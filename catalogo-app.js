@@ -149,6 +149,34 @@ renderAllSections();
 initFilters();
 applyFilters();
 
+// ---- Botón "Ver fragancias" (mobile) ----
+// Al tocarlo, hace scroll hasta que la barra de filtros quede pegada
+// arriba y, justo debajo, se vea el título de la colección visible
+// (según el filtro activo) seguido de las primeras fragancias.
+function scrollToFragrances() {
+  const sectionIds = ['section-fem', 'section-masc', 'section-uni'];
+  let target = null;
+
+  for (const id of sectionIds) {
+    const el = document.getElementById(id);
+    if (el && !el.classList.contains('is-hidden')) {
+      target = el;
+      break;
+    }
+  }
+  if (!target) target = document.getElementById('section-fem');
+  if (!target) return;
+
+  const head = target.querySelector('.section-head') || target;
+  const filterBar = document.querySelector('.filter-bar');
+  const filterBarHeight = filterBar ? filterBar.getBoundingClientRect().height : 0;
+  const top = head.getBoundingClientRect().top + window.scrollY - filterBarHeight - 14;
+
+  window.scrollTo({ top: Math.max(top, 0), behavior: 'smooth' });
+}
+
+document.getElementById('ctaJump')?.addEventListener('click', scrollToFragrances);
+
 // ---- Luz de cursor ----
 // Sigue el mouse con un leve retraso (lerp) para un brillo cálido y suave.
 // Se desactiva en touch y con prefers-reduced-motion.
