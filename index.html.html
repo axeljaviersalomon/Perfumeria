@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catálogo de fragancias — Perfumería Fina</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap');
+
+  :root{
+    --bg: #14110D;
+    --bg-panel: #1B1712;
+    --paper-chip: #EDE5D4;
+    --ink: #EDE7DA;
+    --ink-soft: #9C9384;
+    --ink-faint: #6E6656;
+    --wine: #C6485E;
+    --wine-deep: #E06B80;
+    --pine: #6F9C7C;
+    --pine-deep: #8FBB9B;
+    --brass: #C9A25B;
+    --brass-soft: #DCC087;
+    --hair: rgba(237,231,218,0.12);
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Jost', sans-serif;
+    font-weight:400;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    padding:96px 0 56px;
+    text-align:center;
+    border-bottom:1px solid var(--hair);
+  }
+  .kicker{
+    font-family:'Jost',sans-serif;
+    font-size:13px;
+    letter-spacing:0.14em;
+    color:var(--brass);
+    margin-bottom:22px;
+  }
+  h1.title{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:400;
+    font-size:clamp(42px, 6vw, 74px);
+    line-height:1.02;
+    margin:0 0 26px;
+    letter-spacing:0.005em;
+    color:var(--ink);
+  }
+  h1.title em{
+    font-style:italic;
+    font-weight:500;
+    color:var(--brass-soft);
+  }
+  p.lede{
+    max-width:620px;
+    margin:0 auto;
+    font-size:17px;
+    line-height:1.65;
+    color:var(--ink-soft);
+  }
+
+  .badges{
+    display:flex;
+    justify-content:center;
+    gap:14px;
+    margin-top:34px;
+    flex-wrap:wrap;
+  }
+  .badge{
+    font-size:12.5px;
+    letter-spacing:0.04em;
+    color:var(--ink);
+    border:1px solid var(--hair);
+    padding:9px 18px;
+    border-radius:999px;
+    background:rgba(255,255,255,0.03);
+  }
+
+  /* ---------- SECTIONS LAYOUT ---------- */
+  .collection-section{
+    padding:64px 0;
+    border-bottom:1px solid var(--hair);
+  }
+  .collection-section:first-child{
+    padding-top:72px;
+  }
+
+  .section-head{
+    margin-bottom:38px;
+  }
+  .section-head .sub{
+    font-size:12.5px;
+    letter-spacing:0.1em;
+    color: var(--tone, var(--brass));
+    margin-bottom:10px;
+  }
+  h2.section-title{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:500;
+    font-style:italic;
+    font-size:38px;
+    margin:0 0 16px;
+    color:var(--tone-deep, var(--ink));
+  }
+  .section-head .rule{
+    width:52px;
+    height:2px;
+    background:var(--tone, var(--brass));
+  }
+
+  .fem{ --tone:var(--wine); --tone-deep:var(--wine-deep); }
+  .masc{ --tone:var(--pine); --tone-deep:var(--pine-deep); }
+
+  .fragrance-list{
+    column-count:3;
+    column-gap:34px;
+  }
+
+  .brand-group{
+    break-inside:avoid-column;
+    margin-bottom:22px;
+    padding-bottom:18px;
+    border-bottom:1px solid var(--tone-deep, var(--brass));
+  }
+  .brand-label{
+    font-family:'Jost', sans-serif;
+    font-size:16px;
+    font-weight:600;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--tone-deep, var(--brass));
+    padding-top:26px;
+    margin-bottom:8px;
+    opacity:0.96;
+  }
+  .brand-group:first-child .brand-label{padding-top:0;}
+
+  .item{
+    break-inside:avoid;
+    padding:14px 0;
+    border-bottom:1px solid var(--hair);
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .thumb-wrap{
+    width:58px;
+    height:72px;
+    flex-shrink:0;
+    background:var(--paper-chip);
+    border-radius:5px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    box-shadow:0 2px 10px rgba(0,0,0,0.35);
+  }
+  .thumb-wrap img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    object-position:center;
+    padding:2px;
+    transform:scale(1.12);
+    mix-blend-mode:multiply;
+  }
+  .thumb-placeholder{
+    width:58px;
+    height:72px;
+    flex-shrink:0;
+    border:1px dashed var(--hair);
+    border-radius:5px;
+  }
+  .item .text{
+    flex:1;
+    min-width:0;
+  }
+  .item .name{
+    font-size:15.5px;
+    font-weight:500;
+    letter-spacing:0.005em;
+    color:var(--ink);
+  }
+  .item .inspired{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:15px;
+    color:var(--ink-soft);
+    margin-top:3px;
+  }
+  .item .inspired .brand{
+    font-style:normal;
+    color:var(--tone-deep, var(--brass));
+  }
+  .brand-group .item:last-child{
+    border-bottom:none;
+  }
+
+  /* ---------- UNISEX BAND ---------- */
+  .unisex{
+    border-top:1px solid var(--hair);
+    padding:64px 0 88px;
+    text-align:center;
+  }
+  .unisex .section-head{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .unisex .rule{background:var(--brass);}
+  .unisex .sub{color:var(--brass);}
+  .unisex h2{color:var(--ink);}
+
+  .unisex-grid{
+    max-width:820px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:30px 40px;
+    text-align:left;
+  }
+  .unisex-grid .item{border-bottom:1px solid var(--hair);}
+  .unisex .inspired .brand{color:var(--brass-soft);}
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    border-top:1px solid var(--hair);
+    padding:52px 0 70px;
+  }
+  .footer-grid{
+    display:grid;
+    grid-template-columns:1.3fr 1fr;
+    gap:48px;
+    align-items:start;
+  }
+  footer h3{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:500;
+    font-style:italic;
+    font-size:22px;
+    margin:0 0 12px;
+    color:var(--ink);
+  }
+  footer p{
+    font-size:14px;
+    line-height:1.7;
+    color:var(--ink-soft);
+    margin:0;
+  }
+  .compliance{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+  .compliance .row{
+    display:flex;
+    gap:14px;
+    align-items:flex-start;
+  }
+  .dot{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--brass);
+    margin-top:8px;
+    flex-shrink:0;
+  }
+  .compliance p{font-size:13.5px;}
+
+  .fine{
+    margin-top:46px;
+    padding-top:24px;
+    border-top:1px solid var(--hair);
+    font-size:12px;
+    color:var(--ink-faint);
+    line-height:1.6;
+  }
+
+  @media (max-width:860px){
+    .collections{grid-template-columns:1fr;}
+    .col-divider{display:none;}
+    .collection{padding:0 !important; margin-bottom:56px;}
+    .fragrance-list{column-count:1;}
+    .unisex-grid{grid-template-columns:1fr 1fr;}
+    .footer-grid{grid-template-columns:1fr;}
+  }
+  @media (max-width:520px){
+    .wrap{padding:0 20px;}
+    header.hero{padding:64px 0 40px;}
+    .unisex-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="kicker">Perfumería Fina</div>
+    <h1 class="title">Catálogo de <em>fragancias</em></h1>
+    <p class="lede">Una selección de fragancias inspiradas en los grandes perfumes de autor, formuladas en concentración Eau de Parfum y elaboradas bajo estrictas normativas internacionales de seguridad cosmética.</p>
+    <div class="badges">
+      <span class="badge">Eau de Parfum</span>
+      <span class="badge">Normativa IFRA</span>
+      <span class="badge">Testeado dermatológicamente</span>
+    </div>
+  </header>
+
+</div>
+
+<section class="collection-section fem">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="sub">Colección</div>
+      <h2 class="section-title">Femenino</h2>
+      <div class="rule"></div>
+    </div>
+    <div class="fragrance-list" id="fem-list"></div>
+  </div>
+</section>
+
+<section class="collection-section masc">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="sub">Colección</div>
+      <h2 class="section-title">Masculino</h2>
+      <div class="rule"></div>
+    </div>
+    <div class="fragrance-list" id="masc-list"></div>
+  </div>
+</section>
+
+<section class="unisex">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="sub">Colección</div>
+      <h2 class="section-title">Unisex</h2>
+      <div class="rule"></div>
+    </div>
+    <div class="unisex-grid" id="uni-list"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h3>Sobre esta colección</h3>
+        <p>Cada fragancia de este catálogo es una interpretación propia inspirada en un perfume de autor reconocido internacionalmente. No son originales de las casas mencionadas ni están afiliadas, patrocinadas o avaladas por ellas: son nuestra versión, pensada para acercar esas experiencias olfativas a un precio distinto.</p>
+      </div>
+      <div class="compliance">
+        <div class="row"><span class="dot"></span><p>Todas las fragancias se presentan en concentración Eau de Parfum, con mayor persistencia y riqueza olfativa.</p></div>
+        <div class="row"><span class="dot"></span><p>Formuladas cumpliendo los estándares de seguridad de la IFRA (International Fragrance Association) y las normativas cosméticas vigentes.</p></div>
+        <div class="row"><span class="dot"></span><p>Elaboradas con materias primas controladas y procesos verificados de calidad.</p></div>
+      </div>
+    </div>
+    <div class="fine">Los nombres de marcas y perfumes originales se mencionan únicamente a modo de referencia olfativa para orientar al cliente. Todas las marcas registradas pertenecen a sus respectivos titulares. Las imágenes de referencia corresponden a los productos originales y se utilizan solo con fines ilustrativos de comparación olfativa.</div>
+  </div>
+</footer>
+
+<script>
+// Cada marca es un grupo con sus perfumes: [nombre, inspirado en, imagen opcional]
+const femenino = [
+  { brand: "Cacharel", items: [
+    ["AneAne", "Anaïs Anaïs", "https://www.fragranceoutlet.com/cdn/shop/products/Cacharel-Anais-Anais-Women-Eau-de-Toilette-Spray-1-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1626824865&width=2048"]
+  ]},
+  { brand: "Calvin Klein", items: [
+    ["Euphor CK", "Euphoria", "https://www.fragranceoutlet.com/cdn/shop/files/CK_Euphoria_W_17.jpg?v=1773853833&width=2048"]
+  ]},
+  { brand: "Carolina Herrera", items: [
+    ["CH", "CH", "https://www.fragranceoutlet.com/cdn/shop/products/Carolina-Herrera-Ch-Womens-Eau-de-Toilette-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1773162815&width=2048"],
+    ["GG Blush Elixir", "Good Girl Blush / Fantastic Pink Elixir", "https://www.fragranceoutlet.com/cdn/shop/files/CH_Good_Girl_Blush_Elixir_2.7.jpg?v=1773853494&width=2048"],
+    ["Good G Ch", "Good Girl", "https://www.fragranceoutlet.com/cdn/shop/products/Carolina-Herrera-Good-Girl-Women-Eau-De-Parfum-Spray-Best-Price-Fragrance-Parfume-Fragranceoutlet.Com-Main_314.jpg?v=1568999849&width=2048"],
+    ["Good G Léger", "Good Girl Léger", "https://www.fragranceoutlet.com/cdn/shop/files/good_girl.jpg?v=1698349461&width=2000"],
+    ["Good G Supremo", "Good Girl Supreme", "https://www.fragranceoutlet.com/cdn/shop/files/supreme1.0.jpg?v=1759756150&width=2000"],
+    ["Good Girl Blush", "Good Girl Blush", "https://www.fragranceoutlet.com/cdn/shop/files/CH_Good_Girl_Blush_2.7.jpg?v=1773853540&width=2048"],
+    ["Heroes", "212 Heroes for Her"],
+    ["Manhattan 212", "212", "https://www.fragranceoutlet.com/cdn/shop/products/Carolina-Herrera-212-Womens-Eau-de-Toilette-Spray-2-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1626994755&width=2048"],
+    ["212 Sexy", "212 Sexy", "https://www.fragranceoutlet.com/cdn/shop/products/Carolina-Herrera-212-Sexy-Womens-Eau-de-Parfume-Spray-2-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpeg?v=1660754733&width=2048"],
+    ["Very Glam Good Girl", "Very Good Girl", "https://www.fragranceoutlet.com/cdn/shop/files/carolina_herrera_verygoodgirl_1.7oz.jpg?v=1773853502&width=2048"],
+    ["Very Good Girl", "Very Good Girl", "https://www.fragranceoutlet.com/cdn/shop/files/carolina_herrera_verygoodgirl_1.7oz.jpg?v=1773853502&width=2048"],
+    ["212 VIP Rosé", "212 VIP Rosé", "https://www.fragranceoutlet.com/cdn/shop/products/Carolina-Herrera-212-Vip-Rose-Womens-Eau-de-Parfume-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Detail.jpeg?v=1773162285&width=2048"]
+  ]},
+  { brand: "Davidoff", items: [
+    ["Echo", "Echo Woman"]
+  ]},
+  { brand: "Dior", items: [
+    ["J'adore", "J'adore", "https://www.fragranceoutlet.com/cdn/shop/products/Christian-Dior-Jadore-Women-Eau-de-Parfum-Spray-1.0-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1773155815&width=2048"],
+    ["M Cher", "Miss Dior Chérie"]
+  ]},
+  { brand: "DKNY", items: [
+    ["Delicius DK", "Be Delicious"]
+  ]},
+  { brand: "Dolce & Gabbana", items: [
+    ["Light Blue", "Light Blue", "https://www.fragranceoutlet.com/cdn/shop/products/D_G-Light-Blue-Women-Eau-de-Toilette-Spray-3.4-UBX-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Main.jpg?v=1626831820&width=2048"]
+  ]},
+  { brand: "Elizabeth Arden", items: [
+    ["Red Door", "Red Door", "https://www.fragranceoutlet.com/cdn/shop/products/Elizabeth-Arden-Red-Door-Women-Eau-de-Toilette-Spray-3.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Main.jpg?v=1627006347&width=2048"]
+  ]},
+  { brand: "Giorgio Armani", items: [
+    ["ADG", "Acqua di Gioia", "https://www.sephora.com/productimages/sku/s1284249-main-zoom.jpg?imwidth=315"],
+    ["Amarig", "Emporio Armani"],
+    ["My Way", "My Way", "https://www.fragranceoutlet.com/cdn/shop/products/I0115884larger.jpg?v=1625603951&width=650"],
+    ["Sì", "Sì", "https://www.fragranceoutlet.com/cdn/shop/products/Giorgio-Armani-Armani-Si-Women-Eau-de-Parfume-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Detail.jpeg?v=1705695190&width=2048"],
+    ["Sì Passione", "Sì Passione", "https://www.fragranceoutlet.com/cdn/shop/products/Giorgio-Armani-Si-Passione-Women-Eau-de-Parfum-3.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com.jpg?v=1571860445&width=1000"]
+  ]},
+  { brand: "Givenchy", items: [
+    ["L'Interdit", "L'Interdit", "https://labelleperfumes.com/cdn/shop/products/linterdit-w_1024x.jpg?v=1762269323"]
+  ]},
+  { brand: "Issey Miyake", items: [
+    ["Issey", "L'Eau d'Issey", "https://www.fragranceoutlet.com/cdn/shop/products/Issey-Miyake-Issey-Miyake-Womens-Eau-De-Toilette-EDT-Spray-0.84-oz.-Best-Price-Fragrance-Parfume-FragranceOutlet.com-DETAILS.jpg?v=1627009350&width=2048"],
+    ["Issey Florale", "L'Eau d'Issey Florale"]
+  ]},
+  { brand: "Jean Paul Gaultier", items: [
+    ["Scandal", "Scandal", "https://www.fragranceoutlet.com/cdn/shop/products/Jean_Paul_Gaultier-Scandal-Women-Eau_de_Parfum_Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-DETAILS.jpg?v=1569111767&width=2571"],
+    ["Scandal Paris", "Scandal à Paris"],
+    ["So Scandal", "So Scandal!"]
+  ]},
+  { brand: "Jesus del Pozo", items: [
+    ["Halloween", "Halloween"]
+  ]},
+  { brand: "Kenzo", items: [
+    ["KZO Flower", "Flower", "https://i.ebayimg.com/images/g/43UAAeSwHTRplejb/s-l1600.jpg"]
+  ]},
+  { brand: "Lancôme", items: [
+    ["Hypnos", "Hypnôse"],
+    ["Vida Bella", "La Vie Est Belle", "https://www.fragranceoutlet.com/cdn/shop/products/Lancome-La-Vie-Est-Belle-Womens-Eau-de-Parfume-Spray-3.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpeg?v=1773156890&width=2048"]
+  ]},
+  { brand: "Lattafa", items: [
+    ["Yara Candy", "Yara Candy"],
+    ["Yara Rosa", "Yara"]
+  ]},
+  { brand: "Moschino", items: [
+    ["Cheap & Chic Love", "Cheap & Chic I Love Love"],
+    ["Toy 2", "Toy 2"]
+  ]},
+  { brand: "Mugler", items: [
+    ["Angel Nova", "Angel Nova"]
+  ]},
+  { brand: "Nina Ricci", items: [
+    ["Nina", "Nina", "https://www.perfumeplusoutlet.com/cdn/shop/files/5_c978eef7-7cfc-43f0-b33f-e8ffa78f384c_1080x.jpg?v=1741112674"],
+    ["Nina Bella", "Bella"],
+    ["Nina Fleur", "Nina Fleur"],
+    ["Nina Luna", "Luna"]
+  ]},
+  { brand: "Paco Rabanne", items: [
+    ["Fame", "Fame", "https://www.fragranceoutlet.com/cdn/shop/files/PC_Fame.jpg?v=1726171847&width=2048"],
+    ["Lady Fabulous", "Lady Million", "https://www.fragranceoutlet.com/cdn/shop/products/Paco-Rabanne-Lady-Million-Womens-Eau-de-Parfume-Spray-2.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Main.jpeg?v=1626951023&width=2048"],
+    ["Lady Mill", "Lady Million", "https://www.fragranceoutlet.com/cdn/shop/products/Paco-Rabanne-Lady-Million-Womens-Eau-de-Parfume-Spray-2.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Main.jpeg?v=1626951023&width=2048"],
+    ["Olimpia Clásico", "Olympéa", "https://www.fragranceoutlet.com/cdn/shop/products/Paco-Rabanne-Olympea-Womens-Eau-De-Parfum-EDP-Spray-2.7-oz.-Best-Price-Fragrance-Parfume-FragranceOutlet.com-DETAILS.jpg?v=1626818313&width=2048"],
+    ["Olympéa Flora", "Olympéa Flora"],
+    ["Olympéa Parfum", "Olympéa Le Parfum"],
+    ["Olympéa Solar", "Olympéa Solar", "https://i.ebayimg.com/images/g/T1wAAeSwgf9pSORX/s-l500.jpg"],
+    ["XS Puro", "Pure XS For Her"]
+  ]},
+  { brand: "Tommy Hilfiger", items: [
+    ["Tommy Girl", "Tommy Girl", "https://www.fragranceoutlet.com/cdn/shop/products/Tommy-Hilfiger-Tommy-Girl-Womens-Eau-de-Toilette-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Main.jpg?v=1626994189&width=2048"]
+  ]},
+  { brand: "Versace", items: [
+    ["Crystal Noire", "Crystal Noir", "https://www.fragranceoutlet.com/cdn/shop/products/Versace-Crystal-Noir-Womens-Eau-de-Toilette-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1626803182&width=2048"]
+  ]}
+];
+
+const masculino = [
+  { brand: "Abercrombie & Fitch", items: [
+    ["Spice Breeze Fierce", "Fierce"]
+  ]},
+  { brand: "Armaf", items: [
+    ["Club de Nuit Intense", "Club de Nuit Intense", "https://www.fragranceoutlet.com/cdn/shop/products/Exclusive-Selection-Club-De-Nuit-Intense-Man-Men-Eau-de-Toilette-Spray-3.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com-DETAILS.jpg?v=1773155466&width=2048"]
+  ]},
+  { brand: "Burberry", items: [
+    ["Weekend", "Weekend"]
+  ]},
+  { brand: "Calvin Klein", items: [
+    ["CK One Shock", "CK One Shock for Him", "https://www.fragranceoutlet.com/cdn/shop/products/Calvin-Klein-Ck-One-Shock-Womens-Eau-de-Toilette-Spray-3.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1626991320&width=2048"]
+  ]},
+  { brand: "Carolina Herrera", items: [
+    ["Bad Boy", "Bad Boy", "https://www.fragranceoutlet.com/cdn/shop/files/Carolina_Herrera_Bad_Boy.jpg?v=1773853480&width=2048"],
+    ["CH Men", "CH Men"],
+    ["Bad Boy Cobalt", "Bad Boy Cobalt", "https://www.fragranceoutlet.com/cdn/shop/files/Carolina_Herrera_Bad_Boy_Cobalt_2.jpg?v=1773853391&width=2048"],
+    ["212 Heroes", "212 Heroes for Him", "https://www.fragranceoutlet.com/cdn/shop/files/212heroes.jpg?v=1710857317&width=1600"],
+    ["212 Original Men", "212 Men", "https://www.fragranceoutlet.com/cdn/shop/products/Carolina-Herrera-212-Men-Mens-Eau-de-Toilette-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1626811549&width=2048"],
+    ["212 Sexy Men", "212 Sexy Men", "https://www.fragranceoutlet.com/cdn/shop/products/Carolina-Herrera-212-Sexy-Men-Mens-Eau-de-Toilette-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1660754755&width=2048"],
+    ["212 VIP Men", "212 VIP Men", "https://www.fragranceoutlet.com/cdn/shop/products/Carolina-Herrera-212-Vip-Men-Mens-Eau-de-Toilette-Spray-3.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1626833454&width=2048"],
+    ["212 VIP Black Men", "212 VIP Black Men", "https://www.fragranceoutlet.com/cdn/shop/products/Carolina-Herrera-212-VIP-Black-Men-Eau-de-Parfum-Spray-3.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com-DETAILS.jpg?v=1569100744&width=2000"]
+  ]},
+  { brand: "Davidoff", items: [
+    ["Cool Water", "Cool Water", "https://www.fragranceoutlet.com/cdn/shop/products/Davidoff-Cool-Water-Mens-Eau-de-Toilette-Spray-1.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1773152699&width=2048"],
+    ["Echo Homme", "Echo"],
+    ["Cool Water Deep", "Cool Water Deep"]
+  ]},
+  { brand: "Dior", items: [
+    ["Sauvage D Masc", "Sauvage", "https://www.fragranceoutlet.com/cdn/shop/products/Dior-Sauvage-Mens-Eau-De-Toilette-Spray-EDT-S-2.0-oz.-Best-Price-Fragrance-Perfume-FragranceOutlet.com-Details.jpg?v=1773158101&width=2048"]
+  ]},
+  { brand: "Dolce & Gabbana", items: [
+    ["D&G King", "King"],
+    ["Light Blue Forever", "Light Blue Forever Pour Homme", "https://www.fragranceoutlet.com/cdn/shop/products/D_G-Light-Blue-Mens-Eau-de-Toilette-Spray-1.3-Best-Price-Fragrance-Parfume-FragranceOutlet.com-DetailS.jpg?v=1773154546&width=2048"]
+  ]},
+  { brand: "Giorgio Armani", items: [
+    ["Aquatic Breeze ADG", "Acqua di Giò Homme", "https://www.fragranceoutlet.com/cdn/shop/files/GA_ADGio_1_0_bc2bb660-88ae-41c4-8d20-0864d234f887.jpg?v=1773434263&width=2048"],
+    ["Arm Code", "Armani Code Homme", "https://www.fragranceoutlet.com/cdn/shop/files/Armani_Code_M_Parfum_25_b.png?v=1779382931&width=1254"]
+  ]},
+  { brand: "Givenchy", items: [
+    ["Gentleman Only", "Gentleman Only", "https://www.fragranceoutlet.com/cdn/shop/products/Givenchy-Gentlemen-Only-Mens-Eau-de-Toilette-Spray-3.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1766439162&width=2048"]
+  ]},
+  { brand: "Hugo Boss", items: [
+    ["Boss Bottled", "Boss Bottled"]
+  ]},
+  { brand: "Issey Miyake", items: [
+    ["Issey Homme", "L'Eau d'Issey Pour Homme", "https://www.fragranceoutlet.com/cdn/shop/products/Issey-Miyake-L-Eau-Dissey-Mens-Eau-de-Toilette-Spray-2.5-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1773157916&width=2048"]
+  ]},
+  { brand: "Jean Paul Gaultier", items: [
+    ["Le Beau Le Parfum", "Le Beau Le Parfum"],
+    ["Scandal Homme Le Parfum", "Scandal Pour Homme Le Parfum", "https://www.fragranceoutlet.com/cdn/shop/files/1024-x-1024-productos-91-compressed1-1b4c240b8de5e0a97416902115227643-1024-1024.jpg?v=1726172547&width=1024"],
+    ["Scandal Homme", "Scandal Pour Homme"]
+  ]},
+  { brand: "Kenzo", items: [
+    ["Kenzo Homme", "Kenzo Homme"]
+  ]},
+  { brand: "Lancôme", items: [
+    ["Hypnos Homme", "Hypnôse Homme"]
+  ]},
+  { brand: "Lattafa", items: [
+    ["Assad", "Asad", "https://www.fragranceoutlet.com/cdn/shop/files/Lataffa_Asad_m_34_b.png?v=1779390342&width=1254"]
+  ]},
+  { brand: "Mugler", items: [
+    ["Angel Men", "A*Men / Angel Men"]
+  ]},
+  { brand: "Paco Rabanne", items: [
+    ["Black XS", "Black XS"],
+    ["Invictus", "Invictus"],
+    ["Invictus Platinum", "Invictus Platinum", "https://www.fragranceoutlet.com/cdn/shop/files/21430630_fpx.webp?v=1726172054&width=1200"],
+    ["Invictus Victory Elixir", "Invictus Victory Elixir", "https://www.fragranceoutlet.com/cdn/shop/files/s2679082-main-zoom.webp?v=1726172056&width=2000"],
+    ["One Million", "One Million", "https://www.fragranceoutlet.com/cdn/shop/products/Paco-Rabanne-1-Million-Mens-Eau-de-Toilette-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1773152414&width=2048"],
+    ["Phantom", "Phantom", "https://www.fragranceoutlet.com/cdn/shop/files/Phantom1.jpg?v=1758034950&width=2048"],
+    ["Invictus Victory", "Invictus Victory", "https://www.fragranceoutlet.com/cdn/shop/files/Paco_Rabbanne_invictus_victory_edp1.jpg?v=1768410175&width=2048"]
+  ]},
+  { brand: "Ralph Lauren", items: [
+    ["Polo Black", "Polo Black"],
+    ["Big Pony", "Big Pony"],
+    ["Polo Verde Clásico", "Polo Green / Classic"],
+    ["Polo Blue", "Polo Blue", "https://www.fragranceoutlet.com/cdn/shop/products/Ralph-Lauren-Polo-Blue-Mens-Eau-de-Toilette-Spray-4.2-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1700496502&width=2048"],
+    ["Ralph Blue", "Polo Blue", "https://www.fragranceoutlet.com/cdn/shop/products/Ralph-Lauren-Polo-Blue-Mens-Eau-de-Toilette-Spray-4.2-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1700496502&width=2048"],
+    ["Ralph Style", "línea Ralph Lauren"],
+    ["Ralph Cool", "línea Polo / Cool"]
+  ]},
+  { brand: "Tommy Hilfiger", items: [
+    ["Tommy", "Tommy"]
+  ]},
+  { brand: "Viktor & Rolf", items: [
+    ["Spicebomb", "Spicebomb", "https://www.fragranceoutlet.com/cdn/shop/products/Viktor-_-Rolf-Spicebomb-Mens-Eau-de-Toilette-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com_Details.jpg?v=1626832539&width=2048"]
+  ]},
+  { brand: "Yves Saint Laurent", items: [
+    ["Jazz", "Jazz"],
+    ["Y", "Y", "https://www.fragranceoutlet.com/cdn/shop/files/YSL_Y_EDP.jpg?v=1742249063&width=2048"]
+  ]}
+];
+
+const unisex = [
+  { brand: "Calvin Klein", items: [
+    ["CK Be", "CK Be", "https://www.fragranceoutlet.com/cdn/shop/products/Calvin-Klein-Be-Mens-Eau-de-Toilette-Spray-3.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1626992311&width=2048"],
+    ["CK One", "Calvin Klein One", "https://www.fragranceoutlet.com/cdn/shop/products/Calvin-Klein-Ck-One-Womens-Eau-de-Toilette-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1773158146&width=2048"]
+  ]},
+  { brand: "Donna Karan New York", items: [
+    ["DKN", "DKNY"]
+  ]},
+  { brand: "Lattafa", items: [
+    ["Khamrah", "Khamrah", "https://www.fragranceoutlet.com/cdn/shop/files/Lataffa_Khamarah_m_34_b.png?v=1779397332&width=1254"]
+  ]},
+  { brand: "Maison Francis Kurkdjian", items: [
+    ["Baccarat", "Baccarat Rouge 540", "https://www.fragranceoutlet.com/cdn/shop/products/Maison-Francis-Kurkdjian-Baccarat-Rouge-540-Women-Eau-de-Parfum-6.8-Best-Price-Fragrance-Parfume-FragranceOutlet.com-DETAILS.jpg?v=1551283414&width=2500"]
+  ]},
+  { brand: "Xerjoff", items: [
+    ["Erba Pura", "Erba Pura"]
+  ]}
+];
+
+function renderGrouped(groups, elId){
+  const el = document.getElementById(elId);
+  el.innerHTML = groups.map(group => `
+    <div class="brand-group">
+      <div class="brand-label">${group.brand}</div>
+      ${group.items.map(([name, inspired, image]) => `
+        <div class="item">
+          ${image ? `<div class="thumb-wrap"><img src="${image}" alt="${inspired}"></div>` : `<div class="thumb-placeholder"></div>`}
+          <div class="text">
+            <div class="name">${name}</div>
+            <div class="inspired">Inspirado en <span class="brand">${inspired}</span></div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
+renderGrouped(femenino, 'fem-list');
+renderGrouped(masculino, 'masc-list');
+renderGrouped(unisex, 'uni-list');
+</script>
+
+</body>
+</html>
