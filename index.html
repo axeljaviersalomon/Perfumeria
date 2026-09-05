@@ -1,314 +1,30 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-AR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Catálogo de fragancias — Perfumería Fina</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap');
+<title>Catálogo de Fragancias Eau de Parfum | Perfumería Fina</title>
+<meta name="description" content="Catálogo de fragancias Eau de Parfum inspiradas en los perfumes de autor más reconocidos, para hombre, mujer y unisex. Formuladas bajo normativa IFRA.">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#14110D">
+<link rel="canonical" href="https://axeljaviersalomon.github.io/Perfumeria/">
 
-  :root{
-    --bg: #14110D;
-    --bg-panel: #1B1712;
-    --paper-chip: #EDE5D4;
-    --ink: #EDE7DA;
-    --ink-soft: #9C9384;
-    --ink-faint: #6E6656;
-    --wine: #C6485E;
-    --wine-deep: #E06B80;
-    --pine: #6F9C7C;
-    --pine-deep: #8FBB9B;
-    --brass: #C9A25B;
-    --brass-soft: #DCC087;
-    --hair: rgba(237,231,218,0.12);
-  }
+<meta property="og:type" content="website">
+<meta property="og:title" content="Catálogo de Fragancias Eau de Parfum | Perfumería Fina">
+<meta property="og:description" content="Fragancias inspiradas en los perfumes de autor más reconocidos, para hombre, mujer y unisex. Eau de Parfum, normativa IFRA.">
+<meta property="og:locale" content="es_AR">
+<meta property="og:url" content="https://axeljaviersalomon.github.io/Perfumeria/">
 
-  *{box-sizing:border-box;}
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Catálogo de Fragancias Eau de Parfum | Perfumería Fina">
+<meta name="twitter:description" content="Fragancias inspiradas en los perfumes de autor más reconocidos, para hombre, mujer y unisex.">
 
-  body{
-    margin:0;
-    background:var(--bg);
-    color:var(--ink);
-    font-family:'Jost', sans-serif;
-    font-weight:400;
-    -webkit-font-smoothing:antialiased;
-  }
-
-  .wrap{
-    max-width:1180px;
-    margin:0 auto;
-    padding:0 32px;
-  }
-
-  /* ---------- HERO ---------- */
-  header.hero{
-    padding:96px 0 56px;
-    text-align:center;
-    border-bottom:1px solid var(--hair);
-  }
-  .kicker{
-    font-family:'Jost',sans-serif;
-    font-size:13px;
-    letter-spacing:0.14em;
-    color:var(--brass);
-    margin-bottom:22px;
-  }
-  h1.title{
-    font-family:'Cormorant Garamond', serif;
-    font-weight:400;
-    font-size:clamp(42px, 6vw, 74px);
-    line-height:1.02;
-    margin:0 0 26px;
-    letter-spacing:0.005em;
-    color:var(--ink);
-  }
-  h1.title em{
-    font-style:italic;
-    font-weight:500;
-    color:var(--brass-soft);
-  }
-  p.lede{
-    max-width:620px;
-    margin:0 auto;
-    font-size:17px;
-    line-height:1.65;
-    color:var(--ink-soft);
-  }
-
-  .badges{
-    display:flex;
-    justify-content:center;
-    gap:14px;
-    margin-top:34px;
-    flex-wrap:wrap;
-  }
-  .badge{
-    font-size:12.5px;
-    letter-spacing:0.04em;
-    color:var(--ink);
-    border:1px solid var(--hair);
-    padding:9px 18px;
-    border-radius:999px;
-    background:rgba(255,255,255,0.03);
-  }
-
-  /* ---------- SECTIONS LAYOUT ---------- */
-  .collection-section{
-    padding:64px 0;
-    border-bottom:1px solid var(--hair);
-  }
-  .collection-section:first-child{
-    padding-top:72px;
-  }
-
-  .section-head{
-    margin-bottom:38px;
-  }
-  .section-head .sub{
-    font-size:12.5px;
-    letter-spacing:0.1em;
-    color: var(--tone, var(--brass));
-    margin-bottom:10px;
-  }
-  h2.section-title{
-    font-family:'Cormorant Garamond', serif;
-    font-weight:500;
-    font-style:italic;
-    font-size:38px;
-    margin:0 0 16px;
-    color:var(--tone-deep, var(--ink));
-  }
-  .section-head .rule{
-    width:52px;
-    height:2px;
-    background:var(--tone, var(--brass));
-  }
-
-  .fem{ --tone:var(--wine); --tone-deep:var(--wine-deep); }
-  .masc{ --tone:var(--pine); --tone-deep:var(--pine-deep); }
-
-  .fragrance-list{
-    column-count:3;
-    column-gap:34px;
-  }
-
-  .brand-group{
-    break-inside:avoid-column;
-    margin-bottom:22px;
-    padding-bottom:18px;
-    border-bottom:1px solid var(--tone-deep, var(--brass));
-  }
-  .brand-label{
-    font-family:'Jost', sans-serif;
-    font-size:16px;
-    font-weight:600;
-    letter-spacing:0.08em;
-    text-transform:uppercase;
-    color:var(--tone-deep, var(--brass));
-    padding-top:26px;
-    margin-bottom:8px;
-    opacity:0.96;
-  }
-  .brand-group:first-child .brand-label{padding-top:0;}
-
-  .item{
-    break-inside:avoid;
-    padding:14px 0;
-    border-bottom:1px solid var(--hair);
-    display:flex;
-    align-items:center;
-    gap:14px;
-  }
-  .thumb-wrap{
-    width:58px;
-    height:72px;
-    flex-shrink:0;
-    background:var(--paper-chip);
-    border-radius:5px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-    box-shadow:0 2px 10px rgba(0,0,0,0.35);
-  }
-  .thumb-wrap img{
-    width:100%;
-    height:100%;
-    object-fit:contain;
-    object-position:center;
-    padding:2px;
-    transform:scale(1.12);
-    mix-blend-mode:multiply;
-  }
-  .thumb-placeholder{
-    width:58px;
-    height:72px;
-    flex-shrink:0;
-    border:1px dashed var(--hair);
-    border-radius:5px;
-  }
-  .item .text{
-    flex:1;
-    min-width:0;
-  }
-  .item .name{
-    font-size:15.5px;
-    font-weight:500;
-    letter-spacing:0.005em;
-    color:var(--ink);
-  }
-  .item .inspired{
-    font-family:'Cormorant Garamond', serif;
-    font-style:italic;
-    font-size:15px;
-    color:var(--ink-soft);
-    margin-top:3px;
-  }
-  .item .inspired .brand{
-    font-style:normal;
-    color:var(--tone-deep, var(--brass));
-  }
-  .brand-group .item:last-child{
-    border-bottom:none;
-  }
-
-  /* ---------- UNISEX BAND ---------- */
-  .unisex{
-    border-top:1px solid var(--hair);
-    padding:64px 0 88px;
-    text-align:center;
-  }
-  .unisex .section-head{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-  }
-  .unisex .rule{background:var(--brass);}
-  .unisex .sub{color:var(--brass);}
-  .unisex h2{color:var(--ink);}
-
-  .unisex-grid{
-    max-width:820px;
-    margin:0 auto;
-    display:grid;
-    grid-template-columns:repeat(3, 1fr);
-    gap:30px 40px;
-    text-align:left;
-  }
-  .unisex-grid .item{border-bottom:1px solid var(--hair);}
-  .unisex .inspired .brand{color:var(--brass-soft);}
-
-  /* ---------- FOOTER ---------- */
-  footer{
-    border-top:1px solid var(--hair);
-    padding:52px 0 70px;
-  }
-  .footer-grid{
-    display:grid;
-    grid-template-columns:1.3fr 1fr;
-    gap:48px;
-    align-items:start;
-  }
-  footer h3{
-    font-family:'Cormorant Garamond', serif;
-    font-weight:500;
-    font-style:italic;
-    font-size:22px;
-    margin:0 0 12px;
-    color:var(--ink);
-  }
-  footer p{
-    font-size:14px;
-    line-height:1.7;
-    color:var(--ink-soft);
-    margin:0;
-  }
-  .compliance{
-    display:flex;
-    flex-direction:column;
-    gap:16px;
-  }
-  .compliance .row{
-    display:flex;
-    gap:14px;
-    align-items:flex-start;
-  }
-  .dot{
-    width:6px;height:6px;border-radius:50%;
-    background:var(--brass);
-    margin-top:8px;
-    flex-shrink:0;
-  }
-  .compliance p{font-size:13.5px;}
-
-  .fine{
-    margin-top:46px;
-    padding-top:24px;
-    border-top:1px solid var(--hair);
-    font-size:12px;
-    color:var(--ink-faint);
-    line-height:1.6;
-  }
-
-  @media (max-width:860px){
-    .collections{grid-template-columns:1fr;}
-    .col-divider{display:none;}
-    .collection{padding:0 !important; margin-bottom:56px;}
-    .fragrance-list{column-count:1;}
-    .unisex-grid{grid-template-columns:1fr 1fr;}
-    .footer-grid{grid-template-columns:1fr;}
-  }
-  @media (max-width:520px){
-    .wrap{padding:0 20px;}
-    header.hero{padding:64px 0 40px;}
-    .unisex-grid{grid-template-columns:1fr;}
-  }
-</style>
+<link rel="stylesheet" href="catalogo-style.css">
 </head>
 <body>
+<noscript><div class="wrap"><p>Este catálogo necesita JavaScript para mostrar las miniaturas y los filtros interactivos. Aquí tenés el listado completo en texto plano:</p><h2>Fragancias Femeninas</h2><ul><li>AneAne — Inspirado en Anaïs Anaïs (Cacharel)</li><li>Euphor CK — Inspirado en Euphoria (Calvin Klein)</li><li>CH — Inspirado en CH (Carolina Herrera)</li><li>GG Blush Elixir — Inspirado en Good Girl Blush / Fantastic Pink Elixir (Carolina Herrera)</li><li>Good G Ch — Inspirado en Good Girl (Carolina Herrera)</li><li>Good G Léger — Inspirado en Good Girl Léger (Carolina Herrera)</li><li>Good G Supremo — Inspirado en Good Girl Supreme (Carolina Herrera)</li><li>Good Girl Blush — Inspirado en Good Girl Blush (Carolina Herrera)</li><li>Heroes — Inspirado en 212 Heroes for Her (Carolina Herrera)</li><li>Manhattan 212 — Inspirado en 212 (Carolina Herrera)</li><li>212 Sexy — Inspirado en 212 Sexy (Carolina Herrera)</li><li>Very Glam Good Girl — Inspirado en Very Good Girl (Carolina Herrera)</li><li>Very Good Girl — Inspirado en Very Good Girl (Carolina Herrera)</li><li>212 VIP Rosé — Inspirado en 212 VIP Rosé (Carolina Herrera)</li><li>Echo — Inspirado en Echo Woman (Davidoff)</li><li>J'adore — Inspirado en J'adore (Dior)</li><li>M Cher — Inspirado en Miss Dior Chérie (Dior)</li><li>Delicius DK — Inspirado en Be Delicious (DKNY)</li><li>Light Blue — Inspirado en Light Blue (Dolce &amp; Gabbana)</li><li>Red Door — Inspirado en Red Door (Elizabeth Arden)</li><li>ADG — Inspirado en Acqua di Gioia (Giorgio Armani)</li><li>Amarig — Inspirado en Emporio Armani (Giorgio Armani)</li><li>My Way — Inspirado en My Way (Giorgio Armani)</li><li>Sì — Inspirado en Sì (Giorgio Armani)</li><li>Sì Passione — Inspirado en Sì Passione (Giorgio Armani)</li><li>L'Interdit — Inspirado en L'Interdit (Givenchy)</li><li>Issey — Inspirado en L'Eau d'Issey (Issey Miyake)</li><li>Issey Florale — Inspirado en L'Eau d'Issey Florale (Issey Miyake)</li><li>Scandal — Inspirado en Scandal (Jean Paul Gaultier)</li><li>Scandal Paris — Inspirado en Scandal à Paris (Jean Paul Gaultier)</li><li>So Scandal — Inspirado en So Scandal! (Jean Paul Gaultier)</li><li>Halloween — Inspirado en Halloween (Jesus del Pozo)</li><li>KZO Flower — Inspirado en Flower (Kenzo)</li><li>Hypnos — Inspirado en Hypnôse (Lancôme)</li><li>Vida Bella — Inspirado en La Vie Est Belle (Lancôme)</li><li>Yara Candy — Inspirado en Yara Candy (Lattafa)</li><li>Yara Rosa — Inspirado en Yara (Lattafa)</li><li>Cheap &amp; Chic Love — Inspirado en Cheap &amp; Chic I Love Love (Moschino)</li><li>Toy 2 — Inspirado en Toy 2 (Moschino)</li><li>Angel Nova — Inspirado en Angel Nova (Mugler)</li><li>Nina — Inspirado en Nina (Nina Ricci)</li><li>Nina Bella — Inspirado en Bella (Nina Ricci)</li><li>Nina Fleur — Inspirado en Nina Fleur (Nina Ricci)</li><li>Nina Luna — Inspirado en Luna (Nina Ricci)</li><li>Fame — Inspirado en Fame (Paco Rabanne)</li><li>Lady Fabulous — Inspirado en Lady Million (Paco Rabanne)</li><li>Lady Mill — Inspirado en Lady Million (Paco Rabanne)</li><li>Olimpia Clásico — Inspirado en Olympéa (Paco Rabanne)</li><li>Olympéa Flora — Inspirado en Olympéa Flora (Paco Rabanne)</li><li>Olympéa Parfum — Inspirado en Olympéa Le Parfum (Paco Rabanne)</li><li>Olympéa Solar — Inspirado en Olympéa Solar (Paco Rabanne)</li><li>XS Puro — Inspirado en Pure XS For Her (Paco Rabanne)</li><li>Tommy Girl — Inspirado en Tommy Girl (Tommy Hilfiger)</li><li>Crystal Noire — Inspirado en Crystal Noir (Versace)</li></ul><h2>Fragancias Masculinas</h2><ul><li>Spice Breeze Fierce — Inspirado en Fierce (Abercrombie &amp; Fitch)</li><li>Club de Nuit Intense — Inspirado en Club de Nuit Intense (Armaf)</li><li>Weekend — Inspirado en Weekend (Burberry)</li><li>CK One Shock — Inspirado en CK One Shock for Him (Calvin Klein)</li><li>Bad Boy — Inspirado en Bad Boy (Carolina Herrera)</li><li>CH Men — Inspirado en CH Men (Carolina Herrera)</li><li>Bad Boy Cobalt — Inspirado en Bad Boy Cobalt (Carolina Herrera)</li><li>212 Heroes — Inspirado en 212 Heroes for Him (Carolina Herrera)</li><li>212 Original Men — Inspirado en 212 Men (Carolina Herrera)</li><li>212 Sexy Men — Inspirado en 212 Sexy Men (Carolina Herrera)</li><li>212 VIP Men — Inspirado en 212 VIP Men (Carolina Herrera)</li><li>212 VIP Black Men — Inspirado en 212 VIP Black Men (Carolina Herrera)</li><li>Cool Water — Inspirado en Cool Water (Davidoff)</li><li>Echo Homme — Inspirado en Echo (Davidoff)</li><li>Cool Water Deep — Inspirado en Cool Water Deep (Davidoff)</li><li>Sauvage D Masc — Inspirado en Sauvage (Dior)</li><li>D&amp;G King — Inspirado en King (Dolce &amp; Gabbana)</li><li>Light Blue Forever — Inspirado en Light Blue Forever Pour Homme (Dolce &amp; Gabbana)</li><li>Aquatic Breeze ADG — Inspirado en Acqua di Giò Homme (Giorgio Armani)</li><li>Arm Code — Inspirado en Armani Code Homme (Giorgio Armani)</li><li>Gentleman Only — Inspirado en Gentleman Only (Givenchy)</li><li>Boss Bottled — Inspirado en Boss Bottled (Hugo Boss)</li><li>Issey Homme — Inspirado en L'Eau d'Issey Pour Homme (Issey Miyake)</li><li>Le Beau Le Parfum — Inspirado en Le Beau Le Parfum (Jean Paul Gaultier)</li><li>Scandal Homme Le Parfum — Inspirado en Scandal Pour Homme Le Parfum (Jean Paul Gaultier)</li><li>Scandal Homme — Inspirado en Scandal Pour Homme (Jean Paul Gaultier)</li><li>Kenzo Homme — Inspirado en Kenzo Homme (Kenzo)</li><li>Hypnos Homme — Inspirado en Hypnôse Homme (Lancôme)</li><li>Assad — Inspirado en Asad (Lattafa)</li><li>Angel Men — Inspirado en A*Men / Angel Men (Mugler)</li><li>Black XS — Inspirado en Black XS (Paco Rabanne)</li><li>Invictus — Inspirado en Invictus (Paco Rabanne)</li><li>Invictus Platinum — Inspirado en Invictus Platinum (Paco Rabanne)</li><li>Invictus Victory Elixir — Inspirado en Invictus Victory Elixir (Paco Rabanne)</li><li>One Million — Inspirado en One Million (Paco Rabanne)</li><li>Phantom — Inspirado en Phantom (Paco Rabanne)</li><li>Invictus Victory — Inspirado en Invictus Victory (Paco Rabanne)</li><li>Polo Black — Inspirado en Polo Black (Ralph Lauren)</li><li>Big Pony — Inspirado en Big Pony (Ralph Lauren)</li><li>Polo Verde Clásico — Inspirado en Polo Green / Classic (Ralph Lauren)</li><li>Polo Blue — Inspirado en Polo Blue (Ralph Lauren)</li><li>Ralph Blue — Inspirado en Polo Blue (Ralph Lauren)</li><li>Ralph Style — Inspirado en línea Ralph Lauren (Ralph Lauren)</li><li>Ralph Cool — Inspirado en línea Polo / Cool (Ralph Lauren)</li><li>Tommy — Inspirado en Tommy (Tommy Hilfiger)</li><li>Spicebomb — Inspirado en Spicebomb (Viktor &amp; Rolf)</li><li>Jazz — Inspirado en Jazz (Yves Saint Laurent)</li><li>Y — Inspirado en Y (Yves Saint Laurent)</li></ul><h2>Fragancias Unisex</h2><ul><li>CK Be — Inspirado en CK Be (Calvin Klein)</li><li>CK One — Inspirado en Calvin Klein One (Calvin Klein)</li><li>DKN — Inspirado en DKNY (Donna Karan New York)</li><li>Khamrah — Inspirado en Khamrah (Lattafa)</li><li>Baccarat — Inspirado en Baccarat Rouge 540 (Maison Francis Kurkdjian)</li><li>Erba Pura — Inspirado en Erba Pura (Xerjoff)</li></ul></div></noscript>
 
 <div class="wrap">
-
   <header class="hero">
     <div class="kicker">Perfumería Fina</div>
     <h1 class="title">Catálogo de <em>fragancias</em></h1>
@@ -319,10 +35,21 @@
       <span class="badge">Testeado dermatológicamente</span>
     </div>
   </header>
-
 </div>
 
-<section class="collection-section fem">
+<nav class="filter-bar">
+  <div class="filter-group">
+    <button class="filter-btn active" data-category="todas">Todas</button>
+    <button class="filter-btn" data-category="mujer">Mujer</button>
+    <button class="filter-btn" data-category="hombre">Hombre</button>
+    <button class="filter-btn" data-category="unisex">Unisex</button>
+  </div>
+  <div class="filter-divider"></div>
+  <select id="brand-filter" class="filter-select" aria-label="Filtrar por marca"></select>
+  <p id="results-note" class="results-note" style="display:none;"></p>
+</nav>
+
+<section class="collection-section fem" id="section-fem">
   <div class="wrap">
     <div class="section-head">
       <div class="sub">Colección</div>
@@ -333,7 +60,7 @@
   </div>
 </section>
 
-<section class="collection-section masc">
+<section class="collection-section masc" id="section-masc">
   <div class="wrap">
     <div class="section-head">
       <div class="sub">Colección</div>
@@ -344,7 +71,7 @@
   </div>
 </section>
 
-<section class="unisex">
+<section class="unisex" id="section-uni">
   <div class="wrap">
     <div class="section-head">
       <div class="sub">Colección</div>
@@ -368,249 +95,1104 @@
         <div class="row"><span class="dot"></span><p>Elaboradas con materias primas controladas y procesos verificados de calidad.</p></div>
       </div>
     </div>
-    <div class="fine">Los nombres de marcas y perfumes originales se mencionan únicamente a modo de referencia olfativa para orientar al cliente. Todas las marcas registradas pertenecen a sus respectivos titulares. Las imágenes de referencia corresponden a los productos originales y se utilizan solo con fines ilustrativos de comparación olfativa.</div>
+    <div class="fine">Los nombres de marcas y perfumes originales se mencionan únicamente a modo de referencia olfativa para orientar al cliente. Todas las marcas registradas pertenecen a sus respectivos titulares.</div>
+    <div class="fine">Las imágenes de este catálogo son solo de referencia visual. Cuando no fue posible mostrar una foto del producto original por motivos de derechos de marca y autor, se utilizó una fotografía genérica de frasco sin marca a modo ilustrativo.</div>
   </div>
 </footer>
 
-<script>
-// Cada marca es un grupo con sus perfumes: [nombre, inspirado en, imagen opcional]
-const femenino = [
-  { brand: "Cacharel", items: [
-    ["AneAne", "Anaïs Anaïs", "https://www.fragranceoutlet.com/cdn/shop/products/Cacharel-Anais-Anais-Women-Eau-de-Toilette-Spray-1-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1626824865&width=2048"]
-  ]},
-  { brand: "Calvin Klein", items: [
-    ["Euphor CK", "Euphoria", "https://www.fragranceoutlet.com/cdn/shop/files/CK_Euphoria_W_17.jpg?v=1773853833&width=2048"]
-  ]},
-  { brand: "Carolina Herrera", items: [
-    ["CH", "CH", "https://www.fragranceoutlet.com/cdn/shop/products/Carolina-Herrera-Ch-Womens-Eau-de-Toilette-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1773162815&width=2048"],
-    ["GG Blush Elixir", "Good Girl Blush / Fantastic Pink Elixir", "https://www.fragranceoutlet.com/cdn/shop/files/CH_Good_Girl_Blush_Elixir_2.7.jpg?v=1773853494&width=2048"],
-    ["Good G Ch", "Good Girl", "https://www.fragranceoutlet.com/cdn/shop/products/Carolina-Herrera-Good-Girl-Women-Eau-De-Parfum-Spray-Best-Price-Fragrance-Parfume-Fragranceoutlet.Com-Main_314.jpg?v=1568999849&width=2048"],
-    ["Good G Léger", "Good Girl Léger", "https://www.fragranceoutlet.com/cdn/shop/files/good_girl.jpg?v=1698349461&width=2000"],
-    ["Good G Supremo", "Good Girl Supreme", "https://www.fragranceoutlet.com/cdn/shop/files/supreme1.0.jpg?v=1759756150&width=2000"],
-    ["Good Girl Blush", "Good Girl Blush", "https://www.fragranceoutlet.com/cdn/shop/files/CH_Good_Girl_Blush_2.7.jpg?v=1773853540&width=2048"],
-    ["Heroes", "212 Heroes for Her"],
-    ["Manhattan 212", "212", "https://www.fragranceoutlet.com/cdn/shop/products/Carolina-Herrera-212-Womens-Eau-de-Toilette-Spray-2-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1626994755&width=2048"],
-    ["212 Sexy", "212 Sexy", "https://www.fragranceoutlet.com/cdn/shop/products/Carolina-Herrera-212-Sexy-Womens-Eau-de-Parfume-Spray-2-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpeg?v=1660754733&width=2048"],
-    ["Very Glam Good Girl", "Very Good Girl", "https://www.fragranceoutlet.com/cdn/shop/files/carolina_herrera_verygoodgirl_1.7oz.jpg?v=1773853502&width=2048"],
-    ["Very Good Girl", "Very Good Girl", "https://www.fragranceoutlet.com/cdn/shop/files/carolina_herrera_verygoodgirl_1.7oz.jpg?v=1773853502&width=2048"],
-    ["212 VIP Rosé", "212 VIP Rosé", "https://www.fragranceoutlet.com/cdn/shop/products/Carolina-Herrera-212-Vip-Rose-Womens-Eau-de-Parfume-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Detail.jpeg?v=1773162285&width=2048"]
-  ]},
-  { brand: "Davidoff", items: [
-    ["Echo", "Echo Woman"]
-  ]},
-  { brand: "Dior", items: [
-    ["J'adore", "J'adore", "https://www.fragranceoutlet.com/cdn/shop/products/Christian-Dior-Jadore-Women-Eau-de-Parfum-Spray-1.0-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1773155815&width=2048"],
-    ["M Cher", "Miss Dior Chérie"]
-  ]},
-  { brand: "DKNY", items: [
-    ["Delicius DK", "Be Delicious"]
-  ]},
-  { brand: "Dolce & Gabbana", items: [
-    ["Light Blue", "Light Blue", "https://www.fragranceoutlet.com/cdn/shop/products/D_G-Light-Blue-Women-Eau-de-Toilette-Spray-3.4-UBX-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Main.jpg?v=1626831820&width=2048"]
-  ]},
-  { brand: "Elizabeth Arden", items: [
-    ["Red Door", "Red Door", "https://www.fragranceoutlet.com/cdn/shop/products/Elizabeth-Arden-Red-Door-Women-Eau-de-Toilette-Spray-3.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Main.jpg?v=1627006347&width=2048"]
-  ]},
-  { brand: "Giorgio Armani", items: [
-    ["ADG", "Acqua di Gioia", "https://www.sephora.com/productimages/sku/s1284249-main-zoom.jpg?imwidth=315"],
-    ["Amarig", "Emporio Armani"],
-    ["My Way", "My Way", "https://www.fragranceoutlet.com/cdn/shop/products/I0115884larger.jpg?v=1625603951&width=650"],
-    ["Sì", "Sì", "https://www.fragranceoutlet.com/cdn/shop/products/Giorgio-Armani-Armani-Si-Women-Eau-de-Parfume-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Detail.jpeg?v=1705695190&width=2048"],
-    ["Sì Passione", "Sì Passione", "https://www.fragranceoutlet.com/cdn/shop/products/Giorgio-Armani-Si-Passione-Women-Eau-de-Parfum-3.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com.jpg?v=1571860445&width=1000"]
-  ]},
-  { brand: "Givenchy", items: [
-    ["L'Interdit", "L'Interdit", "https://labelleperfumes.com/cdn/shop/products/linterdit-w_1024x.jpg?v=1762269323"]
-  ]},
-  { brand: "Issey Miyake", items: [
-    ["Issey", "L'Eau d'Issey", "https://www.fragranceoutlet.com/cdn/shop/products/Issey-Miyake-Issey-Miyake-Womens-Eau-De-Toilette-EDT-Spray-0.84-oz.-Best-Price-Fragrance-Parfume-FragranceOutlet.com-DETAILS.jpg?v=1627009350&width=2048"],
-    ["Issey Florale", "L'Eau d'Issey Florale"]
-  ]},
-  { brand: "Jean Paul Gaultier", items: [
-    ["Scandal", "Scandal", "https://www.fragranceoutlet.com/cdn/shop/products/Jean_Paul_Gaultier-Scandal-Women-Eau_de_Parfum_Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-DETAILS.jpg?v=1569111767&width=2571"],
-    ["Scandal Paris", "Scandal à Paris"],
-    ["So Scandal", "So Scandal!"]
-  ]},
-  { brand: "Jesus del Pozo", items: [
-    ["Halloween", "Halloween"]
-  ]},
-  { brand: "Kenzo", items: [
-    ["KZO Flower", "Flower", "https://i.ebayimg.com/images/g/43UAAeSwHTRplejb/s-l1600.jpg"]
-  ]},
-  { brand: "Lancôme", items: [
-    ["Hypnos", "Hypnôse"],
-    ["Vida Bella", "La Vie Est Belle", "https://www.fragranceoutlet.com/cdn/shop/products/Lancome-La-Vie-Est-Belle-Womens-Eau-de-Parfume-Spray-3.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpeg?v=1773156890&width=2048"]
-  ]},
-  { brand: "Lattafa", items: [
-    ["Yara Candy", "Yara Candy"],
-    ["Yara Rosa", "Yara"]
-  ]},
-  { brand: "Moschino", items: [
-    ["Cheap & Chic Love", "Cheap & Chic I Love Love"],
-    ["Toy 2", "Toy 2"]
-  ]},
-  { brand: "Mugler", items: [
-    ["Angel Nova", "Angel Nova"]
-  ]},
-  { brand: "Nina Ricci", items: [
-    ["Nina", "Nina", "https://www.perfumeplusoutlet.com/cdn/shop/files/5_c978eef7-7cfc-43f0-b33f-e8ffa78f384c_1080x.jpg?v=1741112674"],
-    ["Nina Bella", "Bella"],
-    ["Nina Fleur", "Nina Fleur"],
-    ["Nina Luna", "Luna"]
-  ]},
-  { brand: "Paco Rabanne", items: [
-    ["Fame", "Fame", "https://www.fragranceoutlet.com/cdn/shop/files/PC_Fame.jpg?v=1726171847&width=2048"],
-    ["Lady Fabulous", "Lady Million", "https://www.fragranceoutlet.com/cdn/shop/products/Paco-Rabanne-Lady-Million-Womens-Eau-de-Parfume-Spray-2.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Main.jpeg?v=1626951023&width=2048"],
-    ["Lady Mill", "Lady Million", "https://www.fragranceoutlet.com/cdn/shop/products/Paco-Rabanne-Lady-Million-Womens-Eau-de-Parfume-Spray-2.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Main.jpeg?v=1626951023&width=2048"],
-    ["Olimpia Clásico", "Olympéa", "https://www.fragranceoutlet.com/cdn/shop/products/Paco-Rabanne-Olympea-Womens-Eau-De-Parfum-EDP-Spray-2.7-oz.-Best-Price-Fragrance-Parfume-FragranceOutlet.com-DETAILS.jpg?v=1626818313&width=2048"],
-    ["Olympéa Flora", "Olympéa Flora"],
-    ["Olympéa Parfum", "Olympéa Le Parfum"],
-    ["Olympéa Solar", "Olympéa Solar", "https://i.ebayimg.com/images/g/T1wAAeSwgf9pSORX/s-l500.jpg"],
-    ["XS Puro", "Pure XS For Her"]
-  ]},
-  { brand: "Tommy Hilfiger", items: [
-    ["Tommy Girl", "Tommy Girl", "https://www.fragranceoutlet.com/cdn/shop/products/Tommy-Hilfiger-Tommy-Girl-Womens-Eau-de-Toilette-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Main.jpg?v=1626994189&width=2048"]
-  ]},
-  { brand: "Versace", items: [
-    ["Crystal Noire", "Crystal Noir", "https://www.fragranceoutlet.com/cdn/shop/products/Versace-Crystal-Noir-Womens-Eau-de-Toilette-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1626803182&width=2048"]
-  ]}
-];
-
-const masculino = [
-  { brand: "Abercrombie & Fitch", items: [
-    ["Spice Breeze Fierce", "Fierce"]
-  ]},
-  { brand: "Armaf", items: [
-    ["Club de Nuit Intense", "Club de Nuit Intense", "https://www.fragranceoutlet.com/cdn/shop/products/Exclusive-Selection-Club-De-Nuit-Intense-Man-Men-Eau-de-Toilette-Spray-3.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com-DETAILS.jpg?v=1773155466&width=2048"]
-  ]},
-  { brand: "Burberry", items: [
-    ["Weekend", "Weekend"]
-  ]},
-  { brand: "Calvin Klein", items: [
-    ["CK One Shock", "CK One Shock for Him", "https://www.fragranceoutlet.com/cdn/shop/products/Calvin-Klein-Ck-One-Shock-Womens-Eau-de-Toilette-Spray-3.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1626991320&width=2048"]
-  ]},
-  { brand: "Carolina Herrera", items: [
-    ["Bad Boy", "Bad Boy", "https://www.fragranceoutlet.com/cdn/shop/files/Carolina_Herrera_Bad_Boy.jpg?v=1773853480&width=2048"],
-    ["CH Men", "CH Men"],
-    ["Bad Boy Cobalt", "Bad Boy Cobalt", "https://www.fragranceoutlet.com/cdn/shop/files/Carolina_Herrera_Bad_Boy_Cobalt_2.jpg?v=1773853391&width=2048"],
-    ["212 Heroes", "212 Heroes for Him", "https://www.fragranceoutlet.com/cdn/shop/files/212heroes.jpg?v=1710857317&width=1600"],
-    ["212 Original Men", "212 Men", "https://www.fragranceoutlet.com/cdn/shop/products/Carolina-Herrera-212-Men-Mens-Eau-de-Toilette-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1626811549&width=2048"],
-    ["212 Sexy Men", "212 Sexy Men", "https://www.fragranceoutlet.com/cdn/shop/products/Carolina-Herrera-212-Sexy-Men-Mens-Eau-de-Toilette-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1660754755&width=2048"],
-    ["212 VIP Men", "212 VIP Men", "https://www.fragranceoutlet.com/cdn/shop/products/Carolina-Herrera-212-Vip-Men-Mens-Eau-de-Toilette-Spray-3.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1626833454&width=2048"],
-    ["212 VIP Black Men", "212 VIP Black Men", "https://www.fragranceoutlet.com/cdn/shop/products/Carolina-Herrera-212-VIP-Black-Men-Eau-de-Parfum-Spray-3.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com-DETAILS.jpg?v=1569100744&width=2000"]
-  ]},
-  { brand: "Davidoff", items: [
-    ["Cool Water", "Cool Water", "https://www.fragranceoutlet.com/cdn/shop/products/Davidoff-Cool-Water-Mens-Eau-de-Toilette-Spray-1.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1773152699&width=2048"],
-    ["Echo Homme", "Echo"],
-    ["Cool Water Deep", "Cool Water Deep"]
-  ]},
-  { brand: "Dior", items: [
-    ["Sauvage D Masc", "Sauvage", "https://www.fragranceoutlet.com/cdn/shop/products/Dior-Sauvage-Mens-Eau-De-Toilette-Spray-EDT-S-2.0-oz.-Best-Price-Fragrance-Perfume-FragranceOutlet.com-Details.jpg?v=1773158101&width=2048"]
-  ]},
-  { brand: "Dolce & Gabbana", items: [
-    ["D&G King", "King"],
-    ["Light Blue Forever", "Light Blue Forever Pour Homme", "https://www.fragranceoutlet.com/cdn/shop/products/D_G-Light-Blue-Mens-Eau-de-Toilette-Spray-1.3-Best-Price-Fragrance-Parfume-FragranceOutlet.com-DetailS.jpg?v=1773154546&width=2048"]
-  ]},
-  { brand: "Giorgio Armani", items: [
-    ["Aquatic Breeze ADG", "Acqua di Giò Homme", "https://www.fragranceoutlet.com/cdn/shop/files/GA_ADGio_1_0_bc2bb660-88ae-41c4-8d20-0864d234f887.jpg?v=1773434263&width=2048"],
-    ["Arm Code", "Armani Code Homme", "https://www.fragranceoutlet.com/cdn/shop/files/Armani_Code_M_Parfum_25_b.png?v=1779382931&width=1254"]
-  ]},
-  { brand: "Givenchy", items: [
-    ["Gentleman Only", "Gentleman Only", "https://www.fragranceoutlet.com/cdn/shop/products/Givenchy-Gentlemen-Only-Mens-Eau-de-Toilette-Spray-3.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1766439162&width=2048"]
-  ]},
-  { brand: "Hugo Boss", items: [
-    ["Boss Bottled", "Boss Bottled"]
-  ]},
-  { brand: "Issey Miyake", items: [
-    ["Issey Homme", "L'Eau d'Issey Pour Homme", "https://www.fragranceoutlet.com/cdn/shop/products/Issey-Miyake-L-Eau-Dissey-Mens-Eau-de-Toilette-Spray-2.5-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1773157916&width=2048"]
-  ]},
-  { brand: "Jean Paul Gaultier", items: [
-    ["Le Beau Le Parfum", "Le Beau Le Parfum"],
-    ["Scandal Homme Le Parfum", "Scandal Pour Homme Le Parfum", "https://www.fragranceoutlet.com/cdn/shop/files/1024-x-1024-productos-91-compressed1-1b4c240b8de5e0a97416902115227643-1024-1024.jpg?v=1726172547&width=1024"],
-    ["Scandal Homme", "Scandal Pour Homme"]
-  ]},
-  { brand: "Kenzo", items: [
-    ["Kenzo Homme", "Kenzo Homme"]
-  ]},
-  { brand: "Lancôme", items: [
-    ["Hypnos Homme", "Hypnôse Homme"]
-  ]},
-  { brand: "Lattafa", items: [
-    ["Assad", "Asad", "https://www.fragranceoutlet.com/cdn/shop/files/Lataffa_Asad_m_34_b.png?v=1779390342&width=1254"]
-  ]},
-  { brand: "Mugler", items: [
-    ["Angel Men", "A*Men / Angel Men"]
-  ]},
-  { brand: "Paco Rabanne", items: [
-    ["Black XS", "Black XS"],
-    ["Invictus", "Invictus"],
-    ["Invictus Platinum", "Invictus Platinum", "https://www.fragranceoutlet.com/cdn/shop/files/21430630_fpx.webp?v=1726172054&width=1200"],
-    ["Invictus Victory Elixir", "Invictus Victory Elixir", "https://www.fragranceoutlet.com/cdn/shop/files/s2679082-main-zoom.webp?v=1726172056&width=2000"],
-    ["One Million", "One Million", "https://www.fragranceoutlet.com/cdn/shop/products/Paco-Rabanne-1-Million-Mens-Eau-de-Toilette-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1773152414&width=2048"],
-    ["Phantom", "Phantom", "https://www.fragranceoutlet.com/cdn/shop/files/Phantom1.jpg?v=1758034950&width=2048"],
-    ["Invictus Victory", "Invictus Victory", "https://www.fragranceoutlet.com/cdn/shop/files/Paco_Rabbanne_invictus_victory_edp1.jpg?v=1768410175&width=2048"]
-  ]},
-  { brand: "Ralph Lauren", items: [
-    ["Polo Black", "Polo Black"],
-    ["Big Pony", "Big Pony"],
-    ["Polo Verde Clásico", "Polo Green / Classic"],
-    ["Polo Blue", "Polo Blue", "https://www.fragranceoutlet.com/cdn/shop/products/Ralph-Lauren-Polo-Blue-Mens-Eau-de-Toilette-Spray-4.2-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1700496502&width=2048"],
-    ["Ralph Blue", "Polo Blue", "https://www.fragranceoutlet.com/cdn/shop/products/Ralph-Lauren-Polo-Blue-Mens-Eau-de-Toilette-Spray-4.2-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1700496502&width=2048"],
-    ["Ralph Style", "línea Ralph Lauren"],
-    ["Ralph Cool", "línea Polo / Cool"]
-  ]},
-  { brand: "Tommy Hilfiger", items: [
-    ["Tommy", "Tommy"]
-  ]},
-  { brand: "Viktor & Rolf", items: [
-    ["Spicebomb", "Spicebomb", "https://www.fragranceoutlet.com/cdn/shop/products/Viktor-_-Rolf-Spicebomb-Mens-Eau-de-Toilette-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com_Details.jpg?v=1626832539&width=2048"]
-  ]},
-  { brand: "Yves Saint Laurent", items: [
-    ["Jazz", "Jazz"],
-    ["Y", "Y", "https://www.fragranceoutlet.com/cdn/shop/files/YSL_Y_EDP.jpg?v=1742249063&width=2048"]
-  ]}
-];
-
-const unisex = [
-  { brand: "Calvin Klein", items: [
-    ["CK Be", "CK Be", "https://www.fragranceoutlet.com/cdn/shop/products/Calvin-Klein-Be-Mens-Eau-de-Toilette-Spray-3.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1626992311&width=2048"],
-    ["CK One", "Calvin Klein One", "https://www.fragranceoutlet.com/cdn/shop/products/Calvin-Klein-Ck-One-Womens-Eau-de-Toilette-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1773158146&width=2048"]
-  ]},
-  { brand: "Donna Karan New York", items: [
-    ["DKN", "DKNY"]
-  ]},
-  { brand: "Lattafa", items: [
-    ["Khamrah", "Khamrah", "https://www.fragranceoutlet.com/cdn/shop/files/Lataffa_Khamarah_m_34_b.png?v=1779397332&width=1254"]
-  ]},
-  { brand: "Maison Francis Kurkdjian", items: [
-    ["Baccarat", "Baccarat Rouge 540", "https://www.fragranceoutlet.com/cdn/shop/products/Maison-Francis-Kurkdjian-Baccarat-Rouge-540-Women-Eau-de-Parfum-6.8-Best-Price-Fragrance-Parfume-FragranceOutlet.com-DETAILS.jpg?v=1551283414&width=2500"]
-  ]},
-  { brand: "Xerjoff", items: [
-    ["Erba Pura", "Erba Pura"]
-  ]}
-];
-
-function renderGrouped(groups, elId){
-  const el = document.getElementById(elId);
-  el.innerHTML = groups.map(group => `
-    <div class="brand-group">
-      <div class="brand-label">${group.brand}</div>
-      ${group.items.map(([name, inspired, image]) => `
-        <div class="item">
-          ${image ? `<div class="thumb-wrap"><img src="${image}" alt="${inspired}"></div>` : `<div class="thumb-placeholder"></div>`}
-          <div class="text">
-            <div class="name">${name}</div>
-            <div class="inspired">Inspirado en <span class="brand">${inspired}</span></div>
-          </div>
-        </div>
-      `).join('')}
-    </div>
-  `).join('');
+<script src="catalogo-data.js"></script>
+<script src="catalogo-placeholders.js"></script>
+<script src="catalogo-app.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Catálogo de fragancias — Perfumería Fina",
+  "description": "Catálogo de fragancias Eau de Parfum inspiradas en perfumes de autor reconocidos, para hombre, mujer y unisex.",
+  "numberOfItems": 108,
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+        "@type": "Product",
+        "name": "AneAne",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Anaïs Anaïs. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "item": {
+        "@type": "Product",
+        "name": "Euphor CK",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Euphoria. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "item": {
+        "@type": "Product",
+        "name": "CH",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en CH. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "item": {
+        "@type": "Product",
+        "name": "GG Blush Elixir",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Good Girl Blush / Fantastic Pink Elixir. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 5,
+      "item": {
+        "@type": "Product",
+        "name": "Good G Ch",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Good Girl. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 6,
+      "item": {
+        "@type": "Product",
+        "name": "Good G Léger",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Good Girl Léger. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 7,
+      "item": {
+        "@type": "Product",
+        "name": "Good G Supremo",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Good Girl Supreme. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 8,
+      "item": {
+        "@type": "Product",
+        "name": "Good Girl Blush",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Good Girl Blush. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 9,
+      "item": {
+        "@type": "Product",
+        "name": "Heroes",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en 212 Heroes for Her. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 10,
+      "item": {
+        "@type": "Product",
+        "name": "Manhattan 212",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en 212. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 11,
+      "item": {
+        "@type": "Product",
+        "name": "212 Sexy",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en 212 Sexy. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 12,
+      "item": {
+        "@type": "Product",
+        "name": "Very Glam Good Girl",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Very Good Girl. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 13,
+      "item": {
+        "@type": "Product",
+        "name": "Very Good Girl",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Very Good Girl. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 14,
+      "item": {
+        "@type": "Product",
+        "name": "212 VIP Rosé",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en 212 VIP Rosé. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 15,
+      "item": {
+        "@type": "Product",
+        "name": "Echo",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Echo Woman. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 16,
+      "item": {
+        "@type": "Product",
+        "name": "J'adore",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en J'adore. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 17,
+      "item": {
+        "@type": "Product",
+        "name": "M Cher",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Miss Dior Chérie. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 18,
+      "item": {
+        "@type": "Product",
+        "name": "Delicius DK",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Be Delicious. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 19,
+      "item": {
+        "@type": "Product",
+        "name": "Light Blue",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Light Blue. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 20,
+      "item": {
+        "@type": "Product",
+        "name": "Red Door",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Red Door. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 21,
+      "item": {
+        "@type": "Product",
+        "name": "ADG",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Acqua di Gioia. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 22,
+      "item": {
+        "@type": "Product",
+        "name": "Amarig",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Emporio Armani. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 23,
+      "item": {
+        "@type": "Product",
+        "name": "My Way",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en My Way. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 24,
+      "item": {
+        "@type": "Product",
+        "name": "Sì",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Sì. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 25,
+      "item": {
+        "@type": "Product",
+        "name": "Sì Passione",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Sì Passione. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 26,
+      "item": {
+        "@type": "Product",
+        "name": "L'Interdit",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en L'Interdit. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 27,
+      "item": {
+        "@type": "Product",
+        "name": "Issey",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en L'Eau d'Issey. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 28,
+      "item": {
+        "@type": "Product",
+        "name": "Issey Florale",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en L'Eau d'Issey Florale. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 29,
+      "item": {
+        "@type": "Product",
+        "name": "Scandal",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Scandal. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 30,
+      "item": {
+        "@type": "Product",
+        "name": "Scandal Paris",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Scandal à Paris. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 31,
+      "item": {
+        "@type": "Product",
+        "name": "So Scandal",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en So Scandal!. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 32,
+      "item": {
+        "@type": "Product",
+        "name": "Halloween",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Halloween. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 33,
+      "item": {
+        "@type": "Product",
+        "name": "KZO Flower",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Flower. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 34,
+      "item": {
+        "@type": "Product",
+        "name": "Hypnos",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Hypnôse. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 35,
+      "item": {
+        "@type": "Product",
+        "name": "Vida Bella",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en La Vie Est Belle. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 36,
+      "item": {
+        "@type": "Product",
+        "name": "Yara Candy",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Yara Candy. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 37,
+      "item": {
+        "@type": "Product",
+        "name": "Yara Rosa",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Yara. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 38,
+      "item": {
+        "@type": "Product",
+        "name": "Cheap & Chic Love",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Cheap & Chic I Love Love. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 39,
+      "item": {
+        "@type": "Product",
+        "name": "Toy 2",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Toy 2. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 40,
+      "item": {
+        "@type": "Product",
+        "name": "Angel Nova",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Angel Nova. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 41,
+      "item": {
+        "@type": "Product",
+        "name": "Nina",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Nina. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 42,
+      "item": {
+        "@type": "Product",
+        "name": "Nina Bella",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Bella. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 43,
+      "item": {
+        "@type": "Product",
+        "name": "Nina Fleur",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Nina Fleur. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 44,
+      "item": {
+        "@type": "Product",
+        "name": "Nina Luna",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Luna. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 45,
+      "item": {
+        "@type": "Product",
+        "name": "Fame",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Fame. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 46,
+      "item": {
+        "@type": "Product",
+        "name": "Lady Fabulous",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Lady Million. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 47,
+      "item": {
+        "@type": "Product",
+        "name": "Lady Mill",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Lady Million. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 48,
+      "item": {
+        "@type": "Product",
+        "name": "Olimpia Clásico",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Olympéa. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 49,
+      "item": {
+        "@type": "Product",
+        "name": "Olympéa Flora",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Olympéa Flora. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 50,
+      "item": {
+        "@type": "Product",
+        "name": "Olympéa Parfum",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Olympéa Le Parfum. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 51,
+      "item": {
+        "@type": "Product",
+        "name": "Olympéa Solar",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Olympéa Solar. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 52,
+      "item": {
+        "@type": "Product",
+        "name": "XS Puro",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Pure XS For Her. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 53,
+      "item": {
+        "@type": "Product",
+        "name": "Tommy Girl",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Tommy Girl. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 54,
+      "item": {
+        "@type": "Product",
+        "name": "Crystal Noire",
+        "category": "Femenino",
+        "description": "Fragancia Eau de Parfum inspirada en Crystal Noir. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 55,
+      "item": {
+        "@type": "Product",
+        "name": "Spice Breeze Fierce",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Fierce. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 56,
+      "item": {
+        "@type": "Product",
+        "name": "Club de Nuit Intense",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Club de Nuit Intense. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 57,
+      "item": {
+        "@type": "Product",
+        "name": "Weekend",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Weekend. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 58,
+      "item": {
+        "@type": "Product",
+        "name": "CK One Shock",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en CK One Shock for Him. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 59,
+      "item": {
+        "@type": "Product",
+        "name": "Bad Boy",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Bad Boy. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 60,
+      "item": {
+        "@type": "Product",
+        "name": "CH Men",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en CH Men. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 61,
+      "item": {
+        "@type": "Product",
+        "name": "Bad Boy Cobalt",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Bad Boy Cobalt. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 62,
+      "item": {
+        "@type": "Product",
+        "name": "212 Heroes",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en 212 Heroes for Him. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 63,
+      "item": {
+        "@type": "Product",
+        "name": "212 Original Men",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en 212 Men. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 64,
+      "item": {
+        "@type": "Product",
+        "name": "212 Sexy Men",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en 212 Sexy Men. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 65,
+      "item": {
+        "@type": "Product",
+        "name": "212 VIP Men",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en 212 VIP Men. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 66,
+      "item": {
+        "@type": "Product",
+        "name": "212 VIP Black Men",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en 212 VIP Black Men. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 67,
+      "item": {
+        "@type": "Product",
+        "name": "Cool Water",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Cool Water. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 68,
+      "item": {
+        "@type": "Product",
+        "name": "Echo Homme",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Echo. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 69,
+      "item": {
+        "@type": "Product",
+        "name": "Cool Water Deep",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Cool Water Deep. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 70,
+      "item": {
+        "@type": "Product",
+        "name": "Sauvage D Masc",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Sauvage. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 71,
+      "item": {
+        "@type": "Product",
+        "name": "D&G King",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en King. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 72,
+      "item": {
+        "@type": "Product",
+        "name": "Light Blue Forever",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Light Blue Forever Pour Homme. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 73,
+      "item": {
+        "@type": "Product",
+        "name": "Aquatic Breeze ADG",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Acqua di Giò Homme. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 74,
+      "item": {
+        "@type": "Product",
+        "name": "Arm Code",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Armani Code Homme. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 75,
+      "item": {
+        "@type": "Product",
+        "name": "Gentleman Only",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Gentleman Only. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 76,
+      "item": {
+        "@type": "Product",
+        "name": "Boss Bottled",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Boss Bottled. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 77,
+      "item": {
+        "@type": "Product",
+        "name": "Issey Homme",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en L'Eau d'Issey Pour Homme. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 78,
+      "item": {
+        "@type": "Product",
+        "name": "Le Beau Le Parfum",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Le Beau Le Parfum. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 79,
+      "item": {
+        "@type": "Product",
+        "name": "Scandal Homme Le Parfum",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Scandal Pour Homme Le Parfum. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 80,
+      "item": {
+        "@type": "Product",
+        "name": "Scandal Homme",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Scandal Pour Homme. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 81,
+      "item": {
+        "@type": "Product",
+        "name": "Kenzo Homme",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Kenzo Homme. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 82,
+      "item": {
+        "@type": "Product",
+        "name": "Hypnos Homme",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Hypnôse Homme. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 83,
+      "item": {
+        "@type": "Product",
+        "name": "Assad",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Asad. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 84,
+      "item": {
+        "@type": "Product",
+        "name": "Angel Men",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en A*Men / Angel Men. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 85,
+      "item": {
+        "@type": "Product",
+        "name": "Black XS",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Black XS. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 86,
+      "item": {
+        "@type": "Product",
+        "name": "Invictus",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Invictus. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 87,
+      "item": {
+        "@type": "Product",
+        "name": "Invictus Platinum",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Invictus Platinum. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 88,
+      "item": {
+        "@type": "Product",
+        "name": "Invictus Victory Elixir",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Invictus Victory Elixir. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 89,
+      "item": {
+        "@type": "Product",
+        "name": "One Million",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en One Million. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 90,
+      "item": {
+        "@type": "Product",
+        "name": "Phantom",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Phantom. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 91,
+      "item": {
+        "@type": "Product",
+        "name": "Invictus Victory",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Invictus Victory. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 92,
+      "item": {
+        "@type": "Product",
+        "name": "Polo Black",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Polo Black. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 93,
+      "item": {
+        "@type": "Product",
+        "name": "Big Pony",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Big Pony. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 94,
+      "item": {
+        "@type": "Product",
+        "name": "Polo Verde Clásico",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Polo Green / Classic. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 95,
+      "item": {
+        "@type": "Product",
+        "name": "Polo Blue",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Polo Blue. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 96,
+      "item": {
+        "@type": "Product",
+        "name": "Ralph Blue",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Polo Blue. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 97,
+      "item": {
+        "@type": "Product",
+        "name": "Ralph Style",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en línea Ralph Lauren. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 98,
+      "item": {
+        "@type": "Product",
+        "name": "Ralph Cool",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en línea Polo / Cool. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 99,
+      "item": {
+        "@type": "Product",
+        "name": "Tommy",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Tommy. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 100,
+      "item": {
+        "@type": "Product",
+        "name": "Spicebomb",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Spicebomb. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 101,
+      "item": {
+        "@type": "Product",
+        "name": "Jazz",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Jazz. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 102,
+      "item": {
+        "@type": "Product",
+        "name": "Y",
+        "category": "Masculino",
+        "description": "Fragancia Eau de Parfum inspirada en Y. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 103,
+      "item": {
+        "@type": "Product",
+        "name": "CK Be",
+        "category": "Unisex",
+        "description": "Fragancia Eau de Parfum inspirada en CK Be. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 104,
+      "item": {
+        "@type": "Product",
+        "name": "CK One",
+        "category": "Unisex",
+        "description": "Fragancia Eau de Parfum inspirada en Calvin Klein One. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 105,
+      "item": {
+        "@type": "Product",
+        "name": "DKN",
+        "category": "Unisex",
+        "description": "Fragancia Eau de Parfum inspirada en DKNY. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 106,
+      "item": {
+        "@type": "Product",
+        "name": "Khamrah",
+        "category": "Unisex",
+        "description": "Fragancia Eau de Parfum inspirada en Khamrah. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 107,
+      "item": {
+        "@type": "Product",
+        "name": "Baccarat",
+        "category": "Unisex",
+        "description": "Fragancia Eau de Parfum inspirada en Baccarat Rouge 540. Interpretación propia, no afiliada a la casa original."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 108,
+      "item": {
+        "@type": "Product",
+        "name": "Erba Pura",
+        "category": "Unisex",
+        "description": "Fragancia Eau de Parfum inspirada en Erba Pura. Interpretación propia, no afiliada a la casa original."
+      }
+    }
+  ]
 }
-
-renderGrouped(femenino, 'fem-list');
-renderGrouped(masculino, 'masc-list');
-renderGrouped(unisex, 'uni-list');
 </script>
-
 </body>
 </html>

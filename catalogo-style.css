@@ -1,0 +1,362 @@
+/**
+ * catalogo-style.css
+ * Estilos del catálogo de fragancias. Paleta oscura, tipografía editorial
+ * (Cormorant Garamond + Jost) y layout de secciones apiladas por categoría.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap');
+
+:root{
+  --bg: #14110D;
+  --bg-panel: #1B1712;
+  --paper-chip: #EDE5D4;
+  --ink: #EDE7DA;
+  --ink-soft: #9C9384;
+  --ink-faint: #6E6656;
+  --wine: #C6485E;
+  --wine-deep: #E06B80;
+  --pine: #6F9C7C;
+  --pine-deep: #8FBB9B;
+  --brass: #C9A25B;
+  --brass-soft: #DCC087;
+  --hair: rgba(237,231,218,0.12);
+}
+
+*{ box-sizing:border-box; }
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Jost', sans-serif;
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+}
+
+.wrap{
+  max-width:1180px;
+  margin:0 auto;
+  padding:0 32px;
+}
+
+/* ---------- HERO ---------- */
+header.hero{
+  padding:96px 0 56px;
+  text-align:center;
+  border-bottom:1px solid var(--hair);
+}
+.kicker{
+  font-size:13px;
+  letter-spacing:0.14em;
+  color:var(--brass);
+  margin-bottom:22px;
+}
+h1.title{
+  font-family:'Cormorant Garamond', serif;
+  font-weight:400;
+  font-size:clamp(42px, 6vw, 74px);
+  line-height:1.02;
+  margin:0 0 26px;
+  color:var(--ink);
+}
+h1.title em{
+  font-style:italic;
+  font-weight:500;
+  color:var(--brass-soft);
+}
+p.lede{
+  max-width:620px;
+  margin:0 auto;
+  font-size:17px;
+  line-height:1.65;
+  color:var(--ink-soft);
+}
+.badges{
+  display:flex;
+  justify-content:center;
+  gap:14px;
+  margin-top:34px;
+  flex-wrap:wrap;
+}
+.badge{
+  font-size:12.5px;
+  letter-spacing:0.04em;
+  color:var(--ink);
+  border:1px solid var(--hair);
+  padding:9px 18px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.03);
+}
+
+/* ---------- FILTER BAR ---------- */
+.filter-bar{
+  padding:36px 0;
+  border-bottom:1px solid var(--hair);
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+}
+.filter-group{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+.filter-btn{
+  font-family:'Jost', sans-serif;
+  font-size:13px;
+  letter-spacing:0.04em;
+  color:var(--ink-soft);
+  background:transparent;
+  border:1px solid var(--hair);
+  border-radius:999px;
+  padding:9px 20px;
+  cursor:pointer;
+  transition:all 0.15s ease;
+}
+.filter-btn:hover{
+  color:var(--ink);
+  border-color:var(--ink-soft);
+}
+.filter-btn.active{
+  color:var(--bg);
+  background:var(--brass-soft);
+  border-color:var(--brass-soft);
+}
+.filter-divider{
+  width:1px;
+  height:22px;
+  background:var(--hair);
+  margin:0 4px;
+}
+.filter-select{
+  font-family:'Jost', sans-serif;
+  font-size:13px;
+  letter-spacing:0.02em;
+  color:var(--ink);
+  background:var(--bg-panel);
+  border:1px solid var(--hair);
+  border-radius:999px;
+  padding:9px 36px 9px 20px;
+  cursor:pointer;
+  appearance:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0l5 6 5-6z' fill='%239C9384'/></svg>");
+  background-repeat:no-repeat;
+  background-position:right 16px center;
+}
+.filter-select:hover{ border-color:var(--ink-soft); }
+
+.results-note{
+  width:100%;
+  text-align:center;
+  font-family:'Cormorant Garamond', serif;
+  font-style:italic;
+  font-size:15px;
+  color:var(--ink-faint);
+  margin-top:4px;
+}
+
+/* ---------- SECTIONS ---------- */
+.collection-section{
+  padding:64px 0;
+  border-bottom:1px solid var(--hair);
+}
+.collection-section:first-of-type{ padding-top:72px; }
+.collection-section.is-hidden{ display:none; }
+
+.fem{ --tone:var(--wine); --tone-deep:var(--wine-deep); }
+.masc{ --tone:var(--pine); --tone-deep:var(--pine-deep); }
+
+.section-head{ margin-bottom:38px; }
+.section-head .sub{
+  font-size:12.5px;
+  letter-spacing:0.1em;
+  color:var(--tone, var(--brass));
+  margin-bottom:10px;
+}
+h2.section-title{
+  font-family:'Cormorant Garamond', serif;
+  font-weight:500;
+  font-style:italic;
+  font-size:38px;
+  margin:0 0 16px;
+  color:var(--tone-deep, var(--ink));
+}
+.section-head .rule{
+  width:52px;
+  height:2px;
+  background:var(--tone, var(--brass));
+}
+
+.fragrance-list{
+  column-count:3;
+  column-gap:34px;
+}
+
+.brand-group{
+  break-inside:avoid-column;
+  margin-bottom:22px;
+  padding-bottom:18px;
+  border-bottom:1px solid var(--tone-deep, var(--brass));
+}
+.brand-group.is-hidden{ display:none; }
+.brand-label{
+  font-size:16px;
+  font-weight:600;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--tone-deep, var(--brass));
+  padding-top:26px;
+  margin-bottom:8px;
+}
+.brand-group:first-child .brand-label{ padding-top:0; }
+
+.item{
+  break-inside:avoid;
+  padding:14px 0;
+  border-bottom:1px solid var(--hair);
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.brand-group .item:last-child{ border-bottom:none; }
+
+.thumb-wrap{
+  width:58px;
+  height:72px;
+  flex-shrink:0;
+  background:var(--paper-chip);
+  border-radius:5px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  box-shadow:0 2px 10px rgba(0,0,0,0.35);
+}
+.thumb-wrap img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center;
+  padding:2px;
+  transform:scale(1.12);
+  mix-blend-mode:multiply;
+}
+.thumb-wrap img.is-placeholder{
+  object-fit:cover;
+  object-position:center 35%;
+  transform:scale(1.35);
+  padding:0;
+}
+
+.item .text{ flex:1; min-width:0; }
+.item .name{
+  font-size:15.5px;
+  font-weight:500;
+  color:var(--ink);
+}
+.item .inspired{
+  font-family:'Cormorant Garamond', serif;
+  font-style:italic;
+  font-size:15px;
+  color:var(--ink-soft);
+  margin-top:3px;
+}
+.item .inspired .brand-name{
+  font-style:normal;
+  color:var(--tone-deep, var(--brass));
+}
+
+/* ---------- UNISEX BAND ---------- */
+.unisex{
+  border-top:1px solid var(--hair);
+  padding:64px 0 88px;
+  text-align:center;
+}
+.unisex.is-hidden{ display:none; }
+.unisex .section-head{ display:flex; flex-direction:column; align-items:center; }
+.unisex .rule{ background:var(--brass); }
+.unisex .sub{ color:var(--brass); }
+.unisex h2{ color:var(--ink); }
+
+.unisex-grid{
+  max-width:820px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:30px 40px;
+  text-align:left;
+}
+.unisex-grid .item{ border-bottom:1px solid var(--hair); }
+.unisex .inspired .brand-name{ color:var(--brass-soft); }
+.unisex .brand-group{ border-bottom-color:var(--brass); }
+
+/* ---------- FOOTER ---------- */
+footer{
+  border-top:1px solid var(--hair);
+  padding:52px 0 70px;
+}
+.footer-grid{
+  display:grid;
+  grid-template-columns:1.3fr 1fr;
+  gap:48px;
+  align-items:start;
+}
+footer h3{
+  font-family:'Cormorant Garamond', serif;
+  font-weight:500;
+  font-style:italic;
+  font-size:22px;
+  margin:0 0 12px;
+  color:var(--ink);
+}
+footer p{
+  font-size:14px;
+  line-height:1.7;
+  color:var(--ink-soft);
+  margin:0;
+}
+.compliance{ display:flex; flex-direction:column; gap:16px; }
+.compliance .row{ display:flex; gap:14px; align-items:flex-start; }
+.dot{
+  width:6px; height:6px; border-radius:50%;
+  background:var(--brass);
+  margin-top:8px;
+  flex-shrink:0;
+}
+.compliance p{ font-size:13.5px; }
+
+.fine{
+  margin-top:46px;
+  padding-top:24px;
+  border-top:1px solid var(--hair);
+  font-size:12px;
+  color:var(--ink-faint);
+  line-height:1.6;
+}
+.fine + .fine{ margin-top:14px; padding-top:0; border-top:none; }
+
+/* ---------- NOSCRIPT FALLBACK ---------- */
+noscript .wrap{ padding-top:40px; }
+noscript h2{
+  font-family:'Cormorant Garamond', serif;
+  font-style:italic;
+  color:var(--brass-soft);
+  margin-top:32px;
+}
+noscript ul{ padding-left:20px; }
+noscript li{ margin-bottom:6px; color:var(--ink-soft); }
+
+@media (max-width:860px){
+  .fragrance-list{ column-count:1; }
+  .unisex-grid{ grid-template-columns:1fr 1fr; }
+  .footer-grid{ grid-template-columns:1fr; }
+}
+@media (max-width:520px){
+  .wrap{ padding:0 20px; }
+  header.hero{ padding:64px 0 40px; }
+  .unisex-grid{ grid-template-columns:1fr; }
+  .filter-bar{ padding:28px 0; }
+}
