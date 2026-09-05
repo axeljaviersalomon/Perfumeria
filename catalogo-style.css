@@ -82,9 +82,11 @@ header.hero{
   padding:88px 0 0;
   text-align:center;
   border-bottom:1px solid var(--hair);
-  animation:heroIn 1s ease both;
 }
-@keyframes heroIn{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:translateY(0); } }
+@keyframes fadeUp{
+  from{ opacity:0; transform:translateY(18px); }
+  to{ opacity:1; transform:translateY(0); }
+}
 
 .kicker{
   font-family:'Parisienne', cursive;
@@ -94,6 +96,8 @@ header.hero{
   color:var(--brass-soft);
   line-height:1;
   margin-bottom:2px;
+  opacity:0;
+  animation:fadeUp 0.9s cubic-bezier(.19,1,.22,1) 0.1s both;
 }
 .kicker::after{
   content:'';
@@ -111,6 +115,8 @@ h1.title{
   line-height:1.02;
   margin:22px 0 26px;
   color:var(--ink);
+  opacity:0;
+  animation:fadeUp 1s cubic-bezier(.19,1,.22,1) 0.3s both;
 }
 h1.title em{
   font-style:italic;
@@ -126,6 +132,8 @@ p.lede{
   font-size:17px;
   line-height:1.65;
   color:var(--ink-soft);
+  opacity:0;
+  animation:fadeUp 1s cubic-bezier(.19,1,.22,1) 0.5s both;
 }
 
 /* ---------- TRUST BAR ---------- */
@@ -201,6 +209,12 @@ p.lede{
   background:rgba(20,17,13,0.78);
   backdrop-filter:blur(14px);
   -webkit-backdrop-filter:blur(14px);
+  opacity:0;
+  animation:fadeDown 0.8s cubic-bezier(.19,1,.22,1) 1.05s both;
+}
+@keyframes fadeDown{
+  from{ opacity:0; transform:translateY(-14px); }
+  to{ opacity:1; transform:translateY(0); }
 }
 .filter-group{
   display:flex;
@@ -369,6 +383,29 @@ h2.section-title{
   transition:transform 0.45s ease;
 }
 .item:hover .thumb-wrap img{ transform:scale(1.22); }
+
+/* Cascada interna: los items de un grupo aparecen escalonados cuando
+   el .brand-group (padre .reveal) recibe .show */
+.brand-group .item{
+  opacity:0;
+  transform:translateY(10px);
+  transition:opacity 0.5s ease, transform 0.5s ease, background 0.3s ease;
+}
+.brand-group.show .item{ opacity:1; transform:translateY(0); }
+.brand-group.show .item:nth-child(2){ transition-delay:0.03s; }
+.brand-group.show .item:nth-child(3){ transition-delay:0.06s; }
+.brand-group.show .item:nth-child(4){ transition-delay:0.09s; }
+.brand-group.show .item:nth-child(5){ transition-delay:0.12s; }
+.brand-group.show .item:nth-child(6){ transition-delay:0.15s; }
+.brand-group.show .item:nth-child(7){ transition-delay:0.18s; }
+.brand-group.show .item:nth-child(8){ transition-delay:0.21s; }
+.brand-group.show .item:nth-child(9){ transition-delay:0.24s; }
+.brand-group.show .item:nth-child(10){ transition-delay:0.27s; }
+.brand-group.show .item:nth-child(11){ transition-delay:0.3s; }
+.brand-group.show .item:nth-child(12){ transition-delay:0.33s; }
+.brand-group.show .item:nth-child(13){ transition-delay:0.36s; }
+.brand-group.show .item:nth-child(14){ transition-delay:0.39s; }
+.brand-group.show .item:nth-child(15){ transition-delay:0.42s; }
 .thumb-wrap img.is-placeholder{
   object-fit:cover;
   object-position:center 35%;
@@ -466,33 +503,79 @@ footer p{
 /* ---------- WHATSAPP FLOAT ---------- */
 .whatsapp-float{
   position:fixed;
-  right:24px;
-  bottom:24px;
-  width:56px;
-  height:56px;
+  right:26px;
+  bottom:26px;
+  width:60px;
+  height:60px;
   border-radius:50%;
   display:flex;
   align-items:center;
   justify-content:center;
-  background:#25D366;
-  color:#0b0b09;
-  box-shadow:0 6px 20px rgba(0,0,0,0.45), 0 0 0 rgba(37,211,102,0.5);
+  background:linear-gradient(150deg, #1c2620, #10140f 70%);
+  border:1px solid rgba(37,211,102,0.28);
+  color:#3ee888;
+  box-shadow:0 14px 34px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.02);
   z-index:30;
-  transition:transform 0.3s ease, box-shadow 0.3s ease;
-  animation:whatsappPulse 2.6s ease-in-out infinite;
+  overflow:visible;
+  transition:transform 0.35s cubic-bezier(.2,.8,.2,1), box-shadow 0.35s ease, border-color 0.35s ease;
+  opacity:0;
+  animation:floatIn 0.7s cubic-bezier(.2,.8,.2,1) 1.3s both,
+            floatBreathe 3.6s ease-in-out 2.1s infinite;
 }
-.whatsapp-float svg{ width:30px; height:30px; }
+.whatsapp-icon{ width:27px; height:27px; position:relative; z-index:1; filter:drop-shadow(0 0 6px rgba(62,232,136,0.35)); }
+.whatsapp-ring{
+  position:absolute;
+  inset:-1px;
+  border-radius:50%;
+  border:1px solid rgba(62,232,136,0.35);
+  opacity:0;
+  transform:scale(0.85);
+  transition:opacity 0.35s ease, transform 0.35s ease;
+}
 .whatsapp-float:hover{
-  transform:scale(1.08);
-  box-shadow:0 8px 26px rgba(0,0,0,0.5), 0 0 0 8px rgba(37,211,102,0.12);
+  transform:scale(1.08) translateY(-2px);
+  border-color:rgba(62,232,136,0.55);
+  box-shadow:0 18px 40px rgba(0,0,0,0.55), 0 0 22px rgba(62,232,136,0.25);
 }
-@keyframes whatsappPulse{
-  0%, 100%{ box-shadow:0 6px 20px rgba(0,0,0,0.45), 0 0 0 0 rgba(37,211,102,0.35); }
-  50%{ box-shadow:0 6px 20px rgba(0,0,0,0.45), 0 0 0 10px rgba(37,211,102,0); }
+.whatsapp-float:hover .whatsapp-ring{ opacity:1; transform:scale(1.18); }
+
+.whatsapp-tooltip{
+  position:absolute;
+  right:calc(100% + 16px);
+  top:50%;
+  transform:translateY(-50%) translateX(6px);
+  background:var(--bg-panel);
+  color:var(--ink);
+  padding:9px 16px;
+  border-radius:8px;
+  font-family:'Jost', sans-serif;
+  font-size:13px;
+  letter-spacing:0.03em;
+  white-space:nowrap;
+  border:1px solid var(--hair);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 0.3s ease, transform 0.3s ease;
+  box-shadow:0 10px 24px rgba(0,0,0,0.4);
 }
+.whatsapp-float:hover .whatsapp-tooltip{
+  opacity:1;
+  transform:translateY(-50%) translateX(0);
+}
+
+@keyframes floatIn{
+  from{ opacity:0; transform:scale(0.35) translateY(24px); }
+  to{ opacity:1; transform:scale(1) translateY(0); }
+}
+@keyframes floatBreathe{
+  0%, 100%{ box-shadow:0 14px 34px rgba(0,0,0,0.5), 0 0 0 0 rgba(62,232,136,0.22); }
+  50%{ box-shadow:0 14px 34px rgba(0,0,0,0.5), 0 0 14px 6px rgba(62,232,136,0.1); }
+}
+
 @media (max-width:520px){
-  .whatsapp-float{ right:16px; bottom:16px; width:52px; height:52px; }
-  .whatsapp-float svg{ width:28px; height:28px; }
+  .whatsapp-float{ right:16px; bottom:16px; width:54px; height:54px; }
+  .whatsapp-icon{ width:24px; height:24px; }
+  .whatsapp-tooltip{ display:none; }
 }
 
 /* ---------- NOSCRIPT FALLBACK ---------- */
