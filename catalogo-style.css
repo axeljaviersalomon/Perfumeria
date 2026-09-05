@@ -287,7 +287,25 @@ p.lede{
   flex-wrap:wrap;
   justify-content:center;
 }
+/* ---------- BRILLO REUTILIZABLE ---------- */
+/* Franja de luz diagonal que recorre el elemento; se agrega como
+   <span class="btn-shine"> dentro de cualquier botón/control con
+   position:relative + overflow:hidden. */
+.btn-shine{
+  position:absolute;
+  top:0;
+  left:-60%;
+  width:35%;
+  height:100%;
+  background:linear-gradient(115deg, transparent, rgba(255,255,255,0.55), transparent);
+  transform:skewX(-20deg);
+  pointer-events:none;
+  animation:ctaShine 3.6s ease-in-out infinite;
+}
+
 .filter-btn{
+  position:relative;
+  overflow:hidden;
   font-family:'Jost', sans-serif;
   font-size:13px;
   letter-spacing:0.04em;
@@ -297,23 +315,47 @@ p.lede{
   border-radius:999px;
   padding:9px 20px;
   cursor:pointer;
-  transition:all 0.15s ease;
+  transition:color 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.3s ease, transform 0.2s ease;
 }
+.filter-btn .btn-shine{ opacity:0.35; }
+.filter-btn:nth-child(1) .btn-shine{ animation-delay:0s; }
+.filter-btn:nth-child(2) .btn-shine{ animation-delay:0.4s; }
+.filter-btn:nth-child(3) .btn-shine{ animation-delay:0.8s; }
+.filter-btn:nth-child(4) .btn-shine{ animation-delay:1.2s; }
 .filter-btn:hover{
   color:var(--ink);
-  border-color:var(--ink-soft);
-}
-.filter-btn.active{
-  color:var(--bg);
-  background:var(--brass-soft);
   border-color:var(--brass-soft);
+  box-shadow:0 4px 16px rgba(var(--glow-rgb),0.18);
 }
+.filter-btn:active{ transform:scale(0.96); }
+.filter-btn.active{
+  color:#241a0a;
+  font-weight:600;
+  background:linear-gradient(135deg, var(--brass-soft), var(--brass) 50%, var(--brass-soft));
+  background-size:220% 220%;
+  border-color:transparent;
+  box-shadow:0 8px 22px rgba(var(--glow-rgb),0.4), 0 1px 0 rgba(255,255,255,0.35) inset;
+  animation:ctaSheen 5s linear infinite, ctaGlow 3.2s ease-in-out infinite;
+}
+.filter-btn.active .btn-shine{ opacity:0.7; }
 .filter-divider{
   width:1px;
   height:22px;
   background:var(--hair);
   margin:0 4px;
 }
+.filter-select-wrap{
+  position:relative;
+  overflow:hidden;
+  border-radius:999px;
+  display:inline-flex;
+  transition:box-shadow 0.3s ease;
+}
+.filter-select-wrap:hover,
+.filter-select-wrap:focus-within{
+  box-shadow:0 4px 16px rgba(var(--glow-rgb),0.2);
+}
+.filter-select-wrap .btn-shine{ opacity:0.3; animation-delay:1.6s; }
 .filter-select{
   font-family:'Jost', sans-serif;
   font-size:13px;
@@ -328,8 +370,10 @@ p.lede{
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0l5 6 5-6z' fill='%239C9384'/></svg>");
   background-repeat:no-repeat;
   background-position:right 16px center;
+  transition:border-color 0.2s ease;
 }
-.filter-select:hover{ border-color:var(--ink-soft); }
+.filter-select:hover,
+.filter-select:focus{ border-color:var(--brass-soft); outline:none; }
 
 /* ---------- SCROLL REVEAL ---------- */
 .reveal{
@@ -586,6 +630,19 @@ footer p{
   opacity:0;
   animation:floatIn 0.7s cubic-bezier(.2,.8,.2,1) 1.3s both,
             floatBreathe 3.6s ease-in-out 2.1s infinite;
+}
+.whatsapp-clip{
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.whatsapp-clip .btn-shine{
+  background:linear-gradient(115deg, transparent, rgba(62,232,136,0.5), rgba(255,255,255,0.4), transparent);
+  animation-delay:2s;
 }
 .whatsapp-icon{ width:27px; height:27px; position:relative; z-index:1; filter:drop-shadow(0 0 6px rgba(62,232,136,0.35)); }
 .whatsapp-ring{
