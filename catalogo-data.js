@@ -12,57 +12,57 @@
 
 const femenino = [
   { brand: "Cacharel", items: [
-    ["AneAne", "Anaïs Anaïs", "https://www.fragranceoutlet.com/cdn/shop/products/Cacharel-Anais-Anais-Women-Eau-de-Toilette-Spray-1-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1626824865&width=2048"]
+    ["AneAne", "Anaïs Anaïs", "assets/img/productos/aneane.jpg"]
   ]},
   { brand: "Calvin Klein", items: [
-    ["Euphor CK", "Euphoria", "https://www.fragranceoutlet.com/cdn/shop/files/CK_Euphoria_W_17.jpg?v=1773853833&width=2048"]
+    ["Euphor CK", "Euphoria", "assets/img/productos/euphor-ck.jpg"]
   ]},
   { brand: "Carolina Herrera", items: [
-    ["CH", "CH", "https://www.fragranceoutlet.com/cdn/shop/products/Carolina-Herrera-Ch-Womens-Eau-de-Toilette-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1773162815&width=2048"],
-    ["GG Blush Elixir", "Good Girl Blush / Fantastic Pink Elixir", "https://www.fragranceoutlet.com/cdn/shop/files/CH_Good_Girl_Blush_Elixir_2.7.jpg?v=1773853494&width=2048"],
-    ["Good G Ch", "Good Girl", "https://www.fragranceoutlet.com/cdn/shop/products/Carolina-Herrera-Good-Girl-Women-Eau-De-Parfum-Spray-Best-Price-Fragrance-Parfume-Fragranceoutlet.Com-Main_314.jpg?v=1568999849&width=2048"],
-    ["Good G Léger", "Good Girl Léger", "https://www.fragranceoutlet.com/cdn/shop/files/good_girl.jpg?v=1698349461&width=2000"],
-    ["Good G Supremo", "Good Girl Supreme", "https://www.fragranceoutlet.com/cdn/shop/files/supreme1.0.jpg?v=1759756150&width=2000"],
-    ["Good Girl Blush", "Good Girl Blush", "https://www.fragranceoutlet.com/cdn/shop/files/CH_Good_Girl_Blush_2.7.jpg?v=1773853540&width=2048"],
+    ["CH", "CH", "assets/img/productos/ch.jpg"],
+    ["GG Blush Elixir", "Good Girl Blush / Fantastic Pink Elixir", "assets/img/productos/gg-blush-elixir.jpg"],
+    ["Good G Ch", "Good Girl", "assets/img/productos/good-g-ch.jpg"],
+    ["Good G Léger", "Good Girl Léger", "assets/img/productos/good-g-leger.jpg"],
+    ["Good G Supremo", "Good Girl Supreme", "assets/img/productos/good-g-supremo.jpg"],
+    ["Good Girl Blush", "Good Girl Blush", "assets/img/productos/good-girl-blush.jpg"],
     ["Heroes", "212 Heroes for Her"],
-    ["Manhattan 212", "212", "https://www.fragranceoutlet.com/cdn/shop/products/Carolina-Herrera-212-Womens-Eau-de-Toilette-Spray-2-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1626994755&width=2048"],
-    ["212 Sexy", "212 Sexy", "https://www.fragranceoutlet.com/cdn/shop/products/Carolina-Herrera-212-Sexy-Womens-Eau-de-Parfume-Spray-2-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpeg?v=1660754733&width=2048"],
-    ["Very Glam Good Girl", "Very Good Girl", "https://www.fragranceoutlet.com/cdn/shop/files/carolina_herrera_verygoodgirl_1.7oz.jpg?v=1773853502&width=2048"],
-    ["Very Good Girl", "Very Good Girl", "https://www.fragranceoutlet.com/cdn/shop/files/carolina_herrera_verygoodgirl_1.7oz.jpg?v=1773853502&width=2048"],
-    ["212 VIP Rosé", "212 VIP Rosé", "https://www.fragranceoutlet.com/cdn/shop/products/Carolina-Herrera-212-Vip-Rose-Womens-Eau-de-Parfume-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Detail.jpeg?v=1773162285&width=2048"]
+    ["Manhattan 212", "212", "assets/img/productos/manhattan-212.jpg"],
+    ["212 Sexy", "212 Sexy", "assets/img/productos/212-sexy.jpeg"],
+    ["Very Glam Good Girl", "Very Good Girl", "assets/img/productos/very-glam-good-girl.jpg"],
+    ["Very Good Girl", "Very Good Girl", "assets/img/productos/very-glam-good-girl.jpg"],
+    ["212 VIP Rosé", "212 VIP Rosé", "assets/img/productos/212-vip-rose.jpeg"]
   ]},
   { brand: "Davidoff", items: [
     ["Echo", "Echo Woman"]
   ]},
   { brand: "Dior", items: [
-    ["J'adore", "J'adore", "https://www.fragranceoutlet.com/cdn/shop/products/Christian-Dior-Jadore-Women-Eau-de-Parfum-Spray-1.0-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1773155815&width=2048"],
+    ["J'adore", "J'adore", "assets/img/productos/j-adore.jpg"],
     ["M Cher", "Miss Dior Chérie"]
   ]},
   { brand: "DKNY", items: [
     ["Delicius DK", "Be Delicious"]
   ]},
   { brand: "Dolce & Gabbana", items: [
-    ["Light Blue", "Light Blue", "https://www.fragranceoutlet.com/cdn/shop/products/D_G-Light-Blue-Women-Eau-de-Toilette-Spray-3.4-UBX-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Main.jpg?v=1626831820&width=2048"]
+    ["Light Blue", "Light Blue", "assets/img/productos/light-blue.jpg"]
   ]},
   { brand: "Elizabeth Arden", items: [
-    ["Red Door", "Red Door", "https://www.fragranceoutlet.com/cdn/shop/products/Elizabeth-Arden-Red-Door-Women-Eau-de-Toilette-Spray-3.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Main.jpg?v=1627006347&width=2048"]
+    ["Red Door", "Red Door", "assets/img/productos/red-door.jpg"]
   ]},
   { brand: "Giorgio Armani", items: [
-    ["ADG", "Acqua di Gioia", "https://www.sephora.com/productimages/sku/s1284249-main-zoom.jpg?imwidth=315"],
+    ["ADG", "Acqua di Gioia", "assets/img/productos/adg.jpg"],
     ["Amarig", "Emporio Armani"],
-    ["My Way", "My Way", "https://www.fragranceoutlet.com/cdn/shop/products/I0115884larger.jpg?v=1625603951&width=650"],
-    ["Sì", "Sì", "https://www.fragranceoutlet.com/cdn/shop/products/Giorgio-Armani-Armani-Si-Women-Eau-de-Parfume-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Detail.jpeg?v=1705695190&width=2048"],
-    ["Sì Passione", "Sì Passione", "https://www.fragranceoutlet.com/cdn/shop/products/Giorgio-Armani-Si-Passione-Women-Eau-de-Parfum-3.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com.jpg?v=1571860445&width=1000"]
+    ["My Way", "My Way", "assets/img/productos/my-way.jpg"],
+    ["Sì", "Sì", "assets/img/productos/si.jpeg"],
+    ["Sì Passione", "Sì Passione", "assets/img/productos/si-passione.jpg"]
   ]},
   { brand: "Givenchy", items: [
-    ["L'Interdit", "L'Interdit", "https://labelleperfumes.com/cdn/shop/products/linterdit-w_1024x.jpg?v=1762269323"]
+    ["L'Interdit", "L'Interdit", "assets/img/productos/l-interdit.jpg"]
   ]},
   { brand: "Issey Miyake", items: [
-    ["Issey", "L'Eau d'Issey", "https://www.fragranceoutlet.com/cdn/shop/products/Issey-Miyake-Issey-Miyake-Womens-Eau-De-Toilette-EDT-Spray-0.84-oz.-Best-Price-Fragrance-Parfume-FragranceOutlet.com-DETAILS.jpg?v=1627009350&width=2048"],
+    ["Issey", "L'Eau d'Issey", "assets/img/productos/issey.jpg"],
     ["Issey Florale", "L'Eau d'Issey Florale"]
   ]},
   { brand: "Jean Paul Gaultier", items: [
-    ["Scandal", "Scandal", "https://www.fragranceoutlet.com/cdn/shop/products/Jean_Paul_Gaultier-Scandal-Women-Eau_de_Parfum_Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-DETAILS.jpg?v=1569111767&width=2571"],
+    ["Scandal", "Scandal", "assets/img/productos/scandal.jpg"],
     ["Scandal Paris", "Scandal à Paris"],
     ["So Scandal", "So Scandal!"]
   ]},
@@ -70,11 +70,11 @@ const femenino = [
     ["Halloween", "Halloween"]
   ]},
   { brand: "Kenzo", items: [
-    ["KZO Flower", "Flower", "https://i.ebayimg.com/images/g/43UAAeSwHTRplejb/s-l1600.jpg"]
+    ["KZO Flower", "Flower", "assets/img/productos/kzo-flower.jpg"]
   ]},
   { brand: "Lancôme", items: [
     ["Hypnos", "Hypnôse"],
-    ["Vida Bella", "La Vie Est Belle", "https://www.fragranceoutlet.com/cdn/shop/products/Lancome-La-Vie-Est-Belle-Womens-Eau-de-Parfume-Spray-3.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpeg?v=1773156890&width=2048"]
+    ["Vida Bella", "La Vie Est Belle", "assets/img/productos/vida-bella.jpeg"]
   ]},
   { brand: "Lattafa", items: [
     ["Yara Candy", "Yara Candy"],
@@ -88,26 +88,26 @@ const femenino = [
     ["Angel Nova", "Angel Nova"]
   ]},
   { brand: "Nina Ricci", items: [
-    ["Nina", "Nina", "https://www.perfumeplusoutlet.com/cdn/shop/files/5_c978eef7-7cfc-43f0-b33f-e8ffa78f384c_1080x.jpg?v=1741112674"],
+    ["Nina", "Nina", "assets/img/productos/nina.jpg"],
     ["Nina Bella", "Bella"],
     ["Nina Fleur", "Nina Fleur"],
     ["Nina Luna", "Luna"]
   ]},
   { brand: "Paco Rabanne", items: [
-    ["Fame", "Fame", "https://www.fragranceoutlet.com/cdn/shop/files/PC_Fame.jpg?v=1726171847&width=2048"],
-    ["Lady Fabulous", "Lady Million", "https://www.fragranceoutlet.com/cdn/shop/products/Paco-Rabanne-Lady-Million-Womens-Eau-de-Parfume-Spray-2.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Main.jpeg?v=1626951023&width=2048"],
-    ["Lady Mill", "Lady Million", "https://www.fragranceoutlet.com/cdn/shop/products/Paco-Rabanne-Lady-Million-Womens-Eau-de-Parfume-Spray-2.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Main.jpeg?v=1626951023&width=2048"],
-    ["Olimpia Clásico", "Olympéa", "https://www.fragranceoutlet.com/cdn/shop/products/Paco-Rabanne-Olympea-Womens-Eau-De-Parfum-EDP-Spray-2.7-oz.-Best-Price-Fragrance-Parfume-FragranceOutlet.com-DETAILS.jpg?v=1626818313&width=2048"],
+    ["Fame", "Fame", "assets/img/productos/fame.jpg"],
+    ["Lady Fabulous", "Lady Million", "assets/img/productos/lady-fabulous.jpeg"],
+    ["Lady Mill", "Lady Million", "assets/img/productos/lady-fabulous.jpeg"],
+    ["Olimpia Clásico", "Olympéa", "assets/img/productos/olimpia-clasico.jpg"],
     ["Olympéa Flora", "Olympéa Flora"],
     ["Olympéa Parfum", "Olympéa Le Parfum"],
-    ["Olympéa Solar", "Olympéa Solar", "https://i.ebayimg.com/images/g/T1wAAeSwgf9pSORX/s-l500.jpg"],
+    ["Olympéa Solar", "Olympéa Solar", "assets/img/productos/olympea-solar.jpg"],
     ["XS Puro", "Pure XS For Her"]
   ]},
   { brand: "Tommy Hilfiger", items: [
-    ["Tommy Girl", "Tommy Girl", "https://www.fragranceoutlet.com/cdn/shop/products/Tommy-Hilfiger-Tommy-Girl-Womens-Eau-de-Toilette-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Main.jpg?v=1626994189&width=2048"]
+    ["Tommy Girl", "Tommy Girl", "assets/img/productos/tommy-girl.jpg"]
   ]},
   { brand: "Versace", items: [
-    ["Crystal Noire", "Crystal Noir", "https://www.fragranceoutlet.com/cdn/shop/products/Versace-Crystal-Noir-Womens-Eau-de-Toilette-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1626803182&width=2048"]
+    ["Crystal Noire", "Crystal Noir", "assets/img/productos/crystal-noire.jpg"]
   ]}
 ];
 
@@ -116,52 +116,52 @@ const masculino = [
     ["Spice Breeze Fierce", "Fierce"]
   ]},
   { brand: "Armaf", items: [
-    ["Club de Nuit Intense", "Club de Nuit Intense", "https://www.fragranceoutlet.com/cdn/shop/products/Exclusive-Selection-Club-De-Nuit-Intense-Man-Men-Eau-de-Toilette-Spray-3.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com-DETAILS.jpg?v=1773155466&width=2048"]
+    ["Club de Nuit Intense", "Club de Nuit Intense", "assets/img/productos/club-de-nuit-intense.jpg"]
   ]},
   { brand: "Burberry", items: [
     ["Weekend", "Weekend"]
   ]},
   { brand: "Calvin Klein", items: [
-    ["CK One Shock", "CK One Shock for Him", "https://www.fragranceoutlet.com/cdn/shop/products/Calvin-Klein-Ck-One-Shock-Womens-Eau-de-Toilette-Spray-3.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1626991320&width=2048"]
+    ["CK One Shock", "CK One Shock for Him", "assets/img/productos/ck-one-shock.jpg"]
   ]},
   { brand: "Carolina Herrera", items: [
-    ["Bad Boy", "Bad Boy", "https://www.fragranceoutlet.com/cdn/shop/files/Carolina_Herrera_Bad_Boy.jpg?v=1773853480&width=2048"],
+    ["Bad Boy", "Bad Boy", "assets/img/productos/bad-boy.jpg"],
     ["CH Men", "CH Men"],
-    ["Bad Boy Cobalt", "Bad Boy Cobalt", "https://www.fragranceoutlet.com/cdn/shop/files/Carolina_Herrera_Bad_Boy_Cobalt_2.jpg?v=1773853391&width=2048"],
-    ["212 Heroes", "212 Heroes for Him", "https://www.fragranceoutlet.com/cdn/shop/files/212heroes.jpg?v=1710857317&width=1600"],
-    ["212 Original Men", "212 Men", "https://www.fragranceoutlet.com/cdn/shop/products/Carolina-Herrera-212-Men-Mens-Eau-de-Toilette-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1626811549&width=2048"],
-    ["212 Sexy Men", "212 Sexy Men", "https://www.fragranceoutlet.com/cdn/shop/products/Carolina-Herrera-212-Sexy-Men-Mens-Eau-de-Toilette-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1660754755&width=2048"],
-    ["212 VIP Men", "212 VIP Men", "https://www.fragranceoutlet.com/cdn/shop/products/Carolina-Herrera-212-Vip-Men-Mens-Eau-de-Toilette-Spray-3.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1626833454&width=2048"],
-    ["212 VIP Black Men", "212 VIP Black Men", "https://www.fragranceoutlet.com/cdn/shop/products/Carolina-Herrera-212-VIP-Black-Men-Eau-de-Parfum-Spray-3.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com-DETAILS.jpg?v=1569100744&width=2000"]
+    ["Bad Boy Cobalt", "Bad Boy Cobalt", "assets/img/productos/bad-boy-cobalt.jpg"],
+    ["212 Heroes", "212 Heroes for Him", "assets/img/productos/212-heroes.jpg"],
+    ["212 Original Men", "212 Men", "assets/img/productos/212-original-men.jpg"],
+    ["212 Sexy Men", "212 Sexy Men", "assets/img/productos/212-sexy-men.jpg"],
+    ["212 VIP Men", "212 VIP Men", "assets/img/productos/212-vip-men.jpg"],
+    ["212 VIP Black Men", "212 VIP Black Men", "assets/img/productos/212-vip-black-men.jpg"]
   ]},
   { brand: "Davidoff", items: [
-    ["Cool Water", "Cool Water", "https://www.fragranceoutlet.com/cdn/shop/products/Davidoff-Cool-Water-Mens-Eau-de-Toilette-Spray-1.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1773152699&width=2048"],
+    ["Cool Water", "Cool Water", "assets/img/productos/cool-water.jpg"],
     ["Echo Homme", "Echo"],
     ["Cool Water Deep", "Cool Water Deep"]
   ]},
   { brand: "Dior", items: [
-    ["Sauvage D Masc", "Sauvage", "https://www.fragranceoutlet.com/cdn/shop/products/Dior-Sauvage-Mens-Eau-De-Toilette-Spray-EDT-S-2.0-oz.-Best-Price-Fragrance-Perfume-FragranceOutlet.com-Details.jpg?v=1773158101&width=2048"]
+    ["Sauvage D Masc", "Sauvage", "assets/img/productos/sauvage-d-masc.jpg"]
   ]},
   { brand: "Dolce & Gabbana", items: [
     ["D&G King", "King"],
-    ["Light Blue Forever", "Light Blue Forever Pour Homme", "https://www.fragranceoutlet.com/cdn/shop/products/D_G-Light-Blue-Mens-Eau-de-Toilette-Spray-1.3-Best-Price-Fragrance-Parfume-FragranceOutlet.com-DetailS.jpg?v=1773154546&width=2048"]
+    ["Light Blue Forever", "Light Blue Forever Pour Homme", "assets/img/productos/light-blue-forever.jpg"]
   ]},
   { brand: "Giorgio Armani", items: [
-    ["Aquatic Breeze ADG", "Acqua di Giò Homme", "https://www.fragranceoutlet.com/cdn/shop/files/GA_ADGio_1_0_bc2bb660-88ae-41c4-8d20-0864d234f887.jpg?v=1773434263&width=2048"],
-    ["Arm Code", "Armani Code Homme", "https://www.fragranceoutlet.com/cdn/shop/files/Armani_Code_M_Parfum_25_b.png?v=1779382931&width=1254"]
+    ["Aquatic Breeze ADG", "Acqua di Giò Homme", "assets/img/productos/aquatic-breeze-adg.jpg"],
+    ["Arm Code", "Armani Code Homme", "assets/img/productos/arm-code.png"]
   ]},
   { brand: "Givenchy", items: [
-    ["Gentleman Only", "Gentleman Only", "https://www.fragranceoutlet.com/cdn/shop/products/Givenchy-Gentlemen-Only-Mens-Eau-de-Toilette-Spray-3.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1766439162&width=2048"]
+    ["Gentleman Only", "Gentleman Only", "assets/img/productos/gentleman-only.jpg"]
   ]},
   { brand: "Hugo Boss", items: [
     ["Boss Bottled", "Boss Bottled"]
   ]},
   { brand: "Issey Miyake", items: [
-    ["Issey Homme", "L'Eau d'Issey Pour Homme", "https://www.fragranceoutlet.com/cdn/shop/products/Issey-Miyake-L-Eau-Dissey-Mens-Eau-de-Toilette-Spray-2.5-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1773157916&width=2048"]
+    ["Issey Homme", "L'Eau d'Issey Pour Homme", "assets/img/productos/issey-homme.jpg"]
   ]},
   { brand: "Jean Paul Gaultier", items: [
     ["Le Beau Le Parfum", "Le Beau Le Parfum"],
-    ["Scandal Homme Le Parfum", "Scandal Pour Homme Le Parfum", "https://www.fragranceoutlet.com/cdn/shop/files/1024-x-1024-productos-91-compressed1-1b4c240b8de5e0a97416902115227643-1024-1024.jpg?v=1726172547&width=1024"],
+    ["Scandal Homme Le Parfum", "Scandal Pour Homme Le Parfum", "assets/img/productos/scandal-homme-le-parfum.jpg"],
     ["Scandal Homme", "Scandal Pour Homme"]
   ]},
   { brand: "Kenzo", items: [
@@ -171,7 +171,7 @@ const masculino = [
     ["Hypnos Homme", "Hypnôse Homme"]
   ]},
   { brand: "Lattafa", items: [
-    ["Assad", "Asad", "https://www.fragranceoutlet.com/cdn/shop/files/Lataffa_Asad_m_34_b.png?v=1779390342&width=1254"]
+    ["Assad", "Asad", "assets/img/productos/assad.png"]
   ]},
   { brand: "Mugler", items: [
     ["Angel Men", "A*Men / Angel Men"]
@@ -179,18 +179,18 @@ const masculino = [
   { brand: "Paco Rabanne", items: [
     ["Black XS", "Black XS"],
     ["Invictus", "Invictus"],
-    ["Invictus Platinum", "Invictus Platinum", "https://www.fragranceoutlet.com/cdn/shop/files/21430630_fpx.webp?v=1726172054&width=1200"],
-    ["Invictus Victory Elixir", "Invictus Victory Elixir", "https://www.fragranceoutlet.com/cdn/shop/files/s2679082-main-zoom.webp?v=1726172056&width=2000"],
-    ["One Million", "One Million", "https://www.fragranceoutlet.com/cdn/shop/products/Paco-Rabanne-1-Million-Mens-Eau-de-Toilette-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1773152414&width=2048"],
-    ["Phantom", "Phantom", "https://www.fragranceoutlet.com/cdn/shop/files/Phantom1.jpg?v=1758034950&width=2048"],
-    ["Invictus Victory", "Invictus Victory", "https://www.fragranceoutlet.com/cdn/shop/files/Paco_Rabbanne_invictus_victory_edp1.jpg?v=1768410175&width=2048"]
+    ["Invictus Platinum", "Invictus Platinum", "assets/img/productos/invictus-platinum.webp"],
+    ["Invictus Victory Elixir", "Invictus Victory Elixir", "assets/img/productos/invictus-victory-elixir.webp"],
+    ["One Million", "One Million", "assets/img/productos/one-million.jpg"],
+    ["Phantom", "Phantom", "assets/img/productos/phantom.jpg"],
+    ["Invictus Victory", "Invictus Victory", "assets/img/productos/invictus-victory.jpg"]
   ]},
   { brand: "Ralph Lauren", items: [
     ["Polo Black", "Polo Black"],
     ["Big Pony", "Big Pony"],
     ["Polo Verde Clásico", "Polo Green / Classic"],
-    ["Polo Blue", "Polo Blue", "https://www.fragranceoutlet.com/cdn/shop/products/Ralph-Lauren-Polo-Blue-Mens-Eau-de-Toilette-Spray-4.2-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1700496502&width=2048"],
-    ["Ralph Blue", "Polo Blue", "https://www.fragranceoutlet.com/cdn/shop/products/Ralph-Lauren-Polo-Blue-Mens-Eau-de-Toilette-Spray-4.2-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1700496502&width=2048"],
+    ["Polo Blue", "Polo Blue", "assets/img/productos/polo-blue.jpg"],
+    ["Ralph Blue", "Polo Blue", "assets/img/productos/polo-blue.jpg"],
     ["Ralph Style", "línea Ralph Lauren"],
     ["Ralph Cool", "línea Polo / Cool"]
   ]},
@@ -198,27 +198,27 @@ const masculino = [
     ["Tommy", "Tommy"]
   ]},
   { brand: "Viktor & Rolf", items: [
-    ["Spicebomb", "Spicebomb", "https://www.fragranceoutlet.com/cdn/shop/products/Viktor-_-Rolf-Spicebomb-Mens-Eau-de-Toilette-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com_Details.jpg?v=1626832539&width=2048"]
+    ["Spicebomb", "Spicebomb", "assets/img/productos/spicebomb.jpg"]
   ]},
   { brand: "Yves Saint Laurent", items: [
     ["Jazz", "Jazz"],
-    ["Y", "Y", "https://www.fragranceoutlet.com/cdn/shop/files/YSL_Y_EDP.jpg?v=1742249063&width=2048"]
+    ["Y", "Y", "assets/img/productos/y.jpg"]
   ]}
 ];
 
 const unisex = [
   { brand: "Calvin Klein", items: [
-    ["CK Be", "CK Be", "https://www.fragranceoutlet.com/cdn/shop/products/Calvin-Klein-Be-Mens-Eau-de-Toilette-Spray-3.4-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1626992311&width=2048"],
-    ["CK One", "Calvin Klein One", "https://www.fragranceoutlet.com/cdn/shop/products/Calvin-Klein-Ck-One-Womens-Eau-de-Toilette-Spray-1.7-Best-Price-Fragrance-Parfume-FragranceOutlet.com-Details.jpg?v=1773158146&width=2048"]
+    ["CK Be", "CK Be", "assets/img/productos/ck-be.jpg"],
+    ["CK One", "Calvin Klein One", "assets/img/productos/ck-one.jpg"]
   ]},
   { brand: "Donna Karan New York", items: [
     ["DKN", "DKNY"]
   ]},
   { brand: "Lattafa", items: [
-    ["Khamrah", "Khamrah", "https://www.fragranceoutlet.com/cdn/shop/files/Lataffa_Khamarah_m_34_b.png?v=1779397332&width=1254"]
+    ["Khamrah", "Khamrah", "assets/img/productos/khamrah.png"]
   ]},
   { brand: "Maison Francis Kurkdjian", items: [
-    ["Baccarat", "Baccarat Rouge 540", "https://www.fragranceoutlet.com/cdn/shop/products/Maison-Francis-Kurkdjian-Baccarat-Rouge-540-Women-Eau-de-Parfum-6.8-Best-Price-Fragrance-Parfume-FragranceOutlet.com-DETAILS.jpg?v=1551283414&width=2500"]
+    ["Baccarat", "Baccarat Rouge 540", "assets/img/productos/baccarat.jpg"]
   ]},
   { brand: "Xerjoff", items: [
     ["Erba Pura", "Erba Pura"]
