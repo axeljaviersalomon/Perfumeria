@@ -47,7 +47,7 @@ function renderItem(name, inspired, image) {
 function renderBrandGroup(group) {
   const items = group.items.map(([name, inspired, image]) => renderItem(name, inspired, image)).join('');
   return `
-    <div class="brand-group" data-brand="${group.brand}">
+    <div class="brand-group reveal" data-brand="${group.brand}">
       <div class="brand-label">${group.brand}</div>
       ${items}
     </div>
@@ -148,3 +148,69 @@ function initFilters() {
 renderAllSections();
 initFilters();
 applyFilters();
+
+// ---- Luz de cursor ----
+// Sigue el mouse con un leve retraso (lerp) para un brillo cálido y suave.
+// Se desactiva en touch y con prefers-reduced-motion.
+(function cursorGlow() {
+  const glow = document.getElementById('cursorGlow');
+  if (!glow) return;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fine = window.matchMedia('(pointer: fine)').matches;
+  if (reduceMotion || !fine) return;
+
+  let targetX = window.innerWidth / 2;
+  let targetY = window.innerHeight / 2;
+  let x = targetX;
+  let y = targetY;
+  let active = false;
+
+  window.addEventListener('mousemove', (e) => {
+    targetX = e.clientX;
+    targetY = e.clientY;
+    if (!active) {
+      active = true;
+      glow.classList.add('is-active');
+    }
+  });
+
+  document.addEventListener('mouseleave', () => {
+    active = false;
+    glow.classList.remove('is-active');
+  });
+
+  function tick() {
+    x += (targetX - x) * 0.12;
+    y += (targetY - y) * 0.12;
+    glow.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+// ---- Revelado al hacer scroll ----
+// Agrega .show a los .reveal (encabezados de sección y grupos de marca)
+// cuando entran en viewport, para una entrada progresiva y elegante.
+(function revealOnScroll() {
+  const targets = document.querySelectorAll('.reveal');
+  if (!targets.length) return;
+
+  if (!('IntersectionObserver' in window)) {
+    targets.forEach((el) => el.classList.add('show'));
+    return;
+  }
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+          io.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+  );
+
+  targets.forEach((el) => io.observe(el));
+})();
