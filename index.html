@@ -136,9 +136,53 @@
   </span>
 </a>
 
+<!-- Botón flotante del carrito de selección (sin pagos: solo arma el pedido) -->
+<button type="button" class="cart-float" id="cartToggle" aria-haspopup="dialog" aria-controls="cartPanel" aria-expanded="false" aria-label="Ver carrito de fragancias seleccionadas">
+  <span class="cart-ring" aria-hidden="true"></span>
+  <span class="cart-clip">
+    <span class="btn-shine" aria-hidden="true"></span>
+    <svg class="cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6h15l-1.5 9a2 2 0 0 1-2 1.6H8.4a2 2 0 0 1-2-1.7L4 3H1.5"/><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/></svg>
+  </span>
+  <span class="cart-badge" id="cartBadge" aria-hidden="true">0</span>
+</button>
+
+<div class="cart-backdrop" id="cartBackdrop" hidden></div>
+
+<div class="cart-panel" id="cartPanel" role="dialog" aria-modal="true" aria-labelledby="cartPanelTitle" hidden>
+  <div class="cart-panel-head">
+    <h2 id="cartPanelTitle">Tu selección</h2>
+    <button type="button" class="cart-close" id="cartClose" aria-label="Cerrar carrito">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+
+  <div class="cart-empty" id="cartEmpty">
+    <p>Todavía no agregaste ninguna fragancia.</p>
+    <p class="cart-empty-hint">Tocá el ícono junto a cada perfume del catálogo para sumarlo acá.</p>
+  </div>
+
+  <ul class="cart-list" id="cartList"></ul>
+
+  <div class="cart-panel-foot" id="cartFoot" hidden>
+    <div class="cart-total">
+      <span>Total de fragancias</span>
+      <strong id="cartTotalCount">0</strong>
+    </div>
+    <button type="button" class="cart-clear" id="cartClear">Vaciar carrito</button>
+    <button type="button" class="cart-order" id="cartOrder">
+      <span class="btn-shine" aria-hidden="true"></span>
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.198.297-.767.966-.94 1.164-.173.198-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.019-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.086 1.758-.72 2.006-1.414.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.001 2C6.478 2 2 6.477 2 12c0 1.759.454 3.412 1.246 4.848L2 22l5.316-1.394A9.945 9.945 0 0012 22c5.523 0 10-4.477 10-10S17.524 2 12.001 2zm0 18.2a8.183 8.183 0 01-4.166-1.14l-.299-.177-3.09.812.827-3.03-.194-.313A8.19 8.19 0 013.8 12c0-4.522 3.679-8.2 8.2-8.2 4.522 0 8.2 3.678 8.2 8.2s-3.678 8.2-8.199 8.2z"/></svg>
+      Encargar por WhatsApp
+    </button>
+  </div>
+</div>
+
+<div class="cart-toast" id="cartToast" aria-live="polite"></div>
+
 <script src="catalogo-data.js"></script>
 <script src="catalogo-placeholders.js"></script>
 <script src="catalogo-app.js"></script>
+<script src="catalogo-cart.js"></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",

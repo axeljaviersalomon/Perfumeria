@@ -29,23 +29,35 @@ function nextPlaceholderImage() {
   return src;
 }
 
-function renderItem(name, inspired, image) {
+// Los data-item-* quedan en el propio .item para que catalogo-cart.js
+// pueda leerlos por delegación de eventos, sin acoplarse a estos datos
+// ni a las estructuras de femenino/masculino/unisex.
+function renderItem(name, inspired, image, brand) {
   const isPlaceholder = !image;
   const src = image || nextPlaceholderImage();
   const imgClass = isPlaceholder ? 'is-placeholder' : '';
+  const itemId = `${brand}::${name}`;
   return `
-    <div class="item">
+    <div class="item" data-item-id="${itemId}" data-item-name="${name}" data-item-brand="${brand}" data-item-inspired="${inspired}">
       <div class="thumb-wrap"><img class="${imgClass}" src="${src}" alt="${inspired}"></div>
       <div class="text">
         <div class="name">${name}</div>
         <div class="inspired">Inspirado en <span class="brand-name">${inspired}</span></div>
       </div>
+      <button type="button" class="cart-add-btn" aria-label="Agregar ${name} al carrito">
+        <span class="cart-add-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h15l-1.5 8.5a2 2 0 0 1-2 1.6H8.4a2 2 0 0 1-2-1.7L4 3H1.5"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>
+        </span>
+        <span class="cart-add-qty" aria-hidden="true"></span>
+      </button>
     </div>
   `;
 }
 
 function renderBrandGroup(group) {
-  const items = group.items.map(([name, inspired, image]) => renderItem(name, inspired, image)).join('');
+  const items = group.items
+    .map(([name, inspired, image]) => renderItem(name, inspired, image, group.brand))
+    .join('');
   return `
     <div class="brand-group reveal" data-brand="${group.brand}">
       <div class="brand-label">${group.brand}</div>
