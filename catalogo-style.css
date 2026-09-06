@@ -864,6 +864,11 @@ body.cart-open-lock{ overflow:hidden; }
 }
 .cart-backdrop.is-open{ opacity:1; }
 
+/* [hidden] tiene que ganarle a "display:flex" de abajo: si no, al
+   cerrar el panel (panel.hidden = true desde JS) quedaría invisible
+   pero seguiría ocupando su lugar y tapando clics sobre el centro de
+   la pantalla. Misma razón en .cart-panel-foot más abajo. */
+.cart-panel[hidden]{ display:none; }
 .cart-panel{
   position:fixed;
   top:50%;
@@ -1003,6 +1008,7 @@ body.cart-open-lock{ overflow:hidden; }
 .cart-row-remove:hover{ color:var(--wine-deep); }
 .cart-row-remove:active{ transform:scale(0.88); }
 
+.cart-panel-foot[hidden]{ display:none; }
 .cart-panel-foot{
   padding:18px 24px 22px;
   border-top:1px solid var(--hair);
