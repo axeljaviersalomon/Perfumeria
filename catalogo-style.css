@@ -554,14 +554,22 @@ h2.section-title{
   background:rgba(255,255,255,0.02);
   color:var(--brass-soft);
   cursor:pointer;
-  transition:transform 0.2s ease, border-color 0.25s ease, background 0.25s ease;
+  transition:transform 0.2s ease, border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
 }
 .cart-add-btn:hover{
   border-color:var(--brass-soft);
-  background:rgba(var(--glow-rgb),0.14);
+  background:rgba(var(--glow-rgb),0.16);
+  box-shadow:0 4px 14px rgba(var(--glow-rgb),0.22);
 }
-.cart-add-btn:active{ transform:scale(0.88); }
-.cart-add-icon svg{ width:16px; height:16px; display:block; }
+.cart-add-btn:active{ transform:scale(0.86); }
+.cart-add-icon svg{
+  width:15px;
+  height:15px;
+  display:block;
+  transition:transform 0.4s cubic-bezier(.2,.8,.2,1);
+}
+.cart-add-btn:hover .cart-add-icon svg{ transform:rotate(90deg) scale(1.1); }
+.cart-add-btn:active .cart-add-icon svg{ transform:rotate(90deg) scale(0.9); }
 
 .cart-add-qty{
   position:absolute;
@@ -754,8 +762,8 @@ footer p{
 /* ---------- CARRITO: BOTÓN FLOTANTE ---------- */
 .cart-float{
   position:fixed;
-  left:26px;
-  bottom:26px;
+  right:26px;
+  top:26px;
   width:60px;
   height:60px;
   border-radius:50%;
@@ -824,7 +832,7 @@ footer p{
 .cart-badge.is-visible{ opacity:1; transform:scale(1); }
 
 @media (max-width:520px){
-  .cart-float{ left:16px; bottom:16px; width:54px; height:54px; }
+  .cart-float{ right:16px; top:16px; width:54px; height:54px; }
   .cart-icon{ width:22px; height:22px; }
 }
 

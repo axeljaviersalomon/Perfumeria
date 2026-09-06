@@ -46,7 +46,7 @@ function renderItem(name, inspired, image, brand) {
       </div>
       <button type="button" class="cart-add-btn" aria-label="Agregar ${name} al carrito">
         <span class="cart-add-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h15l-1.5 8.5a2 2 0 0 1-2 1.6H8.4a2 2 0 0 1-2-1.7L4 3H1.5"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
         </span>
         <span class="cart-add-qty" aria-hidden="true"></span>
       </button>
