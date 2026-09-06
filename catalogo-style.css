@@ -926,6 +926,10 @@ footer p{
 }
 
 /* ---------- CARRITO: BOTÓN FLOTANTE ---------- */
+/* [hidden] tiene que ganarle a "display:flex" de abajo, mismo motivo que
+   en .cart-panel: el botón se oculta por completo (toggleEl.hidden en
+   catalogo-cart.js) mientras el carrito está vacío. */
+.cart-float[hidden]{ display:none; }
 .cart-float{
   position:fixed;
   right:26px;

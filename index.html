@@ -3,6 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+/* Evita que el navegador (sobre todo en mobile) restaure la posición de
+   scroll de una visita anterior: sin esto, al reabrir la página puede
+   arrancar ya desplazada hacia abajo en vez de mostrar el título desde
+   arriba. Tiene que ejecutarse ya, antes de que el navegador aplique esa
+   restauración. */
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+</script>
 <title>Catálogo de Fragancias Eau de Parfum | Perfumería Fina</title>
 <meta name="description" content="Catálogo de fragancias Eau de Parfum inspiradas en los perfumes de autor más reconocidos, para hombre, mujer y unisex. Formuladas bajo normativa IFRA.">
 <meta name="robots" content="index, follow">

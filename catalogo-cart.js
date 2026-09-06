@@ -154,10 +154,16 @@ function renderCartList() {
   const footEl = document.getElementById('cartFoot');
   const badgeEl = document.getElementById('cartBadge');
   const totalCountEl = document.getElementById('cartTotalCount');
+  const toggleEl = document.getElementById('cartToggle');
   if (!listEl) return;
 
   const entries = Object.values(cart).sort((a, b) => a.name.localeCompare(b.name, 'es'));
   const total = getTotalCount();
+
+  // El botón flotante del carrito solo existe en pantalla mientras hay
+  // algo seleccionado: si el carrito queda vacío (o arranca vacío), no
+  // tiene sentido mostrar un carrito sin nada adentro.
+  if (toggleEl) toggleEl.hidden = total === 0;
 
   badgeEl.textContent = String(total);
   badgeEl.classList.toggle('is-visible', total > 0);
