@@ -194,6 +194,48 @@ function initFilters() {
     state.search = e.target.value;
     applyFilters();
   });
+
+  initSearchToggle();
+}
+
+// El buscador arranca como un simple círculo con la lupa (sobrio, sin
+// invitar a escribir con un placeholder siempre visible); tocarlo revela
+// el campo de texto y esconde el círculo, nunca los dos a la vez.
+function initSearchToggle() {
+  const wrap = document.getElementById('searchWrap');
+  const toggle = document.getElementById('searchToggle');
+  const closeBtn = document.getElementById('searchClose');
+  const input = document.getElementById('search-filter');
+  if (!wrap || !toggle || !closeBtn || !input) return;
+
+  const controls = wrap.closest('.filter-controls');
+
+  function openSearch() {
+    wrap.classList.add('is-open');
+    controls?.classList.add('search-active');
+    toggle.setAttribute('aria-expanded', 'true');
+    input.focus();
+  }
+
+  // Cerrar también limpia lo escrito: si no, reabrir el círculo con una
+  // búsqueda vieja todavía activa (pero invisible) dejaría el catálogo
+  // filtrado sin ninguna pista visible de por qué.
+  function closeSearch() {
+    wrap.classList.remove('is-open');
+    controls?.classList.remove('search-active');
+    toggle.setAttribute('aria-expanded', 'false');
+    if (input.value) {
+      input.value = '';
+      state.search = '';
+      applyFilters();
+    }
+  }
+
+  toggle.addEventListener('click', openSearch);
+  closeBtn.addEventListener('click', closeSearch);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeSearch();
+  });
 }
 
 // ---- Arranque ----
@@ -228,6 +270,31 @@ function scrollToFragrances() {
 }
 
 document.getElementById('ctaJump')?.addEventListener('click', scrollToFragrances);
+
+// ---- Volver arriba ----
+// Aparece recién después de scrollear un poco (si estuviera siempre
+// visible arriba de la página no serviría de nada) y desaparece de
+// nuevo cerca del comienzo.
+(function backToTop() {
+  const btn = document.getElementById('backToTop');
+  if (!btn) return;
+  const SHOW_AFTER_PX = 480;
+  let ticking = false;
+
+  function update() {
+    btn.classList.toggle('is-visible', window.scrollY > SHOW_AFTER_PX);
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(update);
+  }, { passive: true });
+
+  update();
+  btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+})();
 
 // ---- Luz de cursor ----
 // Sigue el mouse con un leve retraso (lerp) para un brillo cálido y suave.

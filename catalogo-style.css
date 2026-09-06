@@ -347,6 +347,15 @@ p.lede{
   background:var(--hair);
   margin:0 4px;
 }
+/* Agrupa el select de marca y el círculo de búsqueda para poder
+   ponerlos en la misma fila en mobile (el select estirándose a ocupar
+   el espacio, el círculo quedando a su tamaño fijo al lado) sin que el
+   círculo termine solo en su propia fila con un hueco vacío al lado. */
+.filter-controls{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
 .filter-select-wrap{
   position:relative;
   overflow:hidden;
@@ -378,11 +387,45 @@ p.lede{
 .filter-select:hover,
 .filter-select:focus{ border-color:var(--brass-soft); outline:none; }
 
+/* Sobrio: por default el buscador es solo un círculo con la lupa, sin
+   texto invitando a escribir. Tocarlo revela el campo de texto (con su
+   propia lupa más chica y una X para cerrarlo); cerrarlo vuelve a dejar
+   solo el círculo. Los dos estados (.filter-search-toggle / -box) viven
+   en el mismo wrapper y alternan con la clase .is-open puesta por
+   catalogo-app.js, nunca los dos visibles a la vez. */
 .filter-search-wrap{
   position:relative;
   display:inline-flex;
   align-items:center;
 }
+.filter-search-toggle{
+  -webkit-appearance:none;
+  appearance:none;
+  width:40px;
+  height:40px;
+  padding:0;
+  border-radius:50%;
+  border:1px solid var(--hair);
+  background:var(--bg-panel);
+  color:var(--ink-soft);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  flex-shrink:0;
+  transition:border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+.filter-search-toggle svg{ width:16px; height:16px; }
+.filter-search-toggle:hover{ border-color:var(--brass-soft); color:var(--brass-soft); }
+.filter-search-wrap.is-open .filter-search-toggle{ display:none; }
+
+.filter-search-box{
+  display:none;
+  position:relative;
+  align-items:center;
+  width:200px;
+}
+.filter-search-wrap.is-open .filter-search-box{ display:inline-flex; }
 .filter-search-icon{
   position:absolute;
   left:16px;
@@ -392,7 +435,7 @@ p.lede{
   pointer-events:none;
 }
 .filter-search-input{
-  width:200px;
+  width:100%;
   font-family:'Jost', sans-serif;
   font-size:13px;
   letter-spacing:0.02em;
@@ -400,8 +443,8 @@ p.lede{
   background:var(--bg-panel);
   border:1px solid var(--hair);
   border-radius:999px;
-  padding:9px 16px 9px 40px;
-  transition:border-color 0.2s ease, box-shadow 0.3s ease, width 0.25s ease;
+  padding:9px 36px 9px 40px;
+  transition:border-color 0.2s ease, box-shadow 0.3s ease;
 }
 .filter-search-input::placeholder{ color:var(--ink-faint); }
 .filter-search-input:hover,
@@ -412,11 +455,32 @@ p.lede{
 }
 /* Safari agrega su propio ícono de lupa + botón de "borrar" al
    type="search"; los sacamos porque ya tenemos el ícono propio a la
-   izquierda y el look nativo desentona con el resto de los controles. */
+   izquierda y la X propia a la derecha, y el look nativo desentona con
+   el resto de los controles. */
 .filter-search-input::-webkit-search-decoration,
 .filter-search-input::-webkit-search-cancel-button,
 .filter-search-input::-webkit-search-results-button,
 .filter-search-input::-webkit-search-results-decoration{ -webkit-appearance:none; }
+.filter-search-close{
+  -webkit-appearance:none;
+  appearance:none;
+  position:absolute;
+  right:4px;
+  width:28px;
+  height:28px;
+  padding:0;
+  border-radius:50%;
+  border:none;
+  background:transparent;
+  color:var(--ink-faint);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:color 0.2s ease, background 0.2s ease;
+}
+.filter-search-close svg{ width:13px; height:13px; }
+.filter-search-close:hover{ color:var(--brass-soft); background:rgba(220,192,135,0.08); }
 
 /* ---------- SCROLL REVEAL ---------- */
 .reveal{
@@ -816,6 +880,49 @@ footer p{
   .whatsapp-float{ right:16px; bottom:16px; width:54px; height:54px; }
   .whatsapp-icon{ width:24px; height:24px; }
   .whatsapp-tooltip{ display:none; }
+}
+
+/* ---------- VOLVER ARRIBA ---------- */
+/* Esquina opuesta al de WhatsApp para no competir por el mismo lugar;
+   oculto hasta que catalogo-app.js suma .is-visible al scrollear. */
+.back-to-top{
+  -webkit-appearance:none;
+  appearance:none;
+  position:fixed;
+  left:26px;
+  bottom:26px;
+  width:48px;
+  height:48px;
+  padding:0;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(150deg, #2a2115, #14100a 70%);
+  border:1px solid rgba(var(--glow-rgb),0.32);
+  color:var(--brass-soft);
+  box-shadow:0 14px 34px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.02);
+  cursor:pointer;
+  z-index:29;
+  opacity:0;
+  transform:translateY(14px) scale(0.85);
+  pointer-events:none;
+  transition:opacity 0.3s ease, transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.back-to-top svg{ width:19px; height:19px; }
+.back-to-top.is-visible{
+  opacity:1;
+  transform:translateY(0) scale(1);
+  pointer-events:auto;
+}
+.back-to-top:hover{
+  border-color:rgba(var(--glow-rgb),0.6);
+  box-shadow:0 18px 40px rgba(0,0,0,0.55), 0 0 22px rgba(var(--glow-rgb),0.3);
+  transform:translateY(-2px) scale(1.05);
+}
+@media (max-width:520px){
+  .back-to-top{ left:16px; bottom:16px; width:44px; height:44px; }
+  .back-to-top svg{ width:17px; height:17px; }
 }
 
 /* ---------- CARRITO: BOTÓN FLOTANTE ---------- */
@@ -1684,8 +1791,14 @@ noscript li{ margin-bottom:6px; color:var(--ink-soft); }
      en una sola fila horizontal; apiladas en columna, el espacio entre
      filas (gap) ya cumple ese rol. */
   .filter-divider{ display:none; }
-  .filter-select-wrap,
-  .filter-search-wrap{ width:100%; }
+  .filter-controls{ width:100%; }
+  .filter-select-wrap{ flex:1; min-width:0; }
   .filter-select{ width:100%; }
-  .filter-search-input{ width:100%; }
+  /* El círculo de búsqueda es de ancho fijo cerrado; abierto, toma el
+     lugar del select (ver .filter-controls.search-active abajo) para
+     tener espacio de sobra donde escribir en vez de compartir la fila
+     con el select angosto. */
+  .filter-search-wrap.is-open{ flex:1; min-width:0; }
+  .filter-search-box{ width:100%; }
+  .filter-controls.search-active .filter-select-wrap{ display:none; }
 }
