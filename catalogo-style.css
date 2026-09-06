@@ -524,17 +524,27 @@ h2.section-title{
 
 .item .text{ flex:1; min-width:0; }
 .item .name{
+  display:block;
+  width:fit-content;
   font-size:15.5px;
   font-weight:500;
   color:var(--ink);
+  transition:transform 0.25s ease;
+  transform-origin:left center;
 }
+.item .name:hover{ transform:scale(1.07); }
 .item .inspired{
+  display:block;
+  width:fit-content;
   font-family:'Cormorant Garamond', serif;
   font-style:italic;
   font-size:15px;
   color:var(--ink-soft);
   margin-top:3px;
+  transition:transform 0.25s ease, color 0.25s ease;
+  transform-origin:left center;
 }
+.item .inspired:hover{ transform:scale(1.05); color:var(--ink); }
 .item .inspired .brand-name{
   font-style:normal;
   color:var(--tone-deep, var(--brass));
@@ -1008,19 +1018,24 @@ body.cart-open-lock{ overflow:hidden; }
 .cart-total strong{ color:var(--brass-soft); font-size:16px; }
 
 .cart-clear{
-  align-self:flex-end;
-  background:none;
-  border:none;
-  color:var(--ink-faint);
+  align-self:stretch;
+  padding:12px 20px;
+  border:1px solid var(--hair);
+  border-radius:999px;
+  background:transparent;
+  color:var(--ink-soft);
   font-family:'Jost', sans-serif;
-  font-size:12.5px;
+  font-size:13px;
   letter-spacing:0.03em;
-  text-decoration:underline;
   cursor:pointer;
-  padding:0;
-  transition:color 0.2s ease;
+  transition:border-color 0.2s ease, color 0.2s ease, background 0.2s ease, transform 0.15s ease;
 }
-.cart-clear:hover{ color:var(--wine-deep); }
+.cart-clear:hover{
+  border-color:var(--wine-deep);
+  color:var(--wine-deep);
+  background:rgba(198,72,94,0.08);
+}
+.cart-clear:active{ transform:scale(0.97); }
 
 .cart-order{
   position:relative;
