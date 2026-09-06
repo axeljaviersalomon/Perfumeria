@@ -417,10 +417,6 @@ p.lede{
 .filter-search-input::-webkit-search-cancel-button,
 .filter-search-input::-webkit-search-results-button,
 .filter-search-input::-webkit-search-results-decoration{ -webkit-appearance:none; }
-@media (max-width:520px){
-  .filter-search-input{ width:100%; }
-  .filter-search-wrap{ width:100%; order:99; }
-}
 
 /* ---------- SCROLL REVEAL ---------- */
 .reveal{
@@ -1648,7 +1644,48 @@ noscript li{ margin-bottom:6px; color:var(--ink-soft); }
   .wrap{ padding:0 20px; }
   header.hero{ padding:56px 0 0; }
   .unisex-grid{ grid-template-columns:1fr; }
-  .filter-bar{ padding:18px 20px; padding-right:86px; }
   .trust-item{ flex:1 1 100%; border-left:none; }
   .cursor-glow{ display:none; }
+
+  /* En mobile, "Todas / Mujer / Hombre / Unisex" ya no entra en una
+     sola línea centrada: se envolvía en 2 líneas desparejas (3 + 1
+     chip suelto) que se veía descuidado. En vez de wrap, cada control
+     pasa a ocupar su propia fila (categorías, marca, buscador),
+     apilados prolijamente de arriba a abajo en vez de repartidos sin
+     un criterio visual. */
+  .filter-bar{
+    flex-direction:column;
+    align-items:stretch;
+    padding:16px 20px 18px;
+    padding-right:86px; /* deja libre el círculo del carrito (ver comentario arriba) */
+    gap:10px;
+  }
+  /* Las categorías siguen siendo chips (no un <select>): son solo 4 y
+     tocarlas una a una es más rápido que abrir un desplegable. Para
+     que quepan en una sola línea prolija, se desliza en horizontal en
+     vez de envolver a una segunda línea. */
+  .filter-group{
+    width:100%;
+    flex-wrap:nowrap;
+    justify-content:flex-start;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    padding-bottom:2px;
+    /* Sin esto, un hijo flex no se achica por debajo del ancho de su
+       contenido (min-width:auto es el default): en vez de scrollear
+       ADENTRO de esta fila, empujaba a .filter-bar (y a toda la
+       página) a desbordar horizontalmente. */
+    min-width:0;
+  }
+  .filter-group::-webkit-scrollbar{ display:none; }
+  .filter-btn{ flex:0 0 auto; white-space:nowrap; }
+  /* El separador vertical entre categorías y marca solo tiene sentido
+     en una sola fila horizontal; apiladas en columna, el espacio entre
+     filas (gap) ya cumple ese rol. */
+  .filter-divider{ display:none; }
+  .filter-select-wrap,
+  .filter-search-wrap{ width:100%; }
+  .filter-select{ width:100%; }
+  .filter-search-input{ width:100%; }
 }
