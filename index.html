@@ -186,24 +186,39 @@
 <!-- Previsualización de una fragancia: se abre al tocar el item en el catálogo -->
 <div class="modal-backdrop" id="previewBackdrop" hidden></div>
 
-<div class="preview-modal" id="previewModal" role="dialog" aria-modal="true" aria-labelledby="previewName" hidden>
-  <button type="button" class="preview-close" id="previewClose" aria-label="Cerrar previsualización">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
-  </button>
-  <div class="preview-media">
-    <img id="previewImg" src="" alt="">
-  </div>
-  <div class="preview-body">
-    <div class="preview-brand" id="previewBrand"></div>
-    <h3 class="preview-name" id="previewName"></h3>
-    <p class="preview-inspired">Inspirado en <span id="previewInspired"></span></p>
-    <button type="button" class="preview-add" id="previewAdd">
-      <span class="btn-shine" aria-hidden="true"></span>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-      <span>Agregar al carrito</span>
+<div class="preview-viewport" id="previewViewport" hidden></div>
+
+<!-- Plantilla de cada una de las 3 cards del carrusel (anterior/activa/
+     siguiente): catalogo-preview.js clona esto 3 veces dentro de
+     #previewViewport al cargar la página. -->
+<template id="previewSlideTemplate">
+  <div class="preview-slide" role="dialog" aria-modal="true">
+    <span class="preview-media-tag">Imagen de referencia</span>
+    <button type="button" class="preview-close" aria-label="Cerrar previsualización">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
+    <div class="preview-slide-inner">
+      <div class="preview-media">
+        <img class="preview-img" src="" alt="">
+      </div>
+      <div class="preview-body">
+        <div class="preview-brand"></div>
+        <h3 class="preview-name"></h3>
+        <p class="preview-inspired">Inspirado en <span></span></p>
+        <div class="preview-meta">
+          <span>60 ml</span>
+          <span class="preview-meta-dot" aria-hidden="true"></span>
+          <span>Eau de Parfum</span>
+        </div>
+        <button type="button" class="preview-add">
+          <span class="btn-shine" aria-hidden="true"></span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          <span>Agregar al carrito</span>
+        </button>
+      </div>
+    </div>
   </div>
-</div>
+</template>
 
 <script src="catalogo-data.js"></script>
 <script src="catalogo-placeholders.js"></script>
