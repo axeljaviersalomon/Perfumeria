@@ -997,8 +997,22 @@ footer p{
 }
 .cart-badge.is-visible{ opacity:1; transform:scale(1); }
 
+/* En mobile, el carrito flotante deja de compartir altura con la barra
+   de filtros: en vez de confiar en que las categorías/el buscador
+   nunca lleguen a ocupar ese ancho (Safari en iOS igual los deja
+   desbordar por debajo del círculo, aunque en Chrome no pasa), el
+   círculo directamente se ubica más abajo, pegado al borde inferior de
+   la barra. --filter-bar-h lo actualiza catalogo-app.js con la altura
+   real de la barra (cambia si el texto de alguna marca larga hace que
+   el select se envuelva), así que la separación se mantiene sin
+   importar el contenido. */
 @media (max-width:520px){
-  .cart-float{ right:16px; top:16px; width:54px; height:54px; }
+  .cart-float{
+    right:16px;
+    top:calc(var(--filter-bar-h, 130px) + 14px);
+    width:54px;
+    height:54px;
+  }
   .cart-icon{ width:22px; height:22px; }
 }
 
@@ -1737,16 +1751,6 @@ noscript li{ margin-bottom:6px; color:var(--ink-soft); }
   .trust-item{ flex:1 1 45%; border-left:none; }
   .trust-item:nth-child(odd){ border-left:none; }
 }
-/* El botón flotante del carrito es "position:fixed" (no forma parte del
-   flujo de .filter-bar) y queda por encima de la barra sticky de
-   filtros con más z-index: sin este padding, cuando las categorías se
-   envuelven en varias líneas en mobile, la última de la fila puede
-   terminar justo debajo del círculo del carrito. Reservamos ese
-   espacio a la derecha para que el texto se envuelva antes de
-   llegar ahí. */
-@media (max-width:768px){
-  .filter-bar{ padding-right:92px; }
-}
 @media (max-width:520px){
   .wrap{ padding:0 20px; }
   header.hero{ padding:56px 0 0; }
@@ -1764,7 +1768,6 @@ noscript li{ margin-bottom:6px; color:var(--ink-soft); }
     flex-direction:column;
     align-items:stretch;
     padding:16px 20px 18px;
-    padding-right:86px; /* deja libre el círculo del carrito (ver comentario arriba) */
     gap:10px;
   }
   /* Las categorías siguen siendo chips (no un <select>): son solo 4 y

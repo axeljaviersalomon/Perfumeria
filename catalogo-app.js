@@ -296,6 +296,24 @@ document.getElementById('ctaJump')?.addEventListener('click', scrollToFragrances
   btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 })();
 
+// ---- Altura real de la barra de filtros ----
+// En mobile, el círculo del carrito se ubica pegado al borde inferior
+// de esta barra (ver ".cart-float" en catalogo-style.css) en vez de
+// compartir su fila: alinear "a ojo" con un número fijo se rompe apenas
+// el contenido cambia de alto (una marca con nombre largo envolviendo
+// el <select>, una fuente que tarda en cargar, cambiar el tamaño de la
+// ventana). ResizeObserver mantiene la variable exacta todo el tiempo,
+// así que el carrito nunca puede terminar superpuesto a los filtros.
+(function syncFilterBarHeight() {
+  const bar = document.querySelector('.filter-bar');
+  if (!bar || !('ResizeObserver' in window)) return;
+
+  const ro = new ResizeObserver(() => {
+    document.documentElement.style.setProperty('--filter-bar-h', `${bar.offsetHeight}px`);
+  });
+  ro.observe(bar);
+})();
+
 // ---- Luz de cursor ----
 // Sigue el mouse con un leve retraso (lerp) para un brillo cálido y suave.
 // Se desactiva en touch y con prefers-reduced-motion.
