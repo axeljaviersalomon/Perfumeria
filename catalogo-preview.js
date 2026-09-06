@@ -34,6 +34,11 @@ let viewport = null;
 let backdrop = null;
 let slides = { prev: null, current: null, next: null };
 
+let notesBackdrop = null;
+let notesPanel = null;
+let lastFocusedBeforeNotesOpen = null;
+const LEVEL_LABELS = { 1: 'Normal', 2: 'Buena', 3: 'Fuerte' };
+
 let lastFocusedBeforePreviewOpen = null;
 
 // Fragancias navegables por swipe/flechas: se recalculan cada vez que se
@@ -67,7 +72,7 @@ function setSlot(slide, name) {
   // centro (si no, con Tab se llega a botones invisibles).
   const isCurrent = name === 'current';
   slide.setAttribute('aria-hidden', String(!isCurrent));
-  slide.querySelectorAll('.preview-close, .preview-add').forEach((btn) => {
+  slide.querySelectorAll('.preview-close, .preview-add, .preview-notes-btn').forEach((btn) => {
     btn.tabIndex = isCurrent ? 0 : -1;
   });
 }
@@ -104,6 +109,13 @@ function fillSlide(slide, itemEl) {
   }
   addBtn.classList.remove('is-confirmed');
   addBtn.disabled = false;
+
+  // Unas pocas fragancias del catálogo no tienen fila en la planilla
+  // del proveedor (catalogo-notas.js no trae datos para esas): en vez
+  // de abrir un popup vacío o inventado, el botón directamente no se
+  // muestra para ellas.
+  const notesBtn = slide.querySelector('.preview-notes-btn');
+  if (notesBtn) notesBtn.hidden = !(typeof catalogoNotas !== 'undefined' && catalogoNotas[itemEl.dataset.itemId]);
 }
 
 // Sin vecino de ese lado (primera o última fragancia de la lista): la
@@ -164,7 +176,14 @@ function setDragX(px) {
 }
 
 function onPreviewKeydown(e) {
-  if (e.key === 'Escape') { closePreview(false); return; }
+  if (e.key === 'Escape') {
+    // Si el popup de notas está abierto, Escape cierra ESE primero (la
+    // ficha de atrás sigue abierta), igual que tocar afuera lo cerraría
+    // sin tocar el carrusel.
+    if (notesPanel?.classList.contains('is-open')) { closeNotes(); return; }
+    closePreview(false);
+    return;
+  }
   if (e.key === 'ArrowLeft') { commitSwipe(-1); return; }
   if (e.key === 'ArrowRight') { commitSwipe(1); }
 }
@@ -224,6 +243,10 @@ function openPreview(itemEl) {
 // card activa en vez del simple fundido de cerrar con la X o el fondo).
 function closePreview(vanish) {
   if (!viewport || !backdrop || !slides.current) return;
+
+  // Por si quedó abierto (no debería, ver z-index): que no reaparezca
+  // mostrando la fragancia equivocada la próxima vez que se abra otra.
+  if (notesPanel?.classList.contains('is-open')) closeNotes();
 
   if (vanish) slides.current.classList.add('is-vanishing');
   viewport.classList.remove('is-open');
@@ -340,7 +363,7 @@ function onPointerDown(e) {
   // en vez de tener que esperar a que cada animación termine.
   const slide = e.target.closest('.preview-slide');
   if (!slide || !slide.classList.contains('slot-current')) return;
-  if (e.target.closest('.preview-add, .preview-close')) return;
+  if (e.target.closest('.preview-add, .preview-close, .preview-notes-btn')) return;
   if (navItems.length < 2) return; // nada para deslizar
 
   drag = { id: e.pointerId, startX: e.clientX, startY: e.clientY, dx: 0, locked: false, active: false };
@@ -432,11 +455,86 @@ function flashAddedThenClose(addBtn) {
   }, 1300);
 }
 
+// Llena una de las dos barras (Proyección/Duración) del popup de
+// notas. `level` es 1/2/3 (Normal/Buena/Fuerte) o null cuando la
+// planilla del proveedor no trae ese dato para esta fragancia en
+// particular: en vez de "0" o esconder el campo, se ve la barra llena
+// igual con "?/3" y esta leyenda en lugar del nivel.
+function fillNotesStat(fracEl, fillEl, valueEl, level) {
+  if (level == null) {
+    fracEl.textContent = '?/3';
+    fillEl.style.width = '100%';
+    valueEl.textContent = 'Dato no disponible';
+    valueEl.classList.add('is-unavailable');
+    return;
+  }
+  fracEl.textContent = `${level}/3`;
+  fillEl.style.width = `${(level / 3) * 100}%`;
+  valueEl.textContent = LEVEL_LABELS[level];
+  valueEl.classList.remove('is-unavailable');
+}
+
+// Siempre lee de la card ACTIVA del carrusel (no de una fija): el botón
+// "Ver notas" solo existe en esa card, así que no hace falta que el
+// popup sepa nada de swipes ni de las otras 2 cards.
+function openNotes(slide) {
+  if (!notesBackdrop || !notesPanel) return;
+  const data = typeof catalogoNotas !== 'undefined' ? catalogoNotas[slide.dataset.itemId] : null;
+  if (!data) return;
+
+  document.getElementById('notesBrand').textContent = slide.dataset.itemBrand || '';
+  document.getElementById('notesTitle').textContent = slide.dataset.itemName || '';
+  document.getElementById('notesBody').textContent = data.notas || '';
+  fillNotesStat(
+    document.getElementById('notesProyFrac'),
+    document.getElementById('notesProyFill'),
+    document.getElementById('notesProyValue'),
+    data.proyeccion
+  );
+  fillNotesStat(
+    document.getElementById('notesDurFrac'),
+    document.getElementById('notesDurFill'),
+    document.getElementById('notesDurValue'),
+    data.duracion
+  );
+
+  lastFocusedBeforeNotesOpen = document.activeElement;
+  notesPanel.hidden = false;
+  notesBackdrop.hidden = false;
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      notesPanel.classList.add('is-open');
+      notesBackdrop.classList.add('is-open');
+    });
+  });
+  document.getElementById('notesClose')?.focus();
+}
+
+function closeNotes() {
+  if (!notesBackdrop || !notesPanel || !notesPanel.classList.contains('is-open')) return;
+  notesPanel.classList.remove('is-open');
+  notesBackdrop.classList.remove('is-open');
+  setTimeout(() => {
+    notesPanel.hidden = true;
+    notesBackdrop.hidden = true;
+  }, 340); // debe coincidir con la transición CSS de .notes-panel
+
+  if (lastFocusedBeforeNotesOpen instanceof HTMLElement) lastFocusedBeforeNotesOpen.focus();
+}
+
 // Delegación sobre #previewViewport: cubre las 3 cards (clonadas del
 // mismo <template>) sin necesitar un listener por cada una, y sigue
 // funcionando aunque sus roles/lugares roten con cada swipe.
 function onViewportClick(e) {
   if (e.target.closest('.preview-close')) { closePreview(false); return; }
+
+  const notesBtn = e.target.closest('.preview-notes-btn');
+  if (notesBtn) {
+    const slide = notesBtn.closest('.preview-slide');
+    if (!slide || !slide.classList.contains('slot-current')) return; // solo la card activa tiene notas
+    openNotes(slide);
+    return;
+  }
 
   const addBtn = e.target.closest('.preview-add');
   if (addBtn) {
@@ -462,6 +560,11 @@ function initPreviewOpenClose() {
   viewport.addEventListener('click', onViewportClick);
   viewport.addEventListener('pointerdown', onPointerDown);
   backdrop?.addEventListener('click', () => closePreview(false));
+
+  notesBackdrop = document.getElementById('notesBackdrop');
+  notesPanel = document.getElementById('notesPanel');
+  document.getElementById('notesClose')?.addEventListener('click', closeNotes);
+  notesBackdrop?.addEventListener('click', closeNotes);
 }
 
 // Delegación sobre document: cubre todos los .item aunque el catálogo

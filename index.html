@@ -210,6 +210,10 @@
           <span class="preview-meta-dot" aria-hidden="true"></span>
           <span>Eau de Parfum</span>
         </div>
+        <button type="button" class="preview-notes-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h8l4 4v14H7z"/><path d="M11 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
+          Ver notas
+        </button>
         <button type="button" class="preview-add">
           <span class="btn-shine" aria-hidden="true"></span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
@@ -220,7 +224,39 @@
   </div>
 </template>
 
+<!-- Notas olfativas + proyección/duración de la fragancia activa en el
+     carrusel de arriba (botón "Ver notas" en la card). Es un popup
+     propio, no otro lugar del carrusel: muestra información extra de
+     la MISMA fragancia, no navega a otra. -->
+<div class="modal-backdrop" id="notesBackdrop" hidden></div>
+<div class="notes-panel" id="notesPanel" role="dialog" aria-modal="true" aria-labelledby="notesTitle" hidden>
+  <button type="button" class="notes-close" id="notesClose" aria-label="Cerrar notas">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <div class="notes-eyebrow" id="notesBrand"></div>
+  <h4 class="notes-title" id="notesTitle"></h4>
+
+  <div class="notes-stats">
+    <div>
+      <div class="notes-stat-label">Proyección <span class="notes-stat-frac" id="notesProyFrac"></span></div>
+      <div class="notes-stat-track"><div class="notes-stat-fill" id="notesProyFill"></div></div>
+      <div class="notes-stat-value" id="notesProyValue"></div>
+    </div>
+    <div>
+      <div class="notes-stat-label">Duración <span class="notes-stat-frac" id="notesDurFrac"></span></div>
+      <div class="notes-stat-track"><div class="notes-stat-fill" id="notesDurFill"></div></div>
+      <div class="notes-stat-value" id="notesDurValue"></div>
+    </div>
+  </div>
+
+  <div class="notes-divider"></div>
+
+  <div class="notes-section-label">Notas olfativas</div>
+  <p class="notes-body" id="notesBody"></p>
+</div>
+
 <script src="catalogo-data.js"></script>
+<script src="catalogo-notas.js"></script>
 <script src="catalogo-placeholders.js"></script>
 <script src="catalogo-app.js"></script>
 <script src="catalogo-cart.js"></script>
