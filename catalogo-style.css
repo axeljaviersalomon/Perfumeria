@@ -378,6 +378,50 @@ p.lede{
 .filter-select:hover,
 .filter-select:focus{ border-color:var(--brass-soft); outline:none; }
 
+.filter-search-wrap{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+}
+.filter-search-icon{
+  position:absolute;
+  left:16px;
+  width:15px;
+  height:15px;
+  color:var(--ink-faint);
+  pointer-events:none;
+}
+.filter-search-input{
+  width:200px;
+  font-family:'Jost', sans-serif;
+  font-size:13px;
+  letter-spacing:0.02em;
+  color:var(--ink);
+  background:var(--bg-panel);
+  border:1px solid var(--hair);
+  border-radius:999px;
+  padding:9px 16px 9px 40px;
+  transition:border-color 0.2s ease, box-shadow 0.3s ease, width 0.25s ease;
+}
+.filter-search-input::placeholder{ color:var(--ink-faint); }
+.filter-search-input:hover,
+.filter-search-input:focus{
+  border-color:var(--brass-soft);
+  outline:none;
+  box-shadow:0 4px 16px rgba(var(--glow-rgb),0.2);
+}
+/* Safari agrega su propio ícono de lupa + botón de "borrar" al
+   type="search"; los sacamos porque ya tenemos el ícono propio a la
+   izquierda y el look nativo desentona con el resto de los controles. */
+.filter-search-input::-webkit-search-decoration,
+.filter-search-input::-webkit-search-cancel-button,
+.filter-search-input::-webkit-search-results-button,
+.filter-search-input::-webkit-search-results-decoration{ -webkit-appearance:none; }
+@media (max-width:520px){
+  .filter-search-input{ width:100%; }
+  .filter-search-wrap{ width:100%; order:99; }
+}
+
 /* ---------- SCROLL REVEAL ---------- */
 .reveal{
   opacity:0;
@@ -440,6 +484,7 @@ h2.section-title{
   border-bottom:1px solid var(--tone-deep, var(--brass));
 }
 .brand-group.is-hidden{ display:none; }
+.item.is-hidden{ display:none; }
 .brand-label{
   font-size:16px;
   font-weight:600;
@@ -1589,11 +1634,21 @@ noscript li{ margin-bottom:6px; color:var(--ink-soft); }
   .trust-item{ flex:1 1 45%; border-left:none; }
   .trust-item:nth-child(odd){ border-left:none; }
 }
+/* El botón flotante del carrito es "position:fixed" (no forma parte del
+   flujo de .filter-bar) y queda por encima de la barra sticky de
+   filtros con más z-index: sin este padding, cuando las categorías se
+   envuelven en varias líneas en mobile, la última de la fila puede
+   terminar justo debajo del círculo del carrito. Reservamos ese
+   espacio a la derecha para que el texto se envuelva antes de
+   llegar ahí. */
+@media (max-width:768px){
+  .filter-bar{ padding-right:92px; }
+}
 @media (max-width:520px){
   .wrap{ padding:0 20px; }
   header.hero{ padding:56px 0 0; }
   .unisex-grid{ grid-template-columns:1fr; }
-  .filter-bar{ padding:18px 20px; }
+  .filter-bar{ padding:18px 20px; padding-right:86px; }
   .trust-item{ flex:1 1 100%; border-left:none; }
   .cursor-glow{ display:none; }
 }

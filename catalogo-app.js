@@ -18,8 +18,23 @@ const CATEGORY_SECTIONS = [
 // Estado activo de los filtros
 const state = {
   category: 'todas',
-  brand: 'todas'
+  brand: 'todas',
+  search: ''
 };
+
+// Sin tildes ni mayúsculas: así "Aneane" encuentra "AneAne" y "cacharel"
+// encuentra "Cacharel" sin que la persona tenga que escribir el acento
+// exacto de "Bergamota" o similar.
+function normalizeSearch(str) {
+  return (str || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+}
+
+function itemMatchesSearch(itemEl, term) {
+  if (!term) return true;
+  return normalizeSearch(itemEl.dataset.itemName).includes(term)
+    || normalizeSearch(itemEl.dataset.itemBrand).includes(term)
+    || normalizeSearch(itemEl.dataset.itemInspired).includes(term);
+}
 
 let placeholderCounter = 0;
 
@@ -99,8 +114,13 @@ function populateBrandSelect() {
   select.innerHTML = options.join('');
 }
 
-// Aplica el filtro actual mostrando/ocultando secciones, grupos e items
+// Aplica el filtro actual mostrando/ocultando secciones, grupos e items.
+// Categoría y marca ocultan el grupo entero; la búsqueda por texto va un
+// nivel más profundo, ocultando fragancias individuales dentro de un
+// grupo que sigue visible (así "Cacharel" con la búsqueda "aneane" sigue
+// mostrando el rótulo de la marca, solo con esa fragancia adentro).
 function applyFilters() {
+  const term = normalizeSearch(state.search);
   let visibleGroupsTotal = 0;
 
   CATEGORY_SECTIONS.forEach(({ key, sectionId, listId }) => {
@@ -119,8 +139,17 @@ function applyFilters() {
 
     groups.forEach(groupEl => {
       const brandMatches = state.brand === 'todas' || groupEl.dataset.brand === state.brand;
-      groupEl.classList.toggle('is-hidden', !brandMatches);
-      if (brandMatches) visibleInSection++;
+
+      let visibleItemsInGroup = 0;
+      groupEl.querySelectorAll('.item').forEach(itemEl => {
+        const searchMatches = itemMatchesSearch(itemEl, term);
+        itemEl.classList.toggle('is-hidden', !searchMatches);
+        if (searchMatches) visibleItemsInGroup++;
+      });
+
+      const groupVisible = brandMatches && visibleItemsInGroup > 0;
+      groupEl.classList.toggle('is-hidden', !groupVisible);
+      if (groupVisible) visibleInSection++;
     });
 
     // Si ninguna marca coincide dentro de esta sección, ocultamos la sección entera
@@ -129,8 +158,10 @@ function applyFilters() {
   });
 
   const note = document.getElementById('results-note');
-  if (state.brand !== 'todas' && visibleGroupsTotal === 0) {
-    note.textContent = `No hay fragancias de "${state.brand}" en esta categoría.`;
+  if (visibleGroupsTotal === 0 && (state.brand !== 'todas' || term)) {
+    note.textContent = term
+      ? `No encontramos fragancias para "${state.search.trim()}".`
+      : `No hay fragancias de "${state.brand}" en esta categoría.`;
     note.style.display = 'block';
   } else {
     note.style.display = 'none';
@@ -156,6 +187,11 @@ function initFilters() {
 
   document.getElementById('brand-filter').addEventListener('change', (e) => {
     state.brand = e.target.value;
+    applyFilters();
+  });
+
+  document.getElementById('search-filter').addEventListener('input', (e) => {
+    state.search = e.target.value;
     applyFilters();
   });
 }
