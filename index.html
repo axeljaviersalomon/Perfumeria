@@ -199,6 +199,10 @@ if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
       <span>Total de fragancias</span>
       <strong id="cartTotalCount">0</strong>
     </div>
+    <div class="cart-total">
+      <span>Total estimado</span>
+      <strong id="cartTotalPrice">$0</strong>
+    </div>
     <button type="button" class="cart-clear" id="cartClear">Vaciar carrito</button>
     <button type="button" class="cart-order" id="cartOrder">
       <span class="btn-shine" aria-hidden="true"></span>
@@ -237,6 +241,7 @@ if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
           <span class="preview-meta-dot" aria-hidden="true"></span>
           <span>Eau de Parfum</span>
         </div>
+        <div class="preview-price"></div>
         <button type="button" class="preview-notes-btn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h8l4 4v14H7z"/><path d="M11 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
           Ver notas
@@ -284,6 +289,7 @@ if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
 <script src="catalogo-data.js"></script>
 <script src="catalogo-notas.js"></script>
+<script src="catalogo-precios.js"></script>
 <script src="catalogo-placeholders.js"></script>
 <script src="catalogo-app.js"></script>
 <script src="catalogo-cart.js"></script>

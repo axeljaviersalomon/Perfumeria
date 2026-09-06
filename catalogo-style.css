@@ -1145,6 +1145,14 @@ body.cart-open-lock{ overflow:hidden; }
   color:var(--ink-faint);
   margin-top:2px;
 }
+.cart-row-price{
+  font-family:'Jost', sans-serif;
+  font-weight:500;
+  font-size:14px;
+  letter-spacing:0.03em;
+  color:var(--brass-soft);
+  margin-top:6px;
+}
 
 .cart-row-qty{
   display:flex;
@@ -1539,6 +1547,19 @@ body.cart-open-lock{ overflow:hidden; }
   background:var(--brass-soft);
   flex-shrink:0;
 }
+
+/* Precio: solo existe acá (y en el carrito), nunca en la grilla del
+   catálogo. Mismo criterio que .preview-notes-btn[hidden] para las
+   fragancias sin dato de precio. */
+.preview-price{
+  font-family:'Jost', sans-serif;
+  font-weight:500;
+  font-size:14px;
+  letter-spacing:0.03em;
+  color:var(--brass-soft);
+  margin:0 0 16px;
+}
+.preview-price[hidden]{ display:none; }
 
 .preview-add{
   position:relative;

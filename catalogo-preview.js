@@ -41,6 +41,10 @@ const LEVEL_LABELS = { 1: 'Normal', 2: 'Buena', 3: 'Fuerte' };
 
 let lastFocusedBeforePreviewOpen = null;
 
+function formatPrice(n) {
+  return `$${n.toLocaleString('es-AR')}`;
+}
+
 // Fragancias navegables por swipe/flechas: se recalculan cada vez que se
 // abre el carrusel (respetan los filtros de categoría/marca activos en
 // ese momento) y no cambian mientras sigue abierto.
@@ -116,6 +120,16 @@ function fillSlide(slide, itemEl) {
   // muestra para ellas.
   const notesBtn = slide.querySelector('.preview-notes-btn');
   if (notesBtn) notesBtn.hidden = !(typeof catalogoNotas !== 'undefined' && catalogoNotas[itemEl.dataset.itemId]);
+
+  // El precio solo se ve acá (y en el carrito), nunca en la grilla del
+  // catálogo. catalogo-precios.js guarda "Consultar" en vez de un
+  // número para las fragancias que se salen de la escala habitual.
+  const priceEl = slide.querySelector('.preview-price');
+  if (priceEl) {
+    const price = typeof catalogoPrecios !== 'undefined' ? catalogoPrecios[itemEl.dataset.itemId] : undefined;
+    priceEl.textContent = typeof price === 'number' ? formatPrice(price) : (price || '');
+    priceEl.hidden = !price;
+  }
 }
 
 // Sin vecino de ese lado (primera o última fragancia de la lista): la

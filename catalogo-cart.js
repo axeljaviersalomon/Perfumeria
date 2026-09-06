@@ -24,6 +24,37 @@ const CLOSE_TRANSITION_MS = 320; // debe coincidir con la transición CSS de .ca
 // Estado del carrito: { [id]: { id, name, brand, inspired, qty } }
 let cart = loadCart();
 let toastTimer = null;
+
+function formatPrice(n) {
+  return `$${n.toLocaleString('es-AR')}`;
+}
+
+// undefined = la fragancia no está en catalogo-precios.js (no debería
+// pasar: todo el catálogo tiene precio), número = precio normal,
+// "Consultar" = se sale de la escala habitual y no se fija un número.
+function getItemPrice(id) {
+  return typeof catalogoPrecios !== 'undefined' ? catalogoPrecios[id] : undefined;
+}
+
+// Suma solo las fragancias con precio numérico: las que están en
+// "Consultar" no entran en la suma, así que hasConsultar avisa que el
+// total mostrado es parcial.
+function computeCartTotals(entries) {
+  let sum = 0;
+  let hasConsultar = false;
+  entries.forEach((entry) => {
+    const price = getItemPrice(entry.id);
+    if (typeof price === 'number') sum += price * entry.qty;
+    else if (price) hasConsultar = true;
+  });
+  return { sum, hasConsultar };
+}
+
+function formatCartTotal(entries) {
+  const { sum, hasConsultar } = computeCartTotals(entries);
+  return formatPrice(sum) + (hasConsultar ? ' + a consultar' : '');
+}
+
 let lastFocusedBeforeOpen = null;
 
 // ---- Persistencia ----
@@ -130,11 +161,14 @@ function restoreItemBadgesFromCart() {
 
 function renderCartRow(entry) {
   const safeName = escapeHtml(entry.name);
+  const price = getItemPrice(entry.id);
+  const priceLabel = typeof price === 'number' ? formatPrice(price * entry.qty) : (price || '');
   return `
     <li class="cart-row" data-item-id="${escapeHtml(entry.id)}">
       <div class="cart-row-info">
         <div class="cart-row-name">${safeName}</div>
         <div class="cart-row-brand">${escapeHtml(entry.brand)}</div>
+        ${priceLabel ? `<div class="cart-row-price">${priceLabel}</div>` : ''}
       </div>
       <div class="cart-row-qty">
         <button type="button" class="cart-qty-btn" data-action="decrease" aria-label="Restar uno a ${safeName}">−</button>
@@ -179,13 +213,20 @@ function renderCartList() {
   footEl.hidden = false;
   totalCountEl.textContent = String(total);
   listEl.innerHTML = entries.map(renderCartRow).join('');
+
+  const totalPriceEl = document.getElementById('cartTotalPrice');
+  if (totalPriceEl) totalPriceEl.textContent = formatCartTotal(entries);
 }
 
 // ---- Pedido por WhatsApp ----
 
 function buildWhatsAppMessage() {
   const entries = Object.values(cart).sort((a, b) => a.name.localeCompare(b.name, 'es'));
-  const lines = entries.map((entry) => `• ${entry.name} (${entry.brand}) x${entry.qty}`);
+  const lines = entries.map((entry) => {
+    const price = getItemPrice(entry.id);
+    const priceLabel = typeof price === 'number' ? formatPrice(price * entry.qty) : (price || '');
+    return `• ${entry.name} (${entry.brand}) x${entry.qty}${priceLabel ? ` — ${priceLabel}` : ''}`;
+  });
   const total = getTotalCount();
   const totalLabel = total === 1 ? 'fragancia' : 'fragancias';
 
@@ -195,6 +236,7 @@ function buildWhatsAppMessage() {
     ...lines,
     '',
     `Total: ${total} ${totalLabel}.`,
+    `Total estimado: ${formatCartTotal(entries)}`,
     '¡Gracias!'
   ].join('\n');
 }
