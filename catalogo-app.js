@@ -39,7 +39,7 @@ function renderItem(name, inspired, image, brand) {
   const itemId = `${brand}::${name}`;
   return `
     <div class="item" data-item-id="${itemId}" data-item-name="${name}" data-item-brand="${brand}" data-item-inspired="${inspired}">
-      <div class="thumb-wrap"><img class="${imgClass}" src="${src}" alt="${inspired}"></div>
+      <div class="thumb-wrap"><img class="${imgClass}" src="${src}" alt="${inspired}" width="58" height="72" loading="lazy" decoding="async"></div>
       <div class="text">
         <div class="name">${name}</div>
         <div class="inspired">Inspirado en <span class="brand-name">${inspired}</span></div>

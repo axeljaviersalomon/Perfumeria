@@ -26,10 +26,10 @@ const femenino = [
     ["Good Girl Blush", "Good Girl Blush", "assets/img/productos/good-girl-blush.jpg"],
     ["Heroes", "212 Heroes for Her"],
     ["Manhattan 212", "212", "assets/img/productos/manhattan-212.jpg"],
-    ["212 Sexy", "212 Sexy", "assets/img/productos/212-sexy.jpeg"],
+    ["212 Sexy", "212 Sexy", "assets/img/productos/212-sexy.jpg"],
     ["Very Glam Good Girl", "Very Good Girl", "assets/img/productos/very-glam-good-girl.jpg"],
     ["Very Good Girl", "Very Good Girl", "assets/img/productos/very-glam-good-girl.jpg"],
-    ["212 VIP Rosé", "212 VIP Rosé", "assets/img/productos/212-vip-rose.jpeg"]
+    ["212 VIP Rosé", "212 VIP Rosé", "assets/img/productos/212-vip-rose.jpg"]
   ]},
   { brand: "Davidoff", items: [
     ["Echo", "Echo Woman"]
@@ -51,7 +51,7 @@ const femenino = [
     ["ADG", "Acqua di Gioia", "assets/img/productos/adg.jpg"],
     ["Amarig", "Emporio Armani"],
     ["My Way", "My Way", "assets/img/productos/my-way.jpg"],
-    ["Sì", "Sì", "assets/img/productos/si.jpeg"],
+    ["Sì", "Sì", "assets/img/productos/si.jpg"],
     ["Sì Passione", "Sì Passione", "assets/img/productos/si-passione.jpg"]
   ]},
   { brand: "Givenchy", items: [
@@ -74,7 +74,7 @@ const femenino = [
   ]},
   { brand: "Lancôme", items: [
     ["Hypnos", "Hypnôse"],
-    ["Vida Bella", "La Vie Est Belle", "assets/img/productos/vida-bella.jpeg"]
+    ["Vida Bella", "La Vie Est Belle", "assets/img/productos/vida-bella.jpg"]
   ]},
   { brand: "Lattafa", items: [
     ["Yara Candy", "Yara Candy"],
@@ -95,8 +95,8 @@ const femenino = [
   ]},
   { brand: "Paco Rabanne", items: [
     ["Fame", "Fame", "assets/img/productos/fame.jpg"],
-    ["Lady Fabulous", "Lady Million", "assets/img/productos/lady-fabulous.jpeg"],
-    ["Lady Mill", "Lady Million", "assets/img/productos/lady-fabulous.jpeg"],
+    ["Lady Fabulous", "Lady Million", "assets/img/productos/lady-fabulous.jpg"],
+    ["Lady Mill", "Lady Million", "assets/img/productos/lady-fabulous.jpg"],
     ["Olimpia Clásico", "Olympéa", "assets/img/productos/olimpia-clasico.jpg"],
     ["Olympéa Flora", "Olympéa Flora"],
     ["Olympéa Parfum", "Olympéa Le Parfum"],
@@ -148,7 +148,7 @@ const masculino = [
   ]},
   { brand: "Giorgio Armani", items: [
     ["Aquatic Breeze ADG", "Acqua di Giò Homme", "assets/img/productos/aquatic-breeze-adg.jpg"],
-    ["Arm Code", "Armani Code Homme", "assets/img/productos/arm-code.png"]
+    ["Arm Code", "Armani Code Homme", "assets/img/productos/arm-code.jpg"]
   ]},
   { brand: "Givenchy", items: [
     ["Gentleman Only", "Gentleman Only", "assets/img/productos/gentleman-only.jpg"]
@@ -171,7 +171,7 @@ const masculino = [
     ["Hypnos Homme", "Hypnôse Homme"]
   ]},
   { brand: "Lattafa", items: [
-    ["Assad", "Asad", "assets/img/productos/assad.png"]
+    ["Assad", "Asad", "assets/img/productos/assad.jpg"]
   ]},
   { brand: "Mugler", items: [
     ["Angel Men", "A*Men / Angel Men"]
@@ -179,8 +179,8 @@ const masculino = [
   { brand: "Paco Rabanne", items: [
     ["Black XS", "Black XS"],
     ["Invictus", "Invictus"],
-    ["Invictus Platinum", "Invictus Platinum", "assets/img/productos/invictus-platinum.webp"],
-    ["Invictus Victory Elixir", "Invictus Victory Elixir", "assets/img/productos/invictus-victory-elixir.webp"],
+    ["Invictus Platinum", "Invictus Platinum", "assets/img/productos/invictus-platinum.jpg"],
+    ["Invictus Victory Elixir", "Invictus Victory Elixir", "assets/img/productos/invictus-victory-elixir.jpg"],
     ["One Million", "One Million", "assets/img/productos/one-million.jpg"],
     ["Phantom", "Phantom", "assets/img/productos/phantom.jpg"],
     ["Invictus Victory", "Invictus Victory", "assets/img/productos/invictus-victory.jpg"]
@@ -215,7 +215,7 @@ const unisex = [
     ["DKN", "DKNY"]
   ]},
   { brand: "Lattafa", items: [
-    ["Khamrah", "Khamrah", "assets/img/productos/khamrah.png"]
+    ["Khamrah", "Khamrah", "assets/img/productos/khamrah.jpg"]
   ]},
   { brand: "Maison Francis Kurkdjian", items: [
     ["Baccarat", "Baccarat Rouge 540", "assets/img/productos/baccarat.jpg"]

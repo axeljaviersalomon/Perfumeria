@@ -2,9 +2,12 @@
  * catalogo-style.css
  * Estilos del catálogo de fragancias. Paleta oscura, tipografía editorial
  * (Cormorant Garamond + Jost) y layout de secciones apiladas por categoría.
+ *
+ * Las fuentes (Cormorant Garamond, Jost, Parisienne) se cargan desde
+ * <link> en el <head> de index.html en vez de @import acá: así el
+ * navegador las descubre y empieza a bajarlas en paralelo con este CSS,
+ * en lugar de esperar a que este archivo termine de cargar primero.
  */
-
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&family=Parisienne&display=swap');
 
 :root{
   --bg: #14110D;
