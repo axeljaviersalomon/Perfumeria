@@ -1152,7 +1152,7 @@ body.cart-open-lock{ overflow:hidden; }
   left:50%;
   width:var(--slide-w);
   touch-action:pan-y;
-  transition:transform 0.48s cubic-bezier(.16,1,.3,1), opacity 0.32s ease, filter 0.32s ease;
+  transition:transform 0.32s cubic-bezier(.16,1,.3,1), opacity 0.26s ease, filter 0.26s ease;
   will-change:transform, opacity;
 }
 .preview-slide.no-anim{ transition:none; }

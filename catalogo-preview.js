@@ -42,7 +42,12 @@ let lastFocusedBeforePreviewOpen = null;
 let navItems = [];
 let navIndex = -1;
 let drag = null;
-let transitioning = false;
+let swipeGen = 0; // ver commitSwipe: identifica a qué swipe pertenece cada reciclado
+// Solo bloquea que se ROTEN los 3 lugares de nuevo mientras la rotación
+// anterior sigue en pantalla (con 3 nodos nada más, dos rotaciones a la
+// vez pueden dejar a alguno sin lugar). NO bloquea agarrar la card y
+// arrastrarla: eso sigue siendo instantáneo en todo momento.
+let rotating = false;
 
 // Solo cuenta los .item que no están ocultos por los filtros de
 // catalogo-app.js (que ocultan agregando "is-hidden" a un ancestro).
@@ -216,8 +221,17 @@ function closePreview(vanish) {
 // al centro. La card que queda sin lugar se recicla instantáneamente
 // fuera de pantalla (invisible) y reaparece deslizándose desde el lado
 // opuesto como el nuevo vecino de ese costado.
+//
+// Solo hay 3 nodos físicos para 3 lugares: si se llega a rotar de nuevo
+// antes de que la rotación anterior termine de reciclar a la card
+// sobrante, dos rotaciones se disputan el mismo nodo y se puede terminar
+// sin ninguna card en "current". Por eso, ROTAR (esta función) espera a
+// que la anterior termine su fase visible (rotating) — pero agarrar y
+// arrastrar la card (onPointerDown/onPointerMove) nunca espera nada, así
+// que deslizar se sigue sintiendo instantáneo aunque el "commit" en sí
+// tenga esta pequeña protección.
 function commitSwipe(offset) {
-  if (transitioning) return;
+  if (rotating) return;
   const targetIndex = navIndex + offset;
   if (targetIndex < 0 || targetIndex >= navItems.length) return;
 
@@ -226,7 +240,17 @@ function commitSwipe(offset) {
   const stayCurrent = slides.current; // pasa al costado opuesto
   const staySide = goingNext ? slides.next : slides.prev; // pasa al centro
 
-  transitioning = true;
+  // Las 3 cards quedan marcadas con este swipe, no solo la que se
+  // recicla: si no, el callback pendiente de reciclado de un swipe
+  // anterior (que revisa el marcado de SU "outgoing") podía no darse
+  // cuenta de que ese mismo nodo ya fue reutilizado con otro rol por
+  // este swipe más nuevo, y terminaba pisándolo con un lugar viejo.
+  const myGen = ++swipeGen;
+  outgoing.dataset.swipeGen = String(myGen);
+  stayCurrent.dataset.swipeGen = String(myGen);
+  staySide.dataset.swipeGen = String(myGen);
+  rotating = true;
+
   setSlot(outgoing, goingNext ? 'exit-left' : 'exit-right');
   setSlot(stayCurrent, goingNext ? 'prev' : 'next');
   setSlot(staySide, 'current');
@@ -244,7 +268,11 @@ function commitSwipe(offset) {
     if (settled) return; // por si transitionend y el respaldo llegan juntos
     settled = true;
     stayCurrent.removeEventListener('transitionend', onPhase1End);
-    transitioning = false; // ya se puede iniciar el próximo swipe
+    rotating = false; // ya se puede rotar de nuevo
+    // Un swipe posterior ya reclamó esta card para otra cosa: reciclarla
+    // ahora la dejaría en un estado incorrecto (contenido/lugar de un
+    // swipe que ya no corresponde).
+    if (outgoing.dataset.swipeGen !== String(myGen)) return;
 
     const newNeighborItem = goingNext ? navItems[capturedIndex + 1] : navItems[capturedIndex - 1];
     outgoing.classList.add('no-anim');
@@ -252,23 +280,37 @@ function commitSwipe(offset) {
     if (newNeighborItem) fillSlide(outgoing, newNeighborItem); else emptySlide(outgoing);
     // eslint-disable-next-line no-unused-expressions
     outgoing.offsetHeight; // fuerza el reflow: el salto a "fuera de pantalla" no debe animarse
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        outgoing.classList.remove('no-anim');
-        setSlot(outgoing, goingNext ? 'next' : 'prev');
-      });
-    });
+
+    let slidIn = false;
+    const slideIntoPlace = () => {
+      if (slidIn) return;
+      slidIn = true;
+      if (outgoing.dataset.swipeGen !== String(myGen)) return;
+      outgoing.classList.remove('no-anim');
+      setSlot(outgoing, goingNext ? 'next' : 'prev');
+    };
+    // El doble rAF es lo que hace que este último tramo (de "fuera de
+    // pantalla" a su lugar de vecina) también se vea animado en vez de
+    // saltar; el setTimeout es solo un respaldo por si el navegador
+    // pausó los rAF de esta pestaña (por ejemplo, si queda en segundo
+    // plano a mitad de la animación) — sin él, esa card quedaría
+    // invisible para siempre en vez de perderse solo esta animación.
+    requestAnimationFrame(() => requestAnimationFrame(slideIntoPlace));
+    setTimeout(slideIntoPlace, 200);
   };
   function onPhase1End(ev) {
     if (ev.propertyName !== 'transform') return;
     finishPhase1();
   }
   stayCurrent.addEventListener('transitionend', onPhase1End);
-  setTimeout(finishPhase1, 600); // respaldo si transitionend no llega a disparar
+  setTimeout(finishPhase1, 420); // respaldo si transitionend no llega a disparar
 }
 
 function onPointerDown(e) {
-  if (transitioning) return;
+  // A propósito no bloquea si ya hay una transición en curso: agarrar la
+  // card a mitad de camino (y que el arrastre siga al dedo desde ahí) es
+  // lo que hace que deslizar varias veces seguidas se sienta instantáneo
+  // en vez de tener que esperar a que cada animación termine.
   const slide = e.target.closest('.preview-slide');
   if (!slide || !slide.classList.contains('slot-current')) return;
   if (e.target.closest('.preview-add, .preview-close')) return;
