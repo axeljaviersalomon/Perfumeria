@@ -112,6 +112,31 @@ function emptySlide(slide) {
   slide.classList.add('is-empty');
 }
 
+// Las fotos del catálogo usan loading="lazy": si la fragancia todavía
+// no se scrolleó a la vista, el navegador ni la pidió por red todavía.
+// Sin esto, la card a dos swipes de distancia (la que recién se
+// convierte en vecina cuando ya diste un swipe) puede tardar en
+// aparecer la primera vez que se muestra. Precargarla con un <img> de
+// memoria (no lazy) fuerza esa descarga de antemano, aunque todavía no
+// se vea en ningún lado: para cuando le toque mostrarse, ya está en la
+// caché del navegador y aparece al instante.
+const preloadedImageUrls = new Set();
+function preloadItemImage(itemEl) {
+  if (!itemEl) return;
+  const src = itemEl.querySelector('img')?.src;
+  if (!src || preloadedImageUrls.has(src)) return;
+  preloadedImageUrls.add(src);
+  new Image().src = src;
+}
+
+// Adelanta la descarga de la fragancia a dos lugares de distancia hacia
+// cada lado (la de un lugar ya se precarga sola: es la vecina visible,
+// que fillSlide llena apenas se abre o se rota el carrusel).
+function preloadFurtherNeighbors(index) {
+  preloadItemImage(navItems[index - 2]);
+  preloadItemImage(navItems[index + 2]);
+}
+
 function buildSlides() {
   const template = document.getElementById('previewSlideTemplate');
   if (!viewport || !template) return;
@@ -159,6 +184,7 @@ function openPreview(itemEl) {
   if (prevItem) fillSlide(slides.prev, prevItem); else emptySlide(slides.prev);
   fillSlide(slides.current, itemEl);
   if (nextItem) fillSlide(slides.next, nextItem); else emptySlide(slides.next);
+  preloadFurtherNeighbors(navIndex);
 
   setSlot(slides.prev, 'prev');
   setSlot(slides.current, 'current');
@@ -259,6 +285,7 @@ function commitSwipe(offset) {
   const capturedIndex = navIndex; // instantánea: evita leer un navIndex ya
   // actualizado por un swipe posterior cuando este setTimeout/callback
   // se dispare más tarde.
+  preloadFurtherNeighbors(capturedIndex);
   slides = goingNext
     ? { prev: stayCurrent, current: staySide, next: outgoing }
     : { prev: outgoing, current: staySide, next: stayCurrent };
