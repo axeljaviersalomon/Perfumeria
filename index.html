@@ -150,7 +150,7 @@
   <span class="cart-badge" id="cartBadge" aria-hidden="true">0</span>
 </button>
 
-<div class="cart-backdrop" id="cartBackdrop" hidden></div>
+<div class="modal-backdrop" id="cartBackdrop" hidden></div>
 
 <div class="cart-panel" id="cartPanel" role="dialog" aria-modal="true" aria-labelledby="cartPanelTitle" hidden>
   <div class="cart-panel-head">
@@ -183,10 +183,33 @@
 
 <div class="cart-toast" id="cartToast" aria-live="polite"></div>
 
+<!-- Previsualización de una fragancia: se abre al tocar el item en el catálogo -->
+<div class="modal-backdrop" id="previewBackdrop" hidden></div>
+
+<div class="preview-modal" id="previewModal" role="dialog" aria-modal="true" aria-labelledby="previewName" hidden>
+  <button type="button" class="preview-close" id="previewClose" aria-label="Cerrar previsualización">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <div class="preview-media">
+    <img id="previewImg" src="" alt="">
+  </div>
+  <div class="preview-body">
+    <div class="preview-brand" id="previewBrand"></div>
+    <h3 class="preview-name" id="previewName"></h3>
+    <p class="preview-inspired">Inspirado en <span id="previewInspired"></span></p>
+    <button type="button" class="preview-add" id="previewAdd">
+      <span class="btn-shine" aria-hidden="true"></span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      <span>Agregar al carrito</span>
+    </button>
+  </div>
+</div>
+
 <script src="catalogo-data.js"></script>
 <script src="catalogo-placeholders.js"></script>
 <script src="catalogo-app.js"></script>
 <script src="catalogo-cart.js"></script>
+<script src="catalogo-preview.js"></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",

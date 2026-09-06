@@ -30,15 +30,19 @@ function nextPlaceholderImage() {
 }
 
 // Los data-item-* quedan en el propio .item para que catalogo-cart.js
-// pueda leerlos por delegación de eventos, sin acoplarse a estos datos
-// ni a las estructuras de femenino/masculino/unisex.
+// y catalogo-preview.js puedan leerlos por delegación de eventos, sin
+// acoplarse a estos datos ni a las estructuras de femenino/masculino/
+// unisex. El .item es clickeable (abre la previsualización) y también
+// navegable por teclado; el botón "+" de adentro sigue siendo su propio
+// control independiente (catalogo-preview.js ignora los clicks que le
+// lleguen desde ahí).
 function renderItem(name, inspired, image, brand) {
   const isPlaceholder = !image;
   const src = image || nextPlaceholderImage();
   const imgClass = isPlaceholder ? 'is-placeholder' : '';
   const itemId = `${brand}::${name}`;
   return `
-    <div class="item" data-item-id="${itemId}" data-item-name="${name}" data-item-brand="${brand}" data-item-inspired="${inspired}">
+    <div class="item" data-item-id="${itemId}" data-item-name="${name}" data-item-brand="${brand}" data-item-inspired="${inspired}" role="button" tabindex="0" aria-haspopup="dialog">
       <div class="thumb-wrap"><img class="${imgClass}" src="${src}" alt="${inspired}" width="58" height="72" loading="lazy" decoding="async"></div>
       <div class="text">
         <div class="name">${name}</div>

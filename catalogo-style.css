@@ -460,11 +460,16 @@ h2.section-title{
   display:flex;
   align-items:center;
   gap:14px;
+  cursor:pointer;
   transition:background 0.3s ease, transform 0.3s ease;
 }
 .item:hover{
   background:rgba(255,255,255,0.03);
   transform:translateX(3px);
+}
+.item:focus-visible{
+  outline:2px solid var(--brass-soft);
+  outline-offset:2px;
 }
 .brand-group .item:last-child{ border-bottom:none; }
 
@@ -849,10 +854,13 @@ footer p{
   .cart-icon{ width:22px; height:22px; }
 }
 
-/* ---------- CARRITO: PANEL Y BACKDROP ---------- */
+/* ---------- MODALES: FONDO COMPARTIDO ---------- */
+/* Usado tanto por el carrito como por la previsualización de una
+   fragancia: cada uno tiene su propio elemento en el DOM (no compiten
+   entre sí), pero comparten el mismo look de vidrio esmerilado. */
 body.cart-open-lock{ overflow:hidden; }
 
-.cart-backdrop{
+.modal-backdrop{
   position:fixed;
   inset:0;
   background:rgba(6,5,3,0.72);
@@ -862,7 +870,9 @@ body.cart-open-lock{ overflow:hidden; }
   opacity:0;
   transition:opacity 0.3s ease;
 }
-.cart-backdrop.is-open{ opacity:1; }
+.modal-backdrop.is-open{ opacity:1; }
+
+/* ---------- CARRITO: PANEL ---------- */
 
 /* [hidden] tiene que ganarle a "display:flex" de abajo: si no, al
    cerrar el panel (panel.hidden = true desde JS) quedaría invisible
@@ -1106,6 +1116,130 @@ body.cart-open-lock{ overflow:hidden; }
 @media (max-width:520px){
   .cart-panel{ max-height:min(600px, calc(100vh - 40px)); }
   .cart-toast{ bottom:92px; }
+}
+
+/* ---------- PREVISUALIZACIÓN DE UNA FRAGANCIA ---------- */
+.preview-modal{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -46%) scale(0.96);
+  width:min(380px, calc(100vw - 32px));
+  max-height:calc(100vh - 64px);
+  overflow-y:auto;
+  background:linear-gradient(165deg, #201a12, var(--bg) 60%);
+  border:1px solid var(--hair);
+  border-radius:18px;
+  box-shadow:0 30px 70px rgba(0,0,0,0.55);
+  z-index:41;
+  opacity:0;
+  transition:opacity 0.32s cubic-bezier(.2,.8,.2,1), transform 0.32s cubic-bezier(.2,.8,.2,1);
+}
+.preview-modal[hidden]{ display:none; }
+.preview-modal.is-open{
+  opacity:1;
+  transform:translate(-50%, -50%) scale(1);
+}
+
+.preview-close{
+  position:absolute;
+  top:16px;
+  right:16px;
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  border:1px solid var(--hair);
+  background:rgba(20,17,13,0.6);
+  color:var(--ink-soft);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  z-index:1;
+  transition:border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+.preview-close svg{ width:16px; height:16px; }
+.preview-close:hover{ border-color:var(--brass-soft); color:var(--brass-soft); }
+.preview-close:active{ transform:scale(0.9); }
+
+.preview-media{
+  width:100%;
+  aspect-ratio:4 / 3;
+  background:var(--paper-chip);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  border-radius:18px 18px 0 0;
+}
+.preview-media img{
+  width:70%;
+  height:70%;
+  object-fit:contain;
+  mix-blend-mode:multiply;
+}
+.preview-media img.is-placeholder{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 35%;
+  mix-blend-mode:normal;
+}
+
+.preview-body{ padding:26px 26px 28px; text-align:center; }
+.preview-brand{
+  font-size:12px;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--brass);
+  margin-bottom:8px;
+}
+.preview-name{
+  font-family:'Cormorant Garamond', serif;
+  font-weight:500;
+  font-style:italic;
+  font-size:30px;
+  color:var(--ink);
+  margin:0 0 10px;
+}
+.preview-inspired{
+  font-family:'Cormorant Garamond', serif;
+  font-style:italic;
+  font-size:16px;
+  color:var(--ink-soft);
+  margin:0 0 26px;
+}
+.preview-inspired span{ color:var(--brass-soft); font-style:normal; }
+
+.preview-add{
+  position:relative;
+  overflow:hidden;
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:15px 20px;
+  border:none;
+  border-radius:999px;
+  cursor:pointer;
+  font-family:'Jost', sans-serif;
+  font-size:14.5px;
+  font-weight:600;
+  letter-spacing:0.03em;
+  color:#241a0a;
+  background:linear-gradient(135deg, var(--brass-soft), var(--brass) 50%, var(--brass-soft));
+  background-size:220% 220%;
+  box-shadow:0 10px 26px rgba(var(--glow-rgb),0.4), 0 1px 0 rgba(255,255,255,0.35) inset;
+  animation:ctaSheen 5s linear infinite, ctaGlow 3.2s ease-in-out infinite;
+  transition:transform 0.2s ease;
+}
+.preview-add svg{ width:17px; height:17px; flex-shrink:0; }
+.preview-add:hover{ transform:translateY(-1px); }
+.preview-add:active{ transform:scale(0.97); }
+.preview-add.is-confirmed{
+  background:linear-gradient(135deg, #3ee888, #25D366 55%, #3ee888);
+  animation:none;
 }
 
 /* ---------- NOSCRIPT FALLBACK ---------- */

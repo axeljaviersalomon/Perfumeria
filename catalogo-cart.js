@@ -290,6 +290,13 @@ function initCartActions() {
   document.getElementById('cartOrder')?.addEventListener('click', openWhatsAppOrder);
 }
 
+// El botón "Agregar al carrito" de la previsualización (catalogo-preview.js)
+// no llama a addItem() directamente: dispara este evento para que ambos
+// módulos sigan sin conocerse entre sí.
+function initPreviewAddToCart() {
+  document.addEventListener('perfume:add-to-cart', (e) => addItem(e.detail));
+}
+
 // Un solo listener en document cubre tanto los botones "+" del catálogo
 // (renderizados dinámicamente) como los controles de cada fila del
 // carrito (que se vuelven a renderizar en cada cambio de cantidad).
@@ -329,5 +336,6 @@ function initDelegatedClicks() {
 initCartToggle();
 initCartActions();
 initDelegatedClicks();
+initPreviewAddToCart();
 renderCartList();
 restoreItemBadgesFromCart();
