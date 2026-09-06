@@ -1410,6 +1410,8 @@ body.cart-open-lock{ overflow:hidden; }
    lee como un link secundario dentro de la card, no como otro botón
    compitiendo con el dorado de "Agregar al carrito". */
 .preview-notes-btn{
+  -webkit-appearance:none;
+  appearance:none;
   width:100%;
   display:flex;
   align-items:center;
