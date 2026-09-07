@@ -4,10 +4,11 @@
  * variable) vive en catalogo-style.css bajo :root[data-theme="light"];
  * este archivo solo decide CUÁL de los dos está activo y lo persiste.
  *
- * El tema guardado ya se aplica antes de esto, con un <script> inline en
- * el <head> de index.html (evita el parpadeo del oscuro por defecto en
- * cada carga para quien haya elegido claro). Acá solo se sincroniza el
- * botón con ese estado y se atiende el click para alternarlo.
+ * El tema inicial ya se aplica antes de esto, con un <script> inline en
+ * el <head> de index.html (evita el parpadeo del tema por defecto):
+ * usa la elección guardada si existe, y si no, la preferencia de tema
+ * claro/oscuro del sistema operativo. Acá solo se sincroniza el botón
+ * con ese estado y se atiende el click para alternarlo manualmente.
  */
 
 const THEME_STORAGE_KEY = 'perfumeria-theme';
