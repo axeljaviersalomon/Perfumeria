@@ -1871,4 +1871,8 @@ noscript li{ margin-bottom:6px; color:var(--ink-soft); }
   .filter-search-wrap.is-open{ flex:1; min-width:0; }
   .filter-search-box{ width:100%; }
   .filter-controls.search-active .filter-select-wrap{ display:none; }
+  /* iOS Safari hace zoom automático al enfocar un input con font-size
+     menor a 16px; en mobile lo subimos a 16px solo para evitar ese zoom,
+     el tamaño visual en desktop (13px) no se toca. */
+  .filter-search-input{ font-size:16px; }
 }
