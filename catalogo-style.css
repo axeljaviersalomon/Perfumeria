@@ -974,13 +974,12 @@ footer p{
 /* [hidden] tiene que ganarle a "display:flex" de abajo, mismo motivo que
    en .cart-panel: el botón se oculta por completo (toggleEl.hidden en
    catalogo-cart.js) mientras el carrito está vacío.
-   Ocupa el lugar que antes tenía el flotante de WhatsApp (esquina
-   inferior derecha, ver comentario en catalogo-style.css git history). */
+   Esquina superior derecha, debajo de la barra de filtros sticky. */
 .cart-float[hidden]{ display:none; }
 .cart-float{
   position:fixed;
   right:26px;
-  bottom:26px;
+  top:100px;
   width:60px;
   height:60px;
   border-radius:50%;
@@ -1057,7 +1056,7 @@ footer p{
 .cart-badge.is-visible{ opacity:1; transform:scale(1); }
 
 @media (max-width:520px){
-  .cart-float{ right:16px; bottom:16px; width:54px; height:54px; }
+  .cart-float{ right:16px; top:88px; width:54px; height:54px; }
   .cart-icon{ width:22px; height:22px; }
 }
 
