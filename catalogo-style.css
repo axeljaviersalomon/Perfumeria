@@ -149,36 +149,59 @@ body, .filter-bar, .cart-panel, .preview-slide-inner, .preview-body,
 }
 
 /* ---------- INTERRUPTOR DE TEMA (claro / oscuro) ---------- */
-/* Vive dentro de .filter-controls (ver .filter-search-toggle, mismo
-   tamaño y look): puesto como botón fijo aparte chocaba con la barra de
-   filtros en cuanto esta queda sticky arriba de todo. A diferencia de
-   los 3 botones flotantes que sí quedan fijos (WhatsApp, volver arriba,
+/* Vive dentro de .filter-controls (ver .filter-search-toggle, al lado):
+   puesto como botón fijo aparte chocaba con la barra de filtros en
+   cuanto esta queda sticky arriba de todo. A diferencia de los 3
+   botones flotantes que sí quedan fijos (WhatsApp, volver arriba,
    carrito) —que mantienen un badge oscuro a propósito, como un sello—
    este representa el tema en sí, así que usa los tokens normales para
-   que se vea "puesto" en la superficie de cada tema. */
+   que se vea "puesto" en la superficie de cada tema.
+   Mecánica tipo pill-switch (thumb que desliza de un extremo al otro),
+   pero sin el texto "on/off" ni el color puro de una referencia de UI
+   genérica: el riel queda sobrio (mismo --hair/--bg-panel que el resto
+   de los controles de la barra) y el thumb dorado lleva el ícono de
+   sol/luna en vez de una flecha, coherente con el resto del sitio. */
 .theme-toggle{
   -webkit-appearance:none;
   appearance:none;
-  width:40px;
-  height:40px;
+  position:relative;
+  width:56px;
+  height:30px;
   padding:0;
   flex-shrink:0;
+  border-radius:999px;
+  border:1px solid var(--hair);
+  background:var(--bg-panel);
+  cursor:pointer;
+  transition:border-color 0.2s ease, background 0.35s ease;
+}
+.theme-toggle:hover{ border-color:var(--brass-soft); }
+.theme-toggle-thumb{
+  position:absolute;
+  top:3px;
+  left:3px;
+  width:22px;
+  height:22px;
   border-radius:50%;
   display:flex;
   align-items:center;
   justify-content:center;
-  border:1px solid var(--hair);
-  background:var(--bg-panel);
-  color:var(--brass-soft);
-  cursor:pointer;
-  transition:border-color 0.2s ease, color 0.2s ease, background 0.35s ease, transform 0.2s ease;
+  background:linear-gradient(135deg, var(--brass-soft), var(--brass));
+  color:var(--btn-ink);
+  box-shadow:0 3px 8px rgba(0,0,0,0.3);
+  transition:transform 0.32s cubic-bezier(.2,.8,.2,1);
 }
-.theme-toggle:hover{ border-color:var(--brass-soft); }
-.theme-toggle:active{ transform:scale(0.88); }
-.theme-icon{ width:17px; height:17px; }
-.theme-icon-moon{ display:none; }
-:root[data-theme="light"] .theme-icon-sun{ display:none; }
-:root[data-theme="light"] .theme-icon-moon{ display:block; }
+.theme-toggle:active .theme-toggle-thumb{ transform:scale(0.88); }
+:root[data-theme="light"] .theme-toggle{ background:rgba(var(--glow-rgb),0.14); }
+:root[data-theme="light"] .theme-toggle-thumb{ transform:translateX(26px); }
+:root[data-theme="light"] .theme-toggle:active .theme-toggle-thumb{ transform:translateX(26px) scale(0.88); }
+/* El thumb siempre muestra el ícono del tema ACTIVO (luna = oscuro
+   puesto, sol = claro puesto), como en cualquier switch día/noche
+   conocido: la posición y el ícono cuentan la misma historia. */
+.theme-icon{ width:12.5px; height:12.5px; }
+.theme-icon-sun{ display:none; }
+:root[data-theme="light"] .theme-icon-sun{ display:block; }
+:root[data-theme="light"] .theme-icon-moon{ display:none; }
 
 .wrap{
   max-width:1180px;

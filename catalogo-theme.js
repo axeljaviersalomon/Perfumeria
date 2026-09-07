@@ -20,7 +20,7 @@ function applyTheme(theme) {
 
   const btn = document.getElementById('themeToggle');
   if (btn) {
-    btn.setAttribute('aria-pressed', String(isLight));
+    btn.setAttribute('aria-checked', String(isLight));
     btn.setAttribute('aria-label', isLight ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro');
   }
 
