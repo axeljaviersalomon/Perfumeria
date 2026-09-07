@@ -1,29 +1,95 @@
 /**
  * catalogo-style.css
- * Estilos del catálogo de fragancias. Paleta oscura, tipografía editorial
- * (Cormorant Garamond + Jost) y layout de secciones apiladas por categoría.
+ * Estilos del catálogo de fragancias. Tipografía editorial (Cormorant
+ * Garamond + Jost) y layout de secciones apiladas por categoría, en dos
+ * temas: oscuro (el diseño original, sigue siendo el default) y claro
+ * (alternativa que activa el interruptor de catalogo-theme.js agregando
+ * data-theme="light" en <html>).
  *
  * Las fuentes (Cormorant Garamond, Jost, Parisienne) se cargan desde
  * <link> en el <head> de index.html en vez de @import acá: así el
  * navegador las descubre y empieza a bajarlas en paralelo con este CSS,
  * en lugar de esperar a que este archivo termine de cargar primero.
+ *
+ * Todo el CSS de acá en más lee color SIEMPRE a través de estas
+ * variables (nunca un hex/rgba suelto para texto o fondo de superficie):
+ * así alcanza con redefinirlas para que el diseño oscuro y el claro
+ * compartan exactamente las mismas reglas. Las pocas excepciones
+ * deliberadas (el sello "Imagen de referencia", los botones flotantes de
+ * WhatsApp/carrito/volver arriba, el sweep de brillo sobre los botones
+ * dorados) quedan comentadas en el lugar donde aparecen.
  */
 
 :root{
   --bg: #14110D;
+  /* Triplete r,g,b de --bg: lo usa la barra de filtros sticky para su
+     vidrio translúcido (rgba(var(--bg-rgb),0.78)). */
+  --bg-rgb: 20,17,13;
   --bg-panel: #1B1712;
+  /* Fondo de la miniatura/foto de cada frasco: tiene que quedarse CLARO
+     en los dos temas (la foto real se compone encima con mix-blend-mode:
+     multiply — sobre un chip oscuro esa mezcla ensucia la imagen). */
   --paper-chip: #EDE5D4;
   --ink: #EDE7DA;
   --ink-soft: #9C9384;
   --ink-faint: #6E6656;
   --wine: #C6485E;
   --wine-deep: #E06B80;
+  /* Triplete r,g,b de --wine, para washes translúcidos (rgba(var(--wine-rgb),X)). */
+  --wine-rgb: 198,72,94;
   --pine: #6F9C7C;
   --pine-deep: #8FBB9B;
   --brass: #C9A25B;
   --brass-soft: #DCC087;
   --hair: rgba(237,231,218,0.12);
   --glow-rgb: 201,162,91;
+  /* Triplete r,g,b de --ink, para washes/tracks translúcidos armados con
+     rgba() (un solo rgba(var(--ink-rgb),X) sirve para los dos temas: en
+     oscuro aclara sutilmente al pasar el mouse, en claro oscurece). */
+  --ink-rgb: 237,231,218;
+  /* Texto/ícono sobre los botones con degradé dorado (brass/brass-soft):
+     oscuro en el tema oscuro (donde el dorado es claro), claro en el
+     tema claro (donde el dorado se oscurece para tener contraste sobre
+     el fondo). */
+  --btn-ink: #241a0a;
+  /* Estado "agregado" del botón de la card de previsualización: un
+     sello propio, independiente del dorado normal del botón. */
+  --confirm-bg-a: #fff8ea;
+  --confirm-bg-b: #EDE5D4;
+  --confirm-ink: #241a0a;
+  /* Chip translúcido de los botones de cerrar (preview/notas). */
+  --overlay-chip: rgba(20,17,13,0.6);
+  /* mix-blend-mode de la luz que sigue al cursor: "screen" aclara (sirve
+     sobre el fondo oscuro), pero sobre un fondo claro un blend "screen"
+     queda invisible (nunca puede aclarar más que blanco). */
+  --glow-blend: screen;
+}
+
+/* ---------- MODO CLARO ---------- */
+:root[data-theme="light"]{
+  --bg: #F6F0E3;
+  --bg-rgb: 246,240,227;
+  --bg-panel: #FFFFFF;
+  --paper-chip: #EFE6D2;
+  --ink: #241A12;
+  --ink-soft: #6B5C48;
+  --ink-faint: #A69880;
+  --wine: #A23349;
+  --wine-deep: #7A2536;
+  --wine-rgb: 162,51,73;
+  --pine: #4B7A5B;
+  --pine-deep: #386047;
+  --brass: #8A6528;
+  --brass-soft: #B4914A;
+  --hair: rgba(36,26,18,0.14);
+  --glow-rgb: 138,101,40;
+  --ink-rgb: 36,26,18;
+  --btn-ink: #FBF7EE;
+  --confirm-bg-a: #2A2118;
+  --confirm-bg-b: #241A12;
+  --confirm-ink: #F6F0E3;
+  --overlay-chip: rgba(255,255,255,0.7);
+  --glow-blend: multiply;
 }
 
 *{ box-sizing:border-box; }
@@ -63,7 +129,7 @@ body::before{
   margin:-280px 0 0 -280px;
   border-radius:50%;
   background:radial-gradient(circle, rgba(var(--glow-rgb),0.18) 0%, rgba(var(--glow-rgb),0.06) 38%, transparent 70%);
-  mix-blend-mode:screen;
+  mix-blend-mode:var(--glow-blend);
   pointer-events:none;
   z-index:4;
   opacity:0;
@@ -71,6 +137,48 @@ body::before{
   will-change:transform;
 }
 .cursor-glow.is-active{ opacity:1; }
+
+/* Transición pareja de todas las superficies al alternar data-theme,
+   para que el cambio se sienta como un fundido y no como un corte.
+   prefers-reduced-motion la desactiva más abajo, junto con el resto de
+   las animaciones del sitio. */
+body, .filter-bar, .cart-panel, .preview-slide-inner, .preview-body,
+.notes-panel, .thumb-wrap, .preview-media, .item, .cart-add-btn,
+.notes-stat-track{
+  transition:background 0.35s ease, background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+}
+
+/* ---------- INTERRUPTOR DE TEMA (claro / oscuro) ---------- */
+/* Vive dentro de .filter-controls (ver .filter-search-toggle, mismo
+   tamaño y look): puesto como botón fijo aparte chocaba con la barra de
+   filtros en cuanto esta queda sticky arriba de todo. A diferencia de
+   los 3 botones flotantes que sí quedan fijos (WhatsApp, volver arriba,
+   carrito) —que mantienen un badge oscuro a propósito, como un sello—
+   este representa el tema en sí, así que usa los tokens normales para
+   que se vea "puesto" en la superficie de cada tema. */
+.theme-toggle{
+  -webkit-appearance:none;
+  appearance:none;
+  width:40px;
+  height:40px;
+  padding:0;
+  flex-shrink:0;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--hair);
+  background:var(--bg-panel);
+  color:var(--brass-soft);
+  cursor:pointer;
+  transition:border-color 0.2s ease, color 0.2s ease, background 0.35s ease, transform 0.2s ease;
+}
+.theme-toggle:hover{ border-color:var(--brass-soft); }
+.theme-toggle:active{ transform:scale(0.88); }
+.theme-icon{ width:17px; height:17px; }
+.theme-icon-moon{ display:none; }
+:root[data-theme="light"] .theme-icon-sun{ display:none; }
+:root[data-theme="light"] .theme-icon-moon{ display:block; }
 
 .wrap{
   max-width:1180px;
@@ -156,7 +264,7 @@ p.lede{
   font-size:14.5px;
   font-weight:600;
   letter-spacing:0.05em;
-  color:#241a0a;
+  color:var(--btn-ink);
   background:linear-gradient(135deg, var(--brass-soft), var(--brass) 50%, var(--brass-soft));
   background-size:220% 220%;
   box-shadow:0 10px 26px rgba(var(--glow-rgb),0.4), 0 1px 0 rgba(255,255,255,0.4) inset;
@@ -274,7 +382,7 @@ p.lede{
   align-items:center;
   justify-content:center;
   gap:14px;
-  background:rgba(20,17,13,0.78);
+  background:rgba(var(--bg-rgb),0.78);
   backdrop-filter:blur(14px);
   -webkit-backdrop-filter:blur(14px);
   opacity:0;
@@ -332,7 +440,7 @@ p.lede{
 }
 .filter-btn:active{ transform:scale(0.96); }
 .filter-btn.active{
-  color:#241a0a;
+  color:var(--btn-ink);
   font-weight:600;
   background:linear-gradient(135deg, var(--brass-soft), var(--brass) 50%, var(--brass-soft));
   background-size:220% 220%;
@@ -480,7 +588,7 @@ p.lede{
   transition:color 0.2s ease, background 0.2s ease;
 }
 .filter-search-close svg{ width:13px; height:13px; }
-.filter-search-close:hover{ color:var(--brass-soft); background:rgba(220,192,135,0.08); }
+.filter-search-close:hover{ color:var(--brass-soft); background:rgba(var(--glow-rgb),0.08); }
 
 /* ---------- SCROLL REVEAL ---------- */
 .reveal{
@@ -569,7 +677,7 @@ h2.section-title{
   transition:background 0.3s ease, transform 0.3s ease;
 }
 .item:hover{
-  background:rgba(255,255,255,0.03);
+  background:rgba(var(--ink-rgb),0.03);
   transform:translateX(3px);
 }
 .item:focus-visible{
@@ -674,7 +782,7 @@ h2.section-title{
   align-items:center;
   justify-content:center;
   border:1px solid var(--hair);
-  background:rgba(255,255,255,0.02);
+  background:rgba(var(--ink-rgb),0.02);
   color:var(--brass-soft);
   cursor:pointer;
   transition:transform 0.2s ease, border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
@@ -703,7 +811,7 @@ h2.section-title{
   padding:0 4px;
   border-radius:999px;
   background:linear-gradient(135deg, var(--brass-soft), var(--brass));
-  color:#241a0a;
+  color:var(--btn-ink);
   font-family:'Jost', sans-serif;
   font-size:10.5px;
   font-weight:700;
@@ -1059,7 +1167,7 @@ body.cart-open-lock{ overflow:hidden; }
   max-height:min(640px, calc(100vh - 64px));
   display:flex;
   flex-direction:column;
-  background:linear-gradient(165deg, #201a12, var(--bg) 60%);
+  background:linear-gradient(165deg, var(--bg-panel), var(--bg) 60%);
   border:1px solid var(--hair);
   border-radius:18px;
   box-shadow:0 30px 70px rgba(0,0,0,0.55);
@@ -1231,7 +1339,7 @@ body.cart-open-lock{ overflow:hidden; }
 .cart-clear:hover{
   border-color:var(--wine-deep);
   color:var(--wine-deep);
-  background:rgba(198,72,94,0.08);
+  background:rgba(var(--wine-rgb),0.08);
 }
 .cart-clear:active{ transform:scale(0.97); }
 
@@ -1402,7 +1510,7 @@ body.cart-open-lock{ overflow:hidden; }
   overflow-y:auto;
   overflow-x:hidden;
   border-radius:18px;
-  background:linear-gradient(165deg, #201a12, var(--bg) 60%);
+  background:linear-gradient(165deg, var(--bg-panel), var(--bg) 60%);
   border:1px solid var(--hair);
   box-shadow:0 30px 70px rgba(0,0,0,0.55);
 }
@@ -1434,7 +1542,7 @@ body.cart-open-lock{ overflow:hidden; }
   height:32px;
   border-radius:50%;
   border:1px solid var(--hair);
-  background:rgba(20,17,13,0.6);
+  background:var(--overlay-chip);
   color:var(--ink-soft);
   display:flex;
   align-items:center;
@@ -1500,7 +1608,7 @@ body.cart-open-lock{ overflow:hidden; }
 .preview-body{
   position:relative;
   z-index:1;
-  background:linear-gradient(165deg, #201a12, var(--bg) 60%);
+  background:linear-gradient(165deg, var(--bg-panel), var(--bg) 60%);
   padding:26px 26px 28px;
   text-align:center;
 }
@@ -1577,7 +1685,7 @@ body.cart-open-lock{ overflow:hidden; }
   font-size:14.5px;
   font-weight:600;
   letter-spacing:0.03em;
-  color:#241a0a;
+  color:var(--btn-ink);
   background:linear-gradient(135deg, var(--brass-soft), var(--brass) 50%, var(--brass-soft));
   background-size:220% 220%;
   box-shadow:0 10px 26px rgba(var(--glow-rgb),0.4), 0 1px 0 rgba(255,255,255,0.35) inset;
@@ -1588,7 +1696,8 @@ body.cart-open-lock{ overflow:hidden; }
 .preview-add:hover{ transform:translateY(-1px); }
 .preview-add:active{ transform:scale(0.97); }
 .preview-add.is-confirmed{
-  background:linear-gradient(135deg, #fff8ea, var(--paper-chip) 55%, #fff8ea);
+  background:linear-gradient(135deg, var(--confirm-bg-a), var(--confirm-bg-b) 55%, var(--confirm-bg-a));
+  color:var(--confirm-ink);
   box-shadow:0 10px 26px rgba(0,0,0,0.25), 0 1px 0 rgba(255,255,255,0.6) inset;
   animation:none;
 }
@@ -1619,7 +1728,7 @@ body.cart-open-lock{ overflow:hidden; }
   cursor:pointer;
   transition:border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
 }
-.preview-notes-btn:hover{ border-color:var(--brass-soft); color:var(--brass-soft); background:rgba(220,192,135,0.06); }
+.preview-notes-btn:hover{ border-color:var(--brass-soft); color:var(--brass-soft); background:rgba(var(--glow-rgb),0.06); }
 .preview-notes-btn svg{ width:15px; height:15px; }
 /* Si la fragancia no tiene fila en la planilla del proveedor (unas
    pocas del catálogo), no se muestra el botón en vez de abrir un
@@ -1646,7 +1755,7 @@ body.cart-open-lock{ overflow:hidden; }
   pointer-events:none;
   text-align:center;
   border-radius:18px;
-  background:linear-gradient(165deg, #201a12, var(--bg) 60%);
+  background:linear-gradient(165deg, var(--bg-panel), var(--bg) 60%);
   border:1px solid var(--hair);
   box-shadow:0 30px 70px rgba(0,0,0,0.55);
   padding:28px 26px 26px;
@@ -1666,7 +1775,7 @@ body.cart-open-lock{ overflow:hidden; }
   height:30px;
   border-radius:50%;
   border:1px solid var(--hair);
-  background:rgba(20,17,13,0.6);
+  background:var(--overlay-chip);
   color:var(--ink-soft);
   display:flex;
   align-items:center;
@@ -1715,7 +1824,7 @@ body.cart-open-lock{ overflow:hidden; }
   position:relative;
   height:9px;
   border-radius:999px;
-  background:rgba(237,231,218,0.08);
+  background:rgba(var(--ink-rgb),0.08);
   border:1px solid var(--hair);
   overflow:hidden;
   margin-bottom:8px;
@@ -1726,7 +1835,7 @@ body.cart-open-lock{ overflow:hidden; }
   width:33%;
   border-radius:999px;
   background:linear-gradient(90deg, var(--brass-soft), var(--brass));
-  box-shadow:0 0 10px rgba(201,162,91,0.45);
+  box-shadow:0 0 10px rgba(var(--glow-rgb),0.45);
 }
 /* Una sola palabra (el nivel que corresponde a esta fragancia, no las
    3 posibles) para no competir visualmente con el número de al lado. */
