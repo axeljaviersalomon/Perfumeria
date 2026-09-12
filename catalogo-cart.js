@@ -56,6 +56,7 @@ function formatCartTotal(entries) {
 }
 
 let lastFocusedBeforeOpen = null;
+let lastFocusedBeforeCartInfoOpen = null;
 
 // ---- Persistencia ----
 
@@ -266,7 +267,48 @@ function showToast(text) {
 // ---- Apertura / cierre del panel ----
 
 function onCartKeydown(e) {
-  if (e.key === 'Escape') closeCart();
+  if (e.key !== 'Escape') return;
+  // Si el aviso "Importante - leer" está abierto, Escape cierra ESE
+  // primero (el carrito de atrás sigue abierto), igual que tocar afuera
+  // lo cerraría sin tocar el carrito.
+  const infoPanel = document.getElementById('cartInfoPanel');
+  if (infoPanel?.classList.contains('is-open')) { closeCartInfo(); return; }
+  closeCart();
+}
+
+// ---- Aviso "Importante - leer" (mismo popup visual que las notas
+// olfativas, pero con un texto fijo sobre la colección) ----
+
+function openCartInfo() {
+  const panel = document.getElementById('cartInfoPanel');
+  const backdrop = document.getElementById('cartInfoBackdrop');
+  if (!panel || !backdrop) return;
+
+  lastFocusedBeforeCartInfoOpen = document.activeElement;
+  panel.hidden = false;
+  backdrop.hidden = false;
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      panel.classList.add('is-open');
+      backdrop.classList.add('is-open');
+    });
+  });
+  document.getElementById('cartInfoClose')?.focus();
+}
+
+function closeCartInfo() {
+  const panel = document.getElementById('cartInfoPanel');
+  const backdrop = document.getElementById('cartInfoBackdrop');
+  if (!panel || !backdrop || !panel.classList.contains('is-open')) return;
+
+  panel.classList.remove('is-open');
+  backdrop.classList.remove('is-open');
+  setTimeout(() => {
+    panel.hidden = true;
+    backdrop.hidden = true;
+  }, 340); // debe coincidir con la transición CSS de .notes-panel
+
+  if (lastFocusedBeforeCartInfoOpen instanceof HTMLElement) lastFocusedBeforeCartInfoOpen.focus();
 }
 
 function openCart() {
@@ -298,6 +340,10 @@ function closeCart() {
   const backdrop = document.getElementById('cartBackdrop');
   const toggle = document.getElementById('cartToggle');
   if (!panel || !backdrop || !toggle) return;
+
+  // Por si quedó abierto (no debería, ver z-index): que no reaparezca
+  // la próxima vez que se abra el carrito.
+  closeCartInfo();
 
   panel.classList.remove('is-open');
   backdrop.classList.remove('is-open');
@@ -331,6 +377,10 @@ function initCartToggle() {
   toggle?.addEventListener('click', toggleCart);
   closeBtn?.addEventListener('click', closeCart);
   backdrop?.addEventListener('click', closeCart);
+
+  document.getElementById('cartInfoBtn')?.addEventListener('click', openCartInfo);
+  document.getElementById('cartInfoClose')?.addEventListener('click', closeCartInfo);
+  document.getElementById('cartInfoBackdrop')?.addEventListener('click', closeCartInfo);
 }
 
 function initCartActions() {

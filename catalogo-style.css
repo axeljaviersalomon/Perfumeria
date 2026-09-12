@@ -1673,7 +1673,7 @@ body.cart-open-lock{ overflow:hidden; }
    del carrusel de la ficha (z-index:41): este popup se abre ARRIBA de
    esa ficha, no en su lugar, así que su propio fondo debe tapar todo
    lo que quedó debajo, carrusel incluido. */
-#notesBackdrop{ z-index:42; }
+#notesBackdrop, #cartInfoBackdrop{ z-index:42; }
 .notes-panel{
   position:fixed;
   top:50%;
@@ -1798,6 +1798,7 @@ body.cart-open-lock{ overflow:hidden; }
   color:var(--ink-soft);
   margin:0;
 }
+.notes-body + .notes-body{ margin-top:14px; }
 
 /* ---------- NOSCRIPT FALLBACK ---------- */
 noscript .wrap{ padding-top:40px; }

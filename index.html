@@ -204,6 +204,11 @@ try {
     </button>
   </div>
 
+  <button type="button" class="preview-notes-btn" id="cartInfoBtn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h8l4 4v14H7z"/><path d="M11 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
+    Importante - leer
+  </button>
+
   <div class="cart-empty" id="cartEmpty">
     <p>Todavía no agregaste ninguna fragancia.</p>
     <p class="cart-empty-hint">Tocá el ícono junto a cada perfume del catálogo para sumarlo acá.</p>
@@ -302,6 +307,21 @@ try {
 
   <div class="notes-section-label">Notas olfativas</div>
   <p class="notes-body" id="notesBody"></p>
+</div>
+
+<!-- Aviso "Importante - leer" del carrito: mismo estilo visual que el
+     popup de notas olfativas de arriba, pero con un texto fijo sobre la
+     colección (no depende de ninguna fragancia en particular). -->
+<div class="modal-backdrop" id="cartInfoBackdrop" hidden></div>
+<div class="notes-panel" id="cartInfoPanel" role="dialog" aria-modal="true" aria-labelledby="cartInfoTitle" hidden>
+  <button type="button" class="notes-close" id="cartInfoClose" aria-label="Cerrar aviso">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <div class="notes-eyebrow">Importante</div>
+  <h4 class="notes-title" id="cartInfoTitle">Sobre esta colección</h4>
+  <div class="notes-divider"></div>
+  <p class="notes-body">Cada fragancia es una interpretación propia inspirada en un perfume de autor reconocido. No es la fragancia original ni viene en su frasco original: es nuestra versión, pensada para acercar esa experiencia olfativa a un precio distinto.</p>
+  <p class="notes-body">Se prepara en el momento del encargo para garantizar calidad máxima: el proceso toma hasta 5 días hábiles.</p>
 </div>
 
 <script src="catalogo-theme.js"></script>
