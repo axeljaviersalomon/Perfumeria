@@ -553,6 +553,7 @@ applyFilters();
   window.addEventListener('scroll', clampToCatalogTop, { passive: true });
 
   document.getElementById('ctaJump')?.addEventListener('click', closeCurtain);
+  document.getElementById('ctaJumpDesktop')?.addEventListener('click', closeCurtain);
   document.getElementById('curtainScrollCue')?.addEventListener('click', closeCurtain);
 })();
 

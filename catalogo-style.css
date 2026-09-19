@@ -335,7 +335,8 @@ p.lede{ --i:2; }
 .trust-item:nth-child(2){ --i:5; }
 .trust-item:nth-child(3){ --i:6; }
 .trust-item:nth-child(4){ --i:7; }
-.curtain-scroll-cue{ --i:8; }
+.cta-jump-desktop{ --i:8; }
+.curtain-scroll-cue{ --i:9; }
 
 .kicker, h1.title, p.lede, .cta-jump, .trust-item, .curtain-scroll-cue{
   opacity:0;
@@ -526,6 +527,12 @@ p.lede{
 }
 @media (max-width:768px){
   .cta-jump{ display:inline-flex; }
+}
+
+/* ---------- CTA "VER FRAGANCIAS" (solo desktop, tras el trust-bar) ---------- */
+.cta-jump-desktop{ display:inline-flex; margin:34px auto 0; }
+@media (max-width:768px){
+  .cta-jump-desktop{ display:none; }
 }
 
 /* ---------- TRUST BAR ---------- */
