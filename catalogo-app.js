@@ -314,6 +314,7 @@ applyFilters();
   const ARRIVAL_LEAD_S = 0.25;
 
   const root = document.documentElement;
+  const spacer = document.querySelector('.curtain-spacer');
   let curtainOpen = true;
   let locked = false;
   let touchStartY = null;
@@ -397,7 +398,7 @@ applyFilters();
     lock();
     curtainOpen = false;
     curtain.classList.remove('curtain-returning');
-    jumpTo(window.innerHeight);
+    jumpTo(catalogTop());
     scheduleArrival();
     clearTimeout(arrivingTimer);
     arrivingTimer = window.setTimeout(clearArrival, TRANSITION_MS + 1600);
@@ -451,8 +452,36 @@ applyFilters();
   // colara como scroll nativo hasta meterse en el propio spacer (vacío,
   // del mismo --bg que la cortina, así que invisible, pero rompe la
   // regla de "un solo gesto" que pidió el usuario).
+  function catalogTop() {
+    return spacer ? spacer.offsetTop + spacer.offsetHeight : window.innerHeight;
+  }
   function atCatalogTop() {
-    return window.scrollY <= window.innerHeight + 2;
+    return window.scrollY <= catalogTop() + 2;
+  }
+
+  // Con la cortina levantada, el documento nunca debe quedar por encima
+  // del tope del catálogo: ahí solo está .curtain-spacer (vacío). Podía
+  // pasar cuando, estando apenas por debajo del tope, se scrolleaba hacia
+  // arriba: el gesto no se interceptaba (todavía no era "el tope") y el
+  // scroll nativo —un tick de rueda son ~100px, y en touch la inercia
+  // sigue sola después de soltar— se metía en el spacer, dejando una
+  // pantalla en blanco sin cortina. Cualquier scroll que cruce ese
+  // límite se corta seco en el tope; desde ahí, el siguiente gesto
+  // hacia arriba es el que baja la cortina.
+  function clampToCatalogTop() {
+    if (curtainOpen || locked) return;
+    const top = catalogTop();
+    if (window.scrollY < top - 1) jumpTo(top);
+  }
+
+  // Un gesto hacia arriba que no llega a reabrir la cortina (no estamos
+  // en el tope) pero que con scroll nativo se pasaría del tope: se frena
+  // justo ahí. Devuelve true si se hizo cargo del gesto.
+  function snapUpToCatalogTop(deltaUp) {
+    const dist = window.scrollY - catalogTop();
+    if (dist <= 2 || dist > Math.max(deltaUp * 3, 160)) return false;
+    jumpTo(catalogTop());
+    return true;
   }
 
   function onWheel(e) {
@@ -472,9 +501,13 @@ applyFilters();
       return;
     }
 
-    if (atCatalogTop() && e.deltaY < -WHEEL_THRESHOLD) {
-      e.preventDefault();
-      openCurtain();
+    if (e.deltaY < -WHEEL_THRESHOLD) {
+      if (atCatalogTop()) {
+        e.preventDefault();
+        openCurtain();
+      } else if (snapUpToCatalogTop(-e.deltaY)) {
+        e.preventDefault();
+      }
     }
   }
 
@@ -508,9 +541,16 @@ applyFilters();
     }
   }
 
+  function onTouchEnd() {
+    touchStartY = null;
+  }
+
   window.addEventListener('wheel', onWheel, { passive: false });
   window.addEventListener('touchstart', onTouchStart, { passive: true });
   window.addEventListener('touchmove', onTouchMove, { passive: false });
+  window.addEventListener('touchend', onTouchEnd, { passive: true });
+  window.addEventListener('touchcancel', onTouchEnd, { passive: true });
+  window.addEventListener('scroll', clampToCatalogTop, { passive: true });
 
   document.getElementById('ctaJump')?.addEventListener('click', closeCurtain);
   document.getElementById('curtainScrollCue')?.addEventListener('click', closeCurtain);
