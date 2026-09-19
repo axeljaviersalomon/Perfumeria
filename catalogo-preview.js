@@ -76,7 +76,7 @@ function setSlot(slide, name) {
   // centro (si no, con Tab se llega a botones invisibles).
   const isCurrent = name === 'current';
   slide.setAttribute('aria-hidden', String(!isCurrent));
-  slide.querySelectorAll('.preview-close, .preview-add, .preview-notes-btn').forEach((btn) => {
+  slide.querySelectorAll('.preview-close, .preview-add, .preview-notes-btn, .preview-share-btn').forEach((btn) => {
     btn.tabIndex = isCurrent ? 0 : -1;
   });
 }
@@ -377,7 +377,7 @@ function onPointerDown(e) {
   // en vez de tener que esperar a que cada animación termine.
   const slide = e.target.closest('.preview-slide');
   if (!slide || !slide.classList.contains('slot-current')) return;
-  if (e.target.closest('.preview-add, .preview-close, .preview-notes-btn')) return;
+  if (e.target.closest('.preview-add, .preview-close, .preview-notes-btn, .preview-share-btn')) return;
   if (navItems.length < 2) return; // nada para deslizar
 
   drag = { id: e.pointerId, startX: e.clientX, startY: e.clientY, dx: 0, locked: false, active: false };
@@ -431,6 +431,48 @@ function onPointerUp(e) {
     else if (goPrev) commitSwipe(-1);
   }
   drag = null;
+}
+
+// Arma el mensaje de la fragancia activa y abre el picker de contactos
+// de WhatsApp (Web Share API, que en celular es justo eso) con la foto
+// adjunta cuando el navegador lo permite; si no soporta compartir
+// archivos (o directamente no soporta la Web Share API, como la mayoría
+// de los navegadores de escritorio), cae a un link de wa.me con el
+// mismo texto, que abre WhatsApp Web o la app igual, solo que sin la
+// imagen adjunta.
+async function shareOnWhatsApp(slide) {
+  const brand = slide.dataset.itemBrand || '';
+  const name = slide.dataset.itemName || '';
+  const inspired = slide.dataset.itemInspired || '';
+  const price = typeof catalogoPrecios !== 'undefined' ? catalogoPrecios[slide.dataset.itemId] : undefined;
+  const priceLine = typeof price === 'number' ? `\nPrecio: ${formatPrice(price)}` : '';
+
+  const text = `¡Mirá esta fragancia! ${brand} - ${name}${inspired ? `\nInspirado en ${inspired}` : ''}${priceLine}`;
+  const imgSrc = slide.querySelector('.preview-img')?.src;
+
+  if (navigator.share) {
+    try {
+      let files;
+      if (imgSrc) {
+        try {
+          const blob = await (await fetch(imgSrc)).blob();
+          const file = new File([blob], 'perfume.jpg', { type: blob.type || 'image/jpeg' });
+          if (navigator.canShare && navigator.canShare({ files: [file] })) files = [file];
+        } catch (_) {
+          // Sin conexión a la imagen o navegador que no puede convertirla
+          // a archivo: se sigue con el share de solo texto.
+        }
+      }
+      await navigator.share(files ? { text, files } : { text });
+      return;
+    } catch (err) {
+      // AbortError: la persona cerró el picker sin elegir contacto, no es
+      // un error real. Cualquier otro caso cae al link de wa.me de abajo.
+      if (err?.name === 'AbortError') return;
+    }
+  }
+
+  window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
 }
 
 function dispatchAddToCart(dataset) {
@@ -547,6 +589,14 @@ function onViewportClick(e) {
     const slide = notesBtn.closest('.preview-slide');
     if (!slide || !slide.classList.contains('slot-current')) return; // solo la card activa tiene notas
     openNotes(slide);
+    return;
+  }
+
+  const shareBtn = e.target.closest('.preview-share-btn');
+  if (shareBtn) {
+    const slide = shareBtn.closest('.preview-slide');
+    if (!slide || !slide.classList.contains('slot-current')) return; // solo la card activa comparte
+    shareOnWhatsApp(slide);
     return;
   }
 
