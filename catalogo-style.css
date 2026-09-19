@@ -210,19 +210,20 @@ body, .filter-bar, .cart-panel, .preview-slide-inner, .preview-body,
 }
 
 /* ---------- CORTINA DE APERTURA ---------- */
-/* El "giro" inicial (kicker + título + lede + trust-bar) ocupa toda la
-   pantalla, tanto en mobile como en desktop, como una cortina fija
-   (position:fixed, siempre 100dvh) por encima de todo el resto del
-   sitio. catalogo-app.js (initHeroCurtain) liga su transform/opacity
-   1:1 a la posición real de scroll con requestAnimationFrame: no hay
-   scroll-jacking (el navegador scrollea nativo, sin wheel/touch
-   interceptado) ni un salto discreto — el primer scroll del visitante
-   la va levantando con la misma velocidad y elasticidad con la que
-   scrollea, y si vuelve arriba la cortina reaparece igual de fluida.
+/* El "giro" inicial (kicker + título + trust-bar) ocupa toda la pantalla,
+   tanto en mobile como en desktop, como una cortina fija (position:fixed,
+   siempre 100dvh) por encima de todo el resto del sitio. No es scroll-
+   jacking del sitio entero: catalogo-app.js (initHeroCurtain) solo
+   controla el límite entre la cortina y el catálogo, y ahí sí cada
+   gesto de scroll/swipe es un salto discreto de una sola vez (no un
+   scroll gradual) — se levanta del todo con un solo scroll hacia abajo
+   y reaparece del todo con un solo scroll hacia arriba estando en el
+   tope del catálogo. La transición la hace este CSS con .curtain-hidden;
+   el JS solo agrega/saca esa clase y reposiciona el scroll al límite
+   exacto (ver el comentario de closeCurtain en catalogo-app.js).
    .curtain-spacer reserva 100dvh en el flujo del documento (la cortina
    en sí no ocupa espacio por ser fixed) para que la barra de filtros y
-   las colecciones arranquen justo debajo, en la posición de scroll
-   donde la cortina termina de irse. */
+   las colecciones arranquen justo donde la cortina termina de irse. */
 .curtain-stage{
   position:fixed;
   inset:0;
@@ -230,17 +231,32 @@ body, .filter-bar, .cart-panel, .preview-slide-inner, .preview-body,
   height:100dvh;
   z-index:45;
   /* overflow-y:auto (no "hidden") a propósito: en teléfonos angostos
-     con las 4 filas del trust-bar apiladas, kicker+título+lede+botón+
+     con las 4 filas del trust-bar apiladas, kicker+título+botón+
      trust-bar puede superar el alto real del viewport. Con overflow
      oculto esas filas de más quedarían recortadas sin aviso; con auto,
      en el peor caso el contenido scrollea adentro de la cortina en vez
-     de perderse. .wrap centra verticalmente vía min-height:100% en
-     lugar de flex+align-items en este contenedor, porque un flex
-     centrado con overflow:auto recorta el borde inicial del contenido
-     quieto ("safe center" no tiene soporte parejo todavía). */
+     de perderse (initHeroCurtain deja pasar ese scroll interno antes de
+     levantar la cortina — ver curtainInternalScrollExhausted). .wrap
+     centra verticalmente vía min-height:100% en lugar de flex+
+     align-items en este contenedor, porque un flex centrado con
+     overflow:auto recorta el borde inicial del contenido quieto ("safe
+     center" no tiene soporte parejo todavía). */
   overflow-y:auto;
   background:var(--bg);
+  transform:translate3d(0,0,0);
+  opacity:1;
+  transition:transform 0.85s cubic-bezier(.76,0,.24,1), opacity 0.6s ease;
   will-change:transform, opacity;
+}
+/* Un solo gesto de scroll/swipe (ver initHeroCurtain) agrega esta clase:
+   la cortina se va hacia arriba y se desvanece con la transición de
+   arriba; sacarla la trae de vuelta bajando desde arriba, con la misma
+   curva — la animación es una sola y reversible, no dos efectos
+   distintos para abrir/cerrar. */
+.curtain-stage.curtain-hidden{
+  transform:translate3d(0,-100%,0);
+  opacity:0;
+  pointer-events:none;
 }
 .curtain-stage::before{
   content:'';
@@ -249,10 +265,6 @@ body, .filter-bar, .cart-panel, .preview-slide-inner, .preview-body,
   background:radial-gradient(ellipse 60% 45% at 50% 0%, rgba(var(--glow-rgb),0.1), transparent 65%);
   pointer-events:none;
 }
-/* Agregada por JS recién cuando la cortina terminó de irse del todo
-   (scroll >= 1 viewport): sin esto seguiría siendo clickeable/tocable
-   pese a estar fuera de pantalla por el transform. */
-.curtain-stage.is-cleared{ visibility:hidden; pointer-events:none; }
 .curtain-stage .wrap{
   position:relative;
   z-index:1;
@@ -262,6 +274,14 @@ body, .filter-bar, .cart-panel, .preview-slide-inner, .preview-body,
   justify-content:center;
   padding-top:24px;
   padding-bottom:24px;
+  transition:transform 0.7s cubic-bezier(.76,0,.24,1), opacity 0.45s ease;
+}
+/* Capa interna con su propio timing, un poco más rápido y con una leve
+   escala: le da profundidad de "cortina" en vez de que todo el bloque se
+   mueva como una sola plancha rígida. */
+.curtain-stage.curtain-hidden .wrap{
+  transform:scale(0.94) translate3d(0,-14px,0);
+  opacity:0;
 }
 
 .curtain-spacer{ height:100vh; height:100dvh; }

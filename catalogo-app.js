@@ -249,80 +249,140 @@ renderAllSections();
 initFilters();
 applyFilters();
 
-// ---- Botón "Ver fragancias" (mobile) ----
-// Al tocarlo, hace scroll hasta que la barra de filtros quede pegada
-// arriba y, justo debajo, se vea el título de la colección visible
-// (según el filtro activo) seguido de las primeras fragancias.
-function scrollToFragrances() {
-  const sectionIds = ['section-fem', 'section-masc', 'section-uni'];
-  let target = null;
-
-  for (const id of sectionIds) {
-    const el = document.getElementById(id);
-    if (el && !el.classList.contains('is-hidden')) {
-      target = el;
-      break;
-    }
-  }
-  if (!target) target = document.getElementById('section-fem');
-  if (!target) return;
-
-  const head = target.querySelector('.section-head') || target;
-  const filterBar = document.querySelector('.filter-bar');
-  const filterBarHeight = filterBar ? filterBar.getBoundingClientRect().height : 0;
-  const top = head.getBoundingClientRect().top + window.scrollY - filterBarHeight - 14;
-
-  window.scrollTo({ top: Math.max(top, 0), behavior: 'smooth' });
-}
-
-document.getElementById('ctaJump')?.addEventListener('click', scrollToFragrances);
-document.getElementById('curtainScrollCue')?.addEventListener('click', scrollToFragrances);
-
 // ---- Cortina de apertura ----
-// Liga la posición/opacidad de la cortina (#curtainStage, fixed a pantalla
-// completa) a la posición real de scroll con requestAnimationFrame: nada
-// de wheel/touchmove interceptado ni animación disparada por temporizador,
-// así se siente tan fluida y "elástica" como el scroll nativo del
-// visitante (rápido si scrollea rápido, lento si scrollea lento), y
-// revertible si vuelve a subir. progress 0 = cortina a pantalla completa;
-// progress 1 = totalmente levantada, un viewport de alto (.curtain-spacer)
-// más abajo, donde arranca la barra de filtros.
+// A diferencia de un scroll-jacking tradicional (que intercepta TODO el
+// scroll del sitio), esto solo controla el único límite entre la cortina
+// y el catálogo: un solo gesto de scroll/swipe hacia abajo con la cortina
+// abierta la levanta del todo (transición CSS, no un scroll gradual), y
+// un solo gesto hacia arriba estando ya en el tope del catálogo la trae
+// de vuelta. En cualquier otro momento (scrolleando DENTRO del catálogo)
+// el scroll es 100% nativo, sin interceptar nada.
 (function initHeroCurtain() {
   const curtain = document.getElementById('curtainStage');
-  const cue = document.getElementById('curtainScrollCue');
   if (!curtain) return;
 
-  let ticking = false;
-  let cleared = false;
+  // Duración real de la transición CSS del .curtain-stage (ver
+  // catalogo-style.css): se usa para no aceptar un segundo gesto hasta
+  // que la animación en curso termine (si no, un scroll/swipe rápido
+  // dispara varias veces seguidas y la cortina "tartamudea").
+  const TRANSITION_MS = 900;
+  const WHEEL_THRESHOLD = 4;
+  const TOUCH_THRESHOLD = 24;
 
-  function update() {
-    const vh = window.innerHeight;
-    const progress = Math.min(Math.max(window.scrollY / vh, 0), 1);
+  let curtainOpen = true;
+  let locked = false;
+  let touchStartY = null;
 
-    curtain.style.transform = `translate3d(0, ${-progress * 100}%, 0)`;
-    curtain.style.opacity = String(1 - progress * 0.85);
-    if (cue) cue.style.opacity = String(Math.max(1 - progress * 6, 0));
+  function lock() {
+    locked = true;
+    window.setTimeout(() => { locked = false; }, TRANSITION_MS + 80);
+  }
 
-    // Fuera de pantalla del todo: se le saca del árbol de interacción
-    // (visibility+pointer-events) para que no tape clicks/scroll sobre
-    // el catálogo pese a estar movida por transform.
-    const shouldClear = progress >= 1;
-    if (shouldClear !== cleared) {
-      cleared = shouldClear;
-      curtain.classList.toggle('is-cleared', cleared);
+  // El salto de scroll (a la altura exacta de un viewport, donde termina
+  // .curtain-spacer y arranca la barra de filtros) se hace SIN animación
+  // nativa y antes de que la cortina empiece a moverse: como el fondo
+  // del spacer es el mismo --bg que el de la cortina, ese salto es
+  // invisible, y lo único que el visitante ve moverse es la cortina
+  // yéndose/viniendo — una sola animación, no dos superpuestas.
+  function closeCurtain() {
+    if (!curtainOpen || locked) return;
+    lock();
+    curtainOpen = false;
+    window.scrollTo(0, window.innerHeight);
+    curtain.classList.add('curtain-hidden');
+  }
+
+  function openCurtain() {
+    if (curtainOpen || locked) return;
+    lock();
+    curtainOpen = true;
+    window.scrollTo(0, 0);
+    curtain.scrollTop = 0;
+    curtain.classList.remove('curtain-hidden');
+  }
+
+  // Con la cortina abierta puede haber contenido que no entra en pantallas
+  // bajas (ver el bloque `max-height` en el CSS) y que scrollea adentro
+  // de la propia cortina (.curtain-stage tiene overflow-y:auto). Antes de
+  // levantarla del todo hay que dejar que ese scroll interno llegue a su
+  // fin; si no, alguien con una pantalla baja nunca vería el pie del
+  // trust-bar.
+  function curtainInternalScrollExhausted(deltaY) {
+    if (curtain.scrollHeight <= curtain.clientHeight + 1) return true;
+    if (deltaY > 0) return curtain.scrollTop + curtain.clientHeight >= curtain.scrollHeight - 1;
+    return curtain.scrollTop <= 0;
+  }
+
+  // Con la cortina cerrada, closeCurtain() deja al documento scrolleado
+  // exactamente a un viewport de alto (donde termina .curtain-spacer):
+  // ese es el "tope" del catálogo, no 0. Comparar contra 0 acá haría que
+  // el primer scroll hacia arriba, en vez de reabrir la cortina, se
+  // colara como scroll nativo hasta meterse en el propio spacer (vacío,
+  // del mismo --bg que la cortina, así que invisible, pero rompe la
+  // regla de "un solo gesto" que pidió el usuario).
+  function atCatalogTop() {
+    return window.scrollY <= window.innerHeight + 2;
+  }
+
+  function onWheel(e) {
+    if (locked) { e.preventDefault(); return; }
+
+    if (curtainOpen) {
+      if (e.deltaY > WHEEL_THRESHOLD) {
+        if (!curtainInternalScrollExhausted(1)) return; // deja que scrollee su propio contenido
+        e.preventDefault();
+        closeCurtain();
+      } else if (e.deltaY < -WHEEL_THRESHOLD) {
+        if (!curtainInternalScrollExhausted(-1)) return;
+        e.preventDefault();
+      } else {
+        e.preventDefault();
+      }
+      return;
     }
-    ticking = false;
+
+    if (atCatalogTop() && e.deltaY < -WHEEL_THRESHOLD) {
+      e.preventDefault();
+      openCurtain();
+    }
   }
 
-  function onScroll() {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(update);
+  function onTouchStart(e) {
+    touchStartY = e.touches[0].clientY;
   }
 
-  window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll, { passive: true });
-  update();
+  function onTouchMove(e) {
+    if (touchStartY === null) return;
+    const deltaY = touchStartY - e.touches[0].clientY; // positivo = dedo sube = gesto de scroll hacia abajo
+
+    if (locked) { e.preventDefault(); return; }
+
+    if (curtainOpen) {
+      if (deltaY > TOUCH_THRESHOLD) {
+        if (!curtainInternalScrollExhausted(1)) return;
+        e.preventDefault();
+        closeCurtain();
+      } else if (deltaY < -TOUCH_THRESHOLD) {
+        if (!curtainInternalScrollExhausted(-1)) return;
+        e.preventDefault();
+      } else {
+        e.preventDefault();
+      }
+      return;
+    }
+
+    if (atCatalogTop() && deltaY < -TOUCH_THRESHOLD) {
+      e.preventDefault();
+      openCurtain();
+    }
+  }
+
+  window.addEventListener('wheel', onWheel, { passive: false });
+  window.addEventListener('touchstart', onTouchStart, { passive: true });
+  window.addEventListener('touchmove', onTouchMove, { passive: false });
+
+  document.getElementById('ctaJump')?.addEventListener('click', closeCurtain);
+  document.getElementById('curtainScrollCue')?.addEventListener('click', closeCurtain);
 })();
 
 // ---- Volver arriba ----
