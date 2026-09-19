@@ -121,6 +121,11 @@ function populateBrandSelect() {
 // mostrando el rótulo de la marca, solo con esa fragancia adentro).
 function applyFilters() {
   const term = normalizeSearch(state.search);
+  // Buscando por nombre/marca: se esconden los títulos grandes de
+  // "Femenino/Masculino/Unisex" (ver .hide-section-title en el CSS) y
+  // solo quedan las fragancias que matchean, sin la división editorial
+  // que solo aporta algo en la vista general o filtrando por categoría.
+  const isSearching = term.length > 0;
   let visibleGroupsTotal = 0;
 
   CATEGORY_SECTIONS.forEach(({ key, sectionId, listId }) => {
@@ -132,6 +137,7 @@ function applyFilters() {
       return;
     }
     sectionEl.classList.remove('is-hidden');
+    sectionEl.classList.toggle('hide-section-title', isSearching);
 
     const listEl = document.getElementById(listId);
     const groups = listEl.querySelectorAll('.brand-group');
@@ -270,6 +276,54 @@ function scrollToFragrances() {
 }
 
 document.getElementById('ctaJump')?.addEventListener('click', scrollToFragrances);
+document.getElementById('curtainScrollCue')?.addEventListener('click', scrollToFragrances);
+
+// ---- Cortina de apertura ----
+// Liga la posición/opacidad de la cortina (#curtainStage, fixed a pantalla
+// completa) a la posición real de scroll con requestAnimationFrame: nada
+// de wheel/touchmove interceptado ni animación disparada por temporizador,
+// así se siente tan fluida y "elástica" como el scroll nativo del
+// visitante (rápido si scrollea rápido, lento si scrollea lento), y
+// revertible si vuelve a subir. progress 0 = cortina a pantalla completa;
+// progress 1 = totalmente levantada, un viewport de alto (.curtain-spacer)
+// más abajo, donde arranca la barra de filtros.
+(function initHeroCurtain() {
+  const curtain = document.getElementById('curtainStage');
+  const cue = document.getElementById('curtainScrollCue');
+  if (!curtain) return;
+
+  let ticking = false;
+  let cleared = false;
+
+  function update() {
+    const vh = window.innerHeight;
+    const progress = Math.min(Math.max(window.scrollY / vh, 0), 1);
+
+    curtain.style.transform = `translate3d(0, ${-progress * 100}%, 0)`;
+    curtain.style.opacity = String(1 - progress * 0.85);
+    if (cue) cue.style.opacity = String(Math.max(1 - progress * 6, 0));
+
+    // Fuera de pantalla del todo: se le saca del árbol de interacción
+    // (visibility+pointer-events) para que no tape clicks/scroll sobre
+    // el catálogo pese a estar movida por transform.
+    const shouldClear = progress >= 1;
+    if (shouldClear !== cleared) {
+      cleared = shouldClear;
+      curtain.classList.toggle('is-cleared', cleared);
+    }
+    ticking = false;
+  }
+
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(update);
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+  update();
+})();
 
 // ---- Volver arriba ----
 // Aparece recién después de scrollear un poco (si estuviera siempre
