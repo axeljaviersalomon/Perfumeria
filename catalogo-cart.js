@@ -19,7 +19,7 @@
 const CART_STORAGE_KEY = 'perfumeria-cart-v1';
 const WHATSAPP_NUMBER = '5491161970675';
 const TOAST_DURATION_MS = 1800;
-const CLOSE_TRANSITION_MS = 320; // debe coincidir con la transición CSS de .cart-panel
+const CLOSE_TRANSITION_MS = 320; // >= la transición de cierre CSS de .cart-panel (0.26s)
 
 // Estado del carrito: { [id]: { id, name, brand, inspired, qty } }
 let cart = loadCart();
@@ -107,7 +107,25 @@ function addItem({ id, name, brand, inspired }) {
   saveCart();
   renderCartList();
   updateItemBadge(id);
+  pingCartFloat();
   showToast(`${name} agregado al carrito`);
+}
+
+// Latido del ícono del botón flotante cada vez que entra algo: conecta
+// el "+" que se tocó en el catálogo con el lugar donde fue a parar.
+function pingCartFloat() {
+  const toggleEl = document.getElementById('cartToggle');
+  if (!toggleEl) return;
+  toggleEl.classList.remove('is-pinged');
+  void toggleEl.offsetWidth; // reinicia la animación si se agregan varias seguidas
+  toggleEl.classList.add('is-pinged');
+  // El botón tiene otras animaciones propias (aparición, brillo): solo
+  // interesa el final de ESTA.
+  toggleEl.addEventListener('animationend', function onEnd(e) {
+    if (e.animationName !== 'cartPing') return;
+    toggleEl.classList.remove('is-pinged');
+    toggleEl.removeEventListener('animationend', onEnd);
+  });
 }
 
 function changeQty(id, delta) {
@@ -160,12 +178,14 @@ function restoreItemBadgesFromCart() {
 
 // ---- Render del panel ----
 
-function renderCartRow(entry) {
+// `index` alimenta la cascada de entrada de las filas al abrir el panel
+// (--i en el CSS); fuera de la apertura no tiene efecto.
+function renderCartRow(entry, index) {
   const safeName = escapeHtml(entry.name);
   const price = getItemPrice(entry.id);
   const priceLabel = typeof price === 'number' ? formatPrice(price * entry.qty) : (price || '');
   return `
-    <li class="cart-row" data-item-id="${escapeHtml(entry.id)}">
+    <li class="cart-row" data-item-id="${escapeHtml(entry.id)}" style="--i:${Math.min(index, 8)}">
       <div class="cart-row-info">
         <div class="cart-row-name">${safeName}</div>
         <div class="cart-row-brand">${escapeHtml(entry.brand)}</div>
@@ -306,7 +326,7 @@ function closeCartInfo() {
   setTimeout(() => {
     panel.hidden = true;
     backdrop.hidden = true;
-  }, 340); // debe coincidir con la transición CSS de .notes-panel
+  }, 340); // >= la transición de cierre CSS de .notes-panel (0.26s)
 
   if (lastFocusedBeforeCartInfoOpen instanceof HTMLElement) lastFocusedBeforeCartInfoOpen.focus();
 }
@@ -322,6 +342,14 @@ function openCart() {
 
   panel.hidden = false;
   backdrop.hidden = false;
+  // Las filas caen en cascada solo en este momento (ver .cart-list
+  // .is-animating en el CSS); la clase se saca cuando la última fila ya
+  // llegó, para que los re-renders por cambio de cantidad no la repitan.
+  const listEl = document.getElementById('cartList');
+  if (listEl) {
+    listEl.classList.add('is-animating');
+    setTimeout(() => listEl.classList.remove('is-animating'), 1000);
+  }
   // El cambio de "hidden" a visible necesita un frame antes de animar,
   // para que el navegador registre el estado inicial de la transición.
   requestAnimationFrame(() => {
@@ -417,7 +445,12 @@ function initDelegatedClicks() {
     if (qtyBtn) {
       const row = qtyBtn.closest('.cart-row');
       const id = row?.dataset.itemId;
-      if (id) changeQty(id, qtyBtn.dataset.action === 'increase' ? 1 : -1);
+      if (!id) return;
+      const delta = qtyBtn.dataset.action === 'increase' ? 1 : -1;
+      // Restar el último deja la fila en cero: se va con la misma salida
+      // animada que la X de quitar, en vez de desaparecer de golpe.
+      if (delta < 0 && cart[id]?.qty === 1) leaveRowThen(row, () => changeQty(id, delta));
+      else changeQty(id, delta);
       return;
     }
 
@@ -425,9 +458,25 @@ function initDelegatedClicks() {
     if (removeBtn) {
       const row = removeBtn.closest('.cart-row');
       const id = row?.dataset.itemId;
-      if (id) removeItem(id);
+      if (id) leaveRowThen(row, () => removeItem(id));
     }
   });
+}
+
+// Pliega la fila (animación .is-leaving del CSS) y recién después
+// aplica el cambio real, que re-renderiza la lista sin esa fila. Un
+// segundo toque sobre la misma fila mientras se está yendo se ignora.
+function leaveRowThen(row, done) {
+  if (!row || row.classList.contains('is-leaving')) return;
+  row.classList.add('is-leaving');
+  let finished = false;
+  const finish = () => {
+    if (finished) return;
+    finished = true;
+    done();
+  };
+  row.addEventListener('animationend', finish, { once: true });
+  setTimeout(finish, 320); // respaldo si animationend no llega (reduced-motion, pestaña en segundo plano)
 }
 
 // ---- Arranque ----

@@ -63,6 +63,27 @@
      sobre el fondo oscuro), pero sobre un fondo claro un blend "screen"
      queda invisible (nunca puede aclarar más que blanco). */
   --glow-blend: screen;
+  /* Sombra que proyecta el borde inferior de la cortina sobre el
+     catálogo mientras se levanta (más liviana en modo claro). */
+  --curtain-shadow: rgba(0,0,0,0.55);
+
+  /* ---- Sistema de movimiento ----
+     Todas las transiciones del sitio leen de estas curvas y duraciones
+     (nunca un cubic-bezier suelto) para que abrir un modal, revelar una
+     sección o levantar la cortina se sientan como parte de una misma
+     familia y no como efectos pegados de distintos lugares.
+     - ease-out-expo: entradas (arranca rápido, se asienta largo y suave).
+     - ease-in-soft:  salidas (se va sin frenar: lo que desaparece no
+                      tiene por qué "aterrizar").
+     - ease-in-out:   desplazamientos de un lugar a otro (la cortina,
+                      el thumb del interruptor de tema). */
+  --ease-out-expo: cubic-bezier(.16,1,.3,1);
+  --ease-out-quart: cubic-bezier(.25,1,.5,1);
+  --ease-in-soft: cubic-bezier(.4,0,.7,.2);
+  --ease-in-out: cubic-bezier(.65,0,.2,1);
+  --dur-fast: 0.22s;
+  --dur-base: 0.45s;
+  --dur-slow: 0.8s;
 }
 
 /* ---------- MODO CLARO ---------- */
@@ -90,6 +111,7 @@
   --confirm-ink: #F6F0E3;
   --overlay-chip: rgba(255,255,255,0.7);
   --glow-blend: multiply;
+  --curtain-shadow: rgba(36,26,18,0.22);
 }
 
 *{ box-sizing:border-box; }
@@ -189,19 +211,27 @@ body, .filter-bar, .cart-panel, .preview-slide-inner, .preview-body,
   background:linear-gradient(135deg, var(--brass-soft), var(--brass));
   color:var(--btn-ink);
   box-shadow:0 3px 8px rgba(0,0,0,0.3);
-  transition:transform 0.32s cubic-bezier(.2,.8,.2,1);
+  transition:transform 0.5s var(--ease-in-out);
 }
-.theme-toggle:active .theme-toggle-thumb{ transform:scale(0.88); }
+.theme-toggle:active .theme-toggle-thumb{ transform:scale(0.88); transition-duration:0.15s; }
 :root[data-theme="light"] .theme-toggle{ background:rgba(var(--glow-rgb),0.14); }
 :root[data-theme="light"] .theme-toggle-thumb{ transform:translateX(37px); }
 :root[data-theme="light"] .theme-toggle:active .theme-toggle-thumb{ transform:translateX(37px) scale(0.88); }
 /* El thumb siempre muestra el ícono del tema ACTIVO (luna = oscuro
    puesto, sol = claro puesto), como en cualquier switch día/noche
-   conocido: la posición y el ícono cuentan la misma historia. */
-.theme-icon{ width:20px; height:20px; }
-.theme-icon-sun{ display:none; }
-:root[data-theme="light"] .theme-icon-sun{ display:block; }
-:root[data-theme="light"] .theme-icon-moon{ display:none; }
+   conocido: la posición y el ícono cuentan la misma historia. Los dos
+   íconos viven superpuestos y se cruzan con un giro corto mientras el
+   thumb viaja, en vez de intercambiarse de golpe con display:none. */
+.theme-icon{
+  position:absolute;
+  width:20px;
+  height:20px;
+  transition:opacity 0.3s ease, transform 0.5s var(--ease-in-out);
+}
+.theme-icon-sun{ opacity:0; transform:rotate(-90deg) scale(0.6); }
+.theme-icon-moon{ opacity:1; transform:rotate(0) scale(1); }
+:root[data-theme="light"] .theme-icon-sun{ opacity:1; transform:rotate(0) scale(1); }
+:root[data-theme="light"] .theme-icon-moon{ opacity:0; transform:rotate(90deg) scale(0.6); }
 
 .wrap{
   max-width:1180px;
@@ -223,7 +253,21 @@ body, .filter-bar, .cart-panel, .preview-slide-inner, .preview-body,
    exacto (ver el comentario de closeCurtain en catalogo-app.js).
    .curtain-spacer reserva 100dvh en el flujo del documento (la cortina
    en sí no ocupa espacio por ser fixed) para que la barra de filtros y
-   las colecciones arranquen justo donde la cortina termina de irse. */
+   las colecciones arranquen justo donde la cortina termina de irse.
+
+   Coreografía al levantarse (y la inversa al volver):
+     1. El contenido del hero (kicker, título, lede, trust-bar) se
+        despide primero, escalonado y rápido, subiendo apenas.
+     2. El plano de la cortina —OPACO, nunca se desvanece: un fundido
+        sobre un plano que además se traslada deja ver el catálogo "a
+        través" de la cortina y se lee turbio— sube entero con una
+        curva in-out, proyectando una sombra sobre lo que va destapando
+        y con un filo dorado en su borde inferior, como el bajo de una
+        cortina real.
+     3. El catálogo no está simplemente "ahí" esperando: la barra de
+        filtros y las primeras secciones entran recién cuando el borde
+        de la cortina ya las destapó (ver html.curtain-open y
+        --reveal-delay más abajo). */
 .curtain-stage{
   position:fixed;
   inset:0;
@@ -243,19 +287,18 @@ body, .filter-bar, .cart-panel, .preview-slide-inner, .preview-body,
      center" no tiene soporte parejo todavía). */
   overflow-y:auto;
   background:var(--bg);
+  border-bottom:1px solid rgba(var(--glow-rgb),0.28);
+  box-shadow:0 30px 80px -10px var(--curtain-shadow);
   transform:translate3d(0,0,0);
-  opacity:1;
-  transition:transform 0.85s cubic-bezier(.76,0,.24,1), opacity 0.6s ease;
-  will-change:transform, opacity;
+  transition:transform 1s var(--ease-in-out);
+  will-change:transform;
 }
 /* Un solo gesto de scroll/swipe (ver initHeroCurtain) agrega esta clase:
-   la cortina se va hacia arriba y se desvanece con la transición de
-   arriba; sacarla la trae de vuelta bajando desde arriba, con la misma
-   curva — la animación es una sola y reversible, no dos efectos
-   distintos para abrir/cerrar. */
+   la cortina se va hacia arriba con la transición de arriba; sacarla la
+   trae de vuelta bajando desde arriba, con la misma curva — la animación
+   es una sola y reversible, no dos efectos distintos para abrir/cerrar. */
 .curtain-stage.curtain-hidden{
   transform:translate3d(0,-100%,0);
-  opacity:0;
   pointer-events:none;
 }
 .curtain-stage::before{
@@ -274,23 +317,64 @@ body, .filter-bar, .cart-panel, .preview-slide-inner, .preview-body,
   justify-content:center;
   padding-top:24px;
   padding-bottom:24px;
-  transition:transform 0.7s cubic-bezier(.76,0,.24,1), opacity 0.45s ease;
 }
-/* Capa interna con su propio timing, un poco más rápido y con una leve
-   escala: le da profundidad de "cortina" en vez de que todo el bloque se
-   mueva como una sola plancha rígida. */
-.curtain-stage.curtain-hidden .wrap{
-  transform:scale(0.94) translate3d(0,-14px,0);
+
+/* ---- Entrada / salida escalonada del contenido del hero ----
+   Un único mecanismo (transiciones + un índice --i por pieza) cubre los
+   tres momentos: la aparición al cargar la página (html.is-ready la
+   dispara, ver el <script> del <head>), la despedida al levantar la
+   cortina y el regreso al bajarla. Antes la carga usaba @keyframes con
+   fill-mode y la cortina otra transición aparte: dos sistemas que
+   además se pisaban (una animación con fill "both" gana siempre sobre
+   una transición de la misma propiedad). */
+.kicker{ --i:0; }
+h1.title{ --i:1; }
+p.lede{ --i:2; }
+.cta-jump{ --i:3; }
+.trust-item:nth-child(1){ --i:4; }
+.trust-item:nth-child(2){ --i:5; }
+.trust-item:nth-child(3){ --i:6; }
+.trust-item:nth-child(4){ --i:7; }
+.curtain-scroll-cue{ --i:8; }
+
+.kicker, h1.title, p.lede, .cta-jump, .trust-item, .curtain-scroll-cue{
   opacity:0;
+  transform:translate3d(0,18px,0);
+  transition:opacity 0.9s var(--ease-out-expo), transform 0.9s var(--ease-out-expo);
+  transition-delay:calc(0.12s + var(--i) * 0.08s);
+}
+html.is-ready .curtain-stage:not(.curtain-hidden) :is(.kicker, h1.title, p.lede, .cta-jump, .trust-item, .curtain-scroll-cue){
+  opacity:1;
+  transform:translate3d(0,0,0);
+}
+/* Al levantar la cortina, el contenido se va rápido y hacia arriba
+   (acompaña la dirección del plano) con un escalonado mínimo: la
+   despedida no tiene por qué ser tan ceremoniosa como la llegada. */
+.curtain-stage.curtain-hidden :is(.kicker, h1.title, p.lede, .cta-jump, .trust-item, .curtain-scroll-cue){
+  opacity:0;
+  transform:translate3d(0,-16px,0);
+  transition-duration:0.45s;
+  transition-timing-function:var(--ease-in-soft);
+  transition-delay:calc(var(--i) * 0.025s);
+}
+/* Al volver a bajar la cortina, el contenido espera a que el plano ya
+   esté casi asentado antes de reaparecer (si no, se ve moverse dentro
+   de un plano que todavía está cayendo). */
+html.is-ready .curtain-stage.curtain-returning :is(.kicker, h1.title, p.lede, .cta-jump, .trust-item, .curtain-scroll-cue){
+  transition-delay:calc(0.5s + var(--i) * 0.07s);
 }
 
 .curtain-spacer{ height:100vh; height:100dvh; }
 
+/* Centrado con margin:auto (no con translateX(-50%)): el transform lo
+   usa la entrada/salida escalonada de arriba. */
 .curtain-scroll-cue{
   position:absolute;
-  left:50%;
+  left:0;
+  right:0;
+  width:max-content;
+  margin:0 auto;
   bottom:clamp(20px, 4vh, 40px);
-  transform:translateX(-50%);
   z-index:1;
   display:flex;
   flex-direction:column;
@@ -306,9 +390,6 @@ body, .filter-bar, .cart-panel, .preview-slide-inner, .preview-body,
   font-size:10.5px;
   letter-spacing:0.12em;
   text-transform:uppercase;
-  opacity:0;
-  animation:fadeUp 0.9s cubic-bezier(.19,1,.22,1) 1.15s both;
-  transition:opacity 0.3s ease;
 }
 .curtain-scroll-cue svg{
   width:17px;
@@ -340,9 +421,10 @@ header.hero{
   color:var(--brass-soft);
   line-height:1;
   margin-bottom:2px;
-  opacity:0;
-  animation:fadeUp 0.9s cubic-bezier(.19,1,.22,1) 0.1s both;
 }
+/* La línea bajo el kicker se dibuja desde el centro hacia afuera un
+   instante después de que aparece el texto, y se recoge al levantar la
+   cortina. */
 .kicker::after{
   content:'';
   display:block;
@@ -351,7 +433,12 @@ header.hero{
   margin:16px auto 0;
   background:linear-gradient(90deg, transparent, var(--brass), transparent);
   opacity:0.7;
+  transform:scaleX(0);
+  transition:transform 0.9s var(--ease-out-expo) 0.55s;
 }
+html.is-ready .curtain-stage:not(.curtain-hidden) .kicker::after{ transform:scaleX(1); }
+.curtain-stage.curtain-hidden .kicker::after{ transition:transform 0.35s var(--ease-in-soft); }
+html.is-ready .curtain-stage.curtain-returning .kicker::after{ transition-delay:0.95s; }
 h1.title{
   font-family:'Cormorant Garamond', serif;
   font-weight:400;
@@ -359,8 +446,6 @@ h1.title{
   line-height:1.02;
   margin:22px 0 26px;
   color:var(--ink);
-  opacity:0;
-  animation:fadeUp 1s cubic-bezier(.19,1,.22,1) 0.3s both;
 }
 h1.title em{
   font-style:italic;
@@ -376,8 +461,6 @@ p.lede{
   font-size:17px;
   line-height:1.65;
   color:var(--ink-soft);
-  opacity:0;
-  animation:fadeUp 1s cubic-bezier(.19,1,.22,1) 0.5s both;
 }
 
 /* ---------- CTA "VER FRAGANCIAS" (solo mobile) ---------- */
@@ -401,14 +484,14 @@ p.lede{
   background:linear-gradient(135deg, var(--brass-soft), var(--brass) 50%, var(--brass-soft));
   background-size:220% 220%;
   box-shadow:0 10px 26px rgba(var(--glow-rgb),0.4), 0 1px 0 rgba(255,255,255,0.4) inset;
-  opacity:0;
-  animation:fadeUp 0.9s cubic-bezier(.19,1,.22,1) 0.65s both,
-            ctaSheen 5s linear 0.65s infinite,
+  animation:ctaSheen 5s linear 0.65s infinite,
             ctaGlow 3.2s ease-in-out 0.65s infinite;
-  transition:transform 0.2s ease;
   -webkit-tap-highlight-color:transparent;
 }
-.cta-jump:active{ transform:scale(0.96); }
+/* La opacidad/posición de reposo las maneja la entrada escalonada del
+   hero; al presionar solo se acorta la transición para que el feedback
+   sea inmediato. */
+.cta-jump:active{ transform:scale(0.96); transition-duration:0.15s; transition-delay:0s; }
 .cta-jump-shine{
   position:absolute;
   top:0;
@@ -465,12 +548,8 @@ p.lede{
   padding:22px 22px;
   border-left:1px solid var(--hair);
   border-bottom:1px solid var(--hair);
-  opacity:0;
-  transform:translateY(10px);
-  animation:trustIn 0.7s ease forwards;
 }
 .trust-item:first-child{ border-left:none; }
-@keyframes trustIn{ to{ opacity:1; transform:translateY(0); } }
 
 .trust-icon{
   flex-shrink:0;
@@ -518,12 +597,22 @@ p.lede{
   background:rgba(var(--bg-rgb),0.78);
   backdrop-filter:blur(14px);
   -webkit-backdrop-filter:blur(14px);
-  opacity:0;
-  animation:fadeDown 0.8s cubic-bezier(.19,1,.22,1) 1.05s both;
+  /* Está arriba de todo, así que es lo ÚLTIMO que la cortina (que sube)
+     destapa: su retardo lo calcula catalogo-app.js (--reveal-delay en
+     línea, ver scheduleArrival) para que entre justo detrás del borde,
+     y se retira de inmediato cuando la cortina vuelve a bajar. El
+     color/fondo conservan la transición de cambio de tema. */
+  opacity:1;
+  transform:translate3d(0,0,0);
+  transition:opacity 0.8s var(--ease-out-expo) var(--reveal-delay),
+             transform 0.8s var(--ease-out-expo) var(--reveal-delay),
+             background-color 0.35s ease, border-color 0.35s ease, color 0.35s ease;
 }
-@keyframes fadeDown{
-  from{ opacity:0; transform:translateY(-14px); }
-  to{ opacity:1; transform:translateY(0); }
+html.curtain-open .filter-bar{
+  opacity:0;
+  transform:translate3d(0,-12px,0);
+  transition-duration:0.3s, 0.3s, 0.35s, 0.35s, 0.35s;
+  transition-delay:0s;
 }
 .filter-group{
   display:flex;
@@ -559,19 +648,20 @@ p.lede{
   border-radius:999px;
   padding:9px 20px;
   cursor:pointer;
-  transition:color 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  transition:color var(--dur-fast) ease, border-color var(--dur-fast) ease, background var(--dur-fast) ease,
+             box-shadow 0.3s ease, transform var(--dur-fast) var(--ease-out-quart);
 }
-.filter-btn .btn-shine{ opacity:0.35; }
-.filter-btn:nth-child(1) .btn-shine{ animation-delay:0s; }
-.filter-btn:nth-child(2) .btn-shine{ animation-delay:0.4s; }
-.filter-btn:nth-child(3) .btn-shine{ animation-delay:0.8s; }
-.filter-btn:nth-child(4) .btn-shine{ animation-delay:1.2s; }
+/* El barrido de luz queda reservado al chip activo (y a las CTAs
+   doradas): cuatro chips secundarios brillando en loop compiten entre
+   sí y con el contenido. Los inactivos responden solo al hover. */
+.filter-btn:not(.active) .btn-shine{ display:none; }
 .filter-btn:hover{
   color:var(--ink);
   border-color:var(--brass-soft);
   box-shadow:0 4px 16px rgba(var(--glow-rgb),0.18);
+  transform:translateY(-1px);
 }
-.filter-btn:active{ transform:scale(0.96); }
+.filter-btn:active{ transform:scale(0.96); transition-duration:0.1s; }
 .filter-btn.active{
   color:var(--btn-ink);
   font-weight:600;
@@ -608,7 +698,8 @@ p.lede{
 .filter-select-wrap:focus-within{
   box-shadow:0 4px 16px rgba(var(--glow-rgb),0.2);
 }
-.filter-select-wrap .btn-shine{ opacity:0.3; animation-delay:1.6s; }
+/* Mismo criterio que los chips inactivos: el select no es una CTA. */
+.filter-select-wrap .btn-shine{ display:none; }
 .filter-select{
   font-family:'Jost', sans-serif;
   font-size:13px;
@@ -633,15 +724,26 @@ p.lede{
    propia lupa más chica y una X para cerrarlo); cerrarlo vuelve a dejar
    solo el círculo. Los dos estados (.filter-search-toggle / -box) viven
    en el mismo wrapper y alternan con la clase .is-open puesta por
-   catalogo-app.js, nunca los dos visibles a la vez. */
+   catalogo-app.js, nunca los dos visibles a la vez.
+   El cambio no es un corte (display:none): el propio círculo se
+   ensancha hasta ser el campo de texto (el wrapper anima su ancho vía
+   flex-basis, así que los controles vecinos se corren suavemente), la
+   lupa se queda en su lugar y el texto aparece cuando ya hay espacio. */
 .filter-search-wrap{
   position:relative;
   display:inline-flex;
   align-items:center;
+  height:40px;
+  flex:0 0 40px;
+  transition:flex 0.55s var(--ease-out-expo);
 }
+.filter-search-wrap.is-open{ flex-basis:220px; }
 .filter-search-toggle{
   -webkit-appearance:none;
   appearance:none;
+  position:absolute;
+  left:0;
+  top:0;
   width:40px;
   height:40px;
   padding:0;
@@ -654,19 +756,31 @@ p.lede{
   justify-content:center;
   cursor:pointer;
   flex-shrink:0;
-  transition:border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+  transition:border-color 0.2s ease, color 0.2s ease, background 0.2s ease, opacity 0.2s ease, transform 0.4s var(--ease-out-expo);
 }
 .filter-search-toggle svg{ width:16px; height:16px; }
 .filter-search-toggle:hover{ border-color:var(--brass-soft); color:var(--brass-soft); }
-.filter-search-wrap.is-open .filter-search-toggle{ display:none; }
+.filter-search-wrap.is-open .filter-search-toggle{
+  opacity:0;
+  transform:scale(0.7);
+  pointer-events:none;
+  transition-duration:0.15s;
+}
 
 .filter-search-box{
-  display:none;
-  position:relative;
+  position:absolute;
+  inset:0;
+  display:flex;
   align-items:center;
-  width:200px;
+  opacity:0;
+  visibility:hidden;
+  transition:opacity 0.25s ease, visibility 0s linear 0.25s;
 }
-.filter-search-wrap.is-open .filter-search-box{ display:inline-flex; }
+.filter-search-wrap.is-open .filter-search-box{
+  opacity:1;
+  visibility:visible;
+  transition:opacity 0.3s ease 0.08s, visibility 0s;
+}
 .filter-search-icon{
   position:absolute;
   left:16px;
@@ -677,6 +791,7 @@ p.lede{
 }
 .filter-search-input{
   width:100%;
+  height:40px;
   font-family:'Jost', sans-serif;
   font-size:13px;
   letter-spacing:0.02em;
@@ -724,12 +839,35 @@ p.lede{
 .filter-search-close:hover{ color:var(--brass-soft); background:rgba(var(--glow-rgb),0.08); }
 
 /* ---------- SCROLL REVEAL ---------- */
+/* --reveal-delay vale 0 salvo durante el segundo en que la cortina se
+   está levantando: ahí catalogo-app.js (scheduleArrival) le da a cada
+   pieza en pantalla, en línea, el instante en que el borde de la
+   cortina pasa por su altura. Así las primeras secciones entran justo
+   cuando las destapa, en vez de terminar de aparecer detrás de ella,
+   ya quietas, sin que nadie las vea llegar. */
+html{ --reveal-delay:0s; }
 .reveal{
   opacity:0;
-  transform:translateY(20px);
-  transition:opacity 0.8s cubic-bezier(.2,.7,.3,1), transform 0.8s cubic-bezier(.2,.7,.3,1);
+  transform:translateY(22px);
+  transition:opacity 0.9s var(--ease-out-expo), transform 0.9s var(--ease-out-expo);
+  transition-delay:var(--reveal-delay);
 }
 .reveal.show{ opacity:1; transform:translateY(0); }
+
+/* Al cambiar de categoría o marca (no al tipear en el buscador, que
+   se refresca con cada tecla), los grupos que quedan a la vista entran
+   de nuevo con una cascada corta: catalogo-app.js pone .is-refresh con
+   un índice --i por grupo visible. Los valores finales coinciden con
+   el estado .show, así que sacar la clase al terminar no mueve nada. */
+.brand-group.is-refresh,
+.section-head.is-refresh{
+  animation:groupIn 0.55s var(--ease-out-expo) both;
+  animation-delay:calc(var(--i, 0) * 0.045s);
+}
+@keyframes groupIn{
+  from{ opacity:0; transform:translateY(12px); }
+  to{ opacity:1; transform:translateY(0); }
+}
 
 .results-note{
   width:100%;
@@ -739,6 +877,7 @@ p.lede{
   font-size:15px;
   color:var(--ink-faint);
   margin-top:4px;
+  animation:fadeUp 0.5s var(--ease-out-expo);
 }
 
 /* ---------- SECTIONS ---------- */
@@ -779,11 +918,20 @@ h2.section-title{
   margin:0 0 16px;
   color:var(--tone-deep, var(--ink));
 }
+/* La regla se dibuja de izquierda a derecha justo después de que el
+   título terminó de asentarse (un poco después que el resto del
+   encabezado, para que se lea como un remate y no como parte del
+   bloque). */
 .section-head .rule{
   width:52px;
   height:2px;
   background:var(--tone, var(--brass));
+  transform:scaleX(0);
+  transform-origin:left center;
+  transition:transform 0.9s var(--ease-out-expo);
+  transition-delay:calc(var(--reveal-delay) + 0.3s);
 }
+.section-head.show .rule{ transform:scaleX(1); }
 
 .fragrance-list{
   column-count:3;
@@ -819,11 +967,11 @@ h2.section-title{
   align-items:center;
   gap:14px;
   cursor:pointer;
-  transition:background 0.3s ease, transform 0.3s ease;
+  transition:background 0.3s ease, transform 0.45s var(--ease-out-expo);
 }
 .item:hover{
   background:rgba(var(--ink-rgb),0.03);
-  transform:translateX(3px);
+  transform:translateX(4px);
 }
 .item:focus-visible{
   outline:2px solid var(--brass-soft);
@@ -855,32 +1003,38 @@ h2.section-title{
   padding:2px;
   transform:scale(1.12);
   mix-blend-mode:multiply;
-  transition:transform 0.45s ease;
+  transition:transform 0.6s var(--ease-out-expo);
 }
-.item:hover .thumb-wrap img{ transform:scale(1.22); }
+.item:hover .thumb-wrap img{ transform:scale(1.2); }
 
 /* Cascada interna: los items de un grupo aparecen escalonados cuando
-   el .brand-group (padre .reveal) recibe .show */
+   el .brand-group (padre .reveal) recibe .show. El hover del item se
+   mueve con su propia transición (transform corto) solo una vez que el
+   item ya llegó: mientras la cascada está en curso manda la entrada. */
 .brand-group .item{
   opacity:0;
-  transform:translateY(10px);
-  transition:opacity 0.5s ease, transform 0.5s ease, background 0.3s ease;
+  transform:translateY(12px);
+  transition:opacity 0.7s var(--ease-out-expo), transform 0.7s var(--ease-out-expo), background 0.3s ease;
+  transition-delay:var(--reveal-delay);
 }
 .brand-group.show .item{ opacity:1; transform:translateY(0); }
-.brand-group.show .item:nth-child(2){ transition-delay:0.03s; }
-.brand-group.show .item:nth-child(3){ transition-delay:0.06s; }
-.brand-group.show .item:nth-child(4){ transition-delay:0.09s; }
-.brand-group.show .item:nth-child(5){ transition-delay:0.12s; }
-.brand-group.show .item:nth-child(6){ transition-delay:0.15s; }
-.brand-group.show .item:nth-child(7){ transition-delay:0.18s; }
-.brand-group.show .item:nth-child(8){ transition-delay:0.21s; }
-.brand-group.show .item:nth-child(9){ transition-delay:0.24s; }
-.brand-group.show .item:nth-child(10){ transition-delay:0.27s; }
-.brand-group.show .item:nth-child(11){ transition-delay:0.3s; }
-.brand-group.show .item:nth-child(12){ transition-delay:0.33s; }
-.brand-group.show .item:nth-child(13){ transition-delay:0.36s; }
-.brand-group.show .item:nth-child(14){ transition-delay:0.39s; }
-.brand-group.show .item:nth-child(15){ transition-delay:0.42s; }
+.brand-group.show .item:nth-child(2){ transition-delay:calc(var(--reveal-delay) + 0.04s); }
+.brand-group.show .item:nth-child(3){ transition-delay:calc(var(--reveal-delay) + 0.08s); }
+.brand-group.show .item:nth-child(4){ transition-delay:calc(var(--reveal-delay) + 0.12s); }
+.brand-group.show .item:nth-child(5){ transition-delay:calc(var(--reveal-delay) + 0.16s); }
+.brand-group.show .item:nth-child(6){ transition-delay:calc(var(--reveal-delay) + 0.2s); }
+.brand-group.show .item:nth-child(7){ transition-delay:calc(var(--reveal-delay) + 0.24s); }
+.brand-group.show .item:nth-child(8){ transition-delay:calc(var(--reveal-delay) + 0.28s); }
+.brand-group.show .item:nth-child(9){ transition-delay:calc(var(--reveal-delay) + 0.32s); }
+.brand-group.show .item:nth-child(10){ transition-delay:calc(var(--reveal-delay) + 0.36s); }
+.brand-group.show .item:nth-child(11){ transition-delay:calc(var(--reveal-delay) + 0.4s); }
+.brand-group.show .item:nth-child(12){ transition-delay:calc(var(--reveal-delay) + 0.44s); }
+.brand-group.show .item:nth-child(13){ transition-delay:calc(var(--reveal-delay) + 0.48s); }
+.brand-group.show .item:nth-child(14){ transition-delay:calc(var(--reveal-delay) + 0.52s); }
+.brand-group.show .item:nth-child(15){ transition-delay:calc(var(--reveal-delay) + 0.56s); }
+/* Una vez visible, el hover (translateX) responde al instante en vez
+   de arrastrar el retardo de la cascada. */
+.brand-group.show .item:hover{ transform:translateX(4px); transition-delay:0s; transition-duration:0.45s; }
 .thumb-wrap img.is-placeholder{
   object-fit:cover;
   object-position:center 35%;
@@ -895,10 +1049,11 @@ h2.section-title{
   font-size:15.5px;
   font-weight:500;
   color:var(--ink);
-  transition:transform 0.25s ease;
-  transform-origin:left center;
+  transition:color 0.3s ease;
 }
-.item .name:hover{ transform:scale(1.07); }
+/* Escalar texto al pasar el mouse se lee tosco: el hover del item ya
+   lo desplaza y realza la miniatura; acá solo se calienta el color. */
+.item:hover .name{ color:var(--brass-soft); }
 .item .inspired{
   display:block;
   width:fit-content;
@@ -907,10 +1062,9 @@ h2.section-title{
   font-size:15px;
   color:var(--ink-soft);
   margin-top:3px;
-  transition:transform 0.25s ease, color 0.25s ease;
-  transform-origin:left center;
+  transition:color 0.3s ease;
 }
-.item .inspired:hover{ transform:scale(1.05); color:var(--ink); }
+.item:hover .inspired{ color:var(--ink); }
 .item .inspired .brand-name{
   font-style:normal;
   color:var(--tone-deep, var(--brass));
@@ -1074,7 +1228,7 @@ footer p{
   opacity:0;
   transform:translateY(14px) scale(0.85);
   pointer-events:none;
-  transition:opacity 0.3s ease, transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  transition:opacity 0.3s ease, transform 0.5s var(--ease-out-expo), border-color 0.3s ease, box-shadow 0.3s ease;
 }
 .back-to-top svg{ width:19px; height:19px; }
 .back-to-top.is-visible{
@@ -1082,6 +1236,7 @@ footer p{
   transform:translateY(0) scale(1);
   pointer-events:auto;
 }
+.back-to-top:active{ transform:scale(0.92); transition-duration:0.1s; }
 .back-to-top:hover{
   border-color:rgba(var(--glow-rgb),0.6);
   box-shadow:0 18px 40px rgba(0,0,0,0.55), 0 0 22px rgba(var(--glow-rgb),0.3);
@@ -1115,10 +1270,23 @@ footer p{
   box-shadow:0 14px 34px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.02);
   z-index:30;
   cursor:pointer;
-  transition:transform 0.35s cubic-bezier(.2,.8,.2,1), box-shadow 0.35s ease, border-color 0.35s ease, background 0.35s ease;
+  transition:transform 0.45s var(--ease-out-expo), box-shadow 0.35s ease, border-color 0.35s ease, background 0.35s ease;
   opacity:0;
-  animation:floatIn 0.7s cubic-bezier(.2,.8,.2,1) 1.5s both,
-            ctaGlow 3.6s ease-in-out 2.3s infinite;
+  /* Sin retardo inicial: el botón recién existe cuando se agrega la
+     primera fragancia (ver [hidden] arriba), y en ese momento tiene
+     que aparecer YA como respuesta al toque, no un segundo y medio
+     después. */
+  animation:floatIn 0.6s var(--ease-out-expo) both,
+            ctaGlow 3.6s ease-in-out 0.8s infinite;
+}
+/* Latido del ícono cada vez que entra algo al carrito (catalogo-cart.js
+   pone .is-pinged): vive en el ícono y no en el botón para no reiniciar
+   la animación de aparición de arriba. */
+.cart-float.is-pinged .cart-icon{ animation:cartPing 0.55s var(--ease-out-expo); }
+@keyframes cartPing{
+  0%{ transform:scale(1); }
+  35%{ transform:scale(1.28) rotate(-6deg); }
+  100%{ transform:scale(1) rotate(0); }
 }
 /* En modo claro el mismo gradiente casi negro se perdía contra el fondo
    marfil/blanco de la página: se reemplaza por el dorado de las CTAs
@@ -1201,9 +1369,11 @@ body.cart-open-lock{ overflow:hidden; }
      el modal, dejando ver el catálogo de fondo sin oscurecer por un
      instante (más notorio en celulares de gama media/baja). */
   will-change:opacity;
-  transition:opacity 0.4s ease;
+  /* Se va más rápido de lo que llega: al cerrar, la persona ya decidió
+     volver al catálogo y no hay que hacerla esperar. */
+  transition:opacity 0.3s ease;
 }
-.modal-backdrop.is-open{ opacity:1; }
+.modal-backdrop.is-open{ opacity:1; transition-duration:0.5s; }
 
 /* ---------- CARRITO: PANEL ---------- */
 
@@ -1227,13 +1397,33 @@ body.cart-open-lock{ overflow:hidden; }
   box-shadow:0 30px 70px rgba(0,0,0,0.55);
   z-index:41;
   opacity:0;
-  transition:opacity 0.32s cubic-bezier(.2,.8,.2,1), transform 0.32s cubic-bezier(.2,.8,.2,1);
+  /* Cierre: corto y sin frenar. Apertura (abajo): más larga y con la
+     curva expo, que arranca decidida y se asienta con suavidad. */
+  transition:opacity 0.22s ease, transform 0.26s var(--ease-in-soft);
   overflow:hidden;
 }
 .cart-panel.is-open{
   opacity:1;
   transform:translate(-50%, -50%) scale(1);
+  transition:opacity 0.35s ease, transform 0.55s var(--ease-out-expo);
 }
+/* El contenido del panel llega en una cascada breve detrás del marco
+   (cabecera, aviso, lista, pie), y desaparece junto con el panel sin
+   escalonar. */
+.cart-panel-head, #cartInfoBtn, .cart-empty, .cart-list, .cart-panel-foot{
+  opacity:0;
+  transform:translateY(10px);
+  transition:opacity 0.2s ease, transform 0.2s ease;
+}
+.cart-panel.is-open :is(.cart-panel-head, #cartInfoBtn, .cart-empty, .cart-list, .cart-panel-foot){
+  opacity:1;
+  transform:translateY(0);
+  transition:opacity 0.6s var(--ease-out-expo), transform 0.6s var(--ease-out-expo);
+}
+.cart-panel.is-open .cart-panel-head{ transition-delay:0.06s; }
+.cart-panel.is-open #cartInfoBtn{ transition-delay:0.11s; }
+.cart-panel.is-open :is(.cart-empty, .cart-list){ transition-delay:0.16s; }
+.cart-panel.is-open .cart-panel-foot{ transition-delay:0.22s; }
 
 .cart-panel-head{
   display:flex;
@@ -1291,6 +1481,27 @@ body.cart-open-lock{ overflow:hidden; }
   border-bottom:1px solid var(--hair);
 }
 .cart-row:last-child{ border-bottom:none; }
+/* Las filas caen en cascada solo al ABRIR el panel (.is-animating la
+   pone catalogo-cart.js por un instante): los re-renders por cambio de
+   cantidad no vuelven a animar toda la lista. */
+.cart-list.is-animating .cart-row{
+  animation:rowIn 0.5s var(--ease-out-expo) both;
+  animation-delay:calc(0.18s + var(--i, 0) * 0.04s);
+}
+@keyframes rowIn{
+  from{ opacity:0; transform:translateX(-8px); }
+  to{ opacity:1; transform:translateX(0); }
+}
+/* Quitar una fragancia: la fila se pliega y se va antes de que el
+   resto de la lista se acomode (catalogo-cart.js espera a que termine
+   para re-renderizar). */
+.cart-row.is-leaving{
+  animation:rowOut 0.26s var(--ease-in-soft) forwards;
+  pointer-events:none;
+}
+@keyframes rowOut{
+  to{ opacity:0; transform:translateX(14px); }
+}
 .cart-row-info{ flex:1; min-width:0; }
 .cart-row-name{
   font-size:14.5px;
@@ -1445,13 +1656,14 @@ body.cart-open-lock{ overflow:hidden; }
   opacity:0;
   pointer-events:none;
   z-index:35;
-  transition:opacity 0.3s ease, transform 0.3s ease;
+  transition:opacity 0.25s ease, transform 0.3s var(--ease-in-soft);
   max-width:calc(100vw - 40px);
   text-align:center;
 }
 .cart-toast.is-visible{
   opacity:1;
   transform:translate(-50%, 0);
+  transition:opacity 0.3s ease, transform 0.55s var(--ease-out-expo);
 }
 
 @media (max-width:520px){
@@ -1475,10 +1687,25 @@ body.cart-open-lock{ overflow:hidden; }
   z-index:41;
   pointer-events:none;
   opacity:0;
-  transition:opacity 0.4s ease;
+  transition:opacity 0.28s ease;
 }
 .preview-viewport[hidden]{ display:none; }
-.preview-viewport.is-open{ opacity:1; }
+.preview-viewport.is-open{ opacity:1; transition-duration:0.4s; }
+
+/* Entrada/salida de las cards: el movimiento vive en .preview-slide-
+   inner (no en .preview-slide, cuyo transform es el del carrusel y el
+   arrastre). Al abrir, la activa sube y se asienta; las vecinas la
+   siguen un instante después. Al cerrar, todas bajan apenas y se van
+   con el fundido del viewport. */
+.preview-slide-inner{
+  transform:translateY(26px) scale(0.96);
+  transition:transform 0.3s var(--ease-in-soft);
+}
+.preview-viewport.is-open .preview-slide-inner{
+  transform:translateY(0) scale(1);
+  transition:transform 0.65s var(--ease-out-expo);
+}
+.preview-viewport.is-open :is(.slot-prev, .slot-next) .preview-slide-inner{ transition-delay:0.07s; }
 
 .preview-slide{
   --slide-w:clamp(220px, 60vw, 380px);
@@ -1552,6 +1779,9 @@ body.cart-open-lock{ overflow:hidden; }
   opacity:0;
   transform:translate(-50%, -58%) scale(0.86);
 }
+/* En este cierre manda el movimiento de la card entera hacia arriba:
+   la capa interna no baja (sería un tirón en sentido contrario). */
+.preview-viewport .preview-slide.is-vanishing .preview-slide-inner{ transform:none; }
 
 /* El recorte de esquinas y el scroll interno viven en este wrapper (no
    en .preview-slide) para que la etiqueta "Imagen de referencia" y el
@@ -1813,13 +2043,14 @@ body.cart-open-lock{ overflow:hidden; }
   border:1px solid var(--hair);
   box-shadow:0 30px 70px rgba(0,0,0,0.55);
   padding:28px 26px 26px;
-  transition:opacity 0.34s cubic-bezier(.16,1,.3,1), transform 0.34s cubic-bezier(.16,1,.3,1);
+  transition:opacity 0.22s ease, transform 0.26s var(--ease-in-soft);
 }
 .notes-panel[hidden]{ display:none; }
 .notes-panel.is-open{
   opacity:1;
   transform:translate(-50%, -50%) scale(1);
   pointer-events:auto;
+  transition:opacity 0.35s ease, transform 0.55s var(--ease-out-expo);
 }
 .notes-close{
   position:absolute;
@@ -1890,7 +2121,12 @@ body.cart-open-lock{ overflow:hidden; }
   border-radius:999px;
   background:linear-gradient(90deg, var(--brass-soft), var(--brass));
   box-shadow:0 0 10px rgba(var(--glow-rgb),0.45);
+  transition:width 0.9s var(--ease-out-expo) 0.25s;
 }
+/* Las barras arrancan vacías y se llenan hasta su nivel apenas el
+   popup terminó de asentarse (el ancho real lo pone catalogo-preview.js
+   en línea; el !important solo manda mientras el panel está cerrado). */
+.notes-panel:not(.is-open) .notes-stat-fill{ width:0 !important; transition:none; }
 /* Una sola palabra (el nivel que corresponde a esta fragancia, no las
    3 posibles) para no competir visualmente con el número de al lado. */
 .notes-stat-value{
@@ -1983,15 +2219,25 @@ noscript li{ margin-bottom:6px; color:var(--ink-soft); }
      filas (gap) ya cumple ese rol. */
   .filter-divider{ display:none; }
   .filter-controls{ width:100%; }
-  .filter-select-wrap{ flex:1; min-width:0; }
-  .filter-select{ width:100%; }
+  .filter-select-wrap{
+    flex:1 1 0px;
+    min-width:0;
+    transition:flex 0.55s var(--ease-out-expo), opacity 0.25s ease, margin 0.55s var(--ease-out-expo), box-shadow 0.3s ease;
+  }
+  .filter-select{ width:100%; min-width:0; }
   /* El círculo de búsqueda es de ancho fijo cerrado; abierto, toma el
-     lugar del select (ver .filter-controls.search-active abajo) para
-     tener espacio de sobra donde escribir en vez de compartir la fila
-     con el select angosto. */
-  .filter-search-wrap.is-open{ flex:1; min-width:0; }
-  .filter-search-box{ width:100%; }
-  .filter-controls.search-active .filter-select-wrap{ display:none; }
+     lugar del select para tener espacio de sobra donde escribir en vez
+     de compartir la fila con el select angosto. No es un intercambio
+     seco: el select se pliega (flex 1 → 0, y absorbe el gap de la fila
+     con el margen negativo) mientras el buscador crece hasta ocupar
+     toda la fila, en un solo movimiento. */
+  .filter-search-wrap.is-open{ flex:1 1 0px; min-width:0; }
+  .filter-controls.search-active .filter-select-wrap{
+    flex:0 0 0px;
+    opacity:0;
+    margin-left:-14px;
+    pointer-events:none;
+  }
   /* iOS Safari hace zoom automático al enfocar un input con font-size
      menor a 16px; en mobile lo subimos a 16px solo para evitar ese zoom,
      el tamaño visual en desktop (13px) no se toca. */

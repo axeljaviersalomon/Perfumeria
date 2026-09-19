@@ -531,7 +531,7 @@ function closeNotes() {
   setTimeout(() => {
     notesPanel.hidden = true;
     notesBackdrop.hidden = true;
-  }, 340); // debe coincidir con la transición CSS de .notes-panel
+  }, 340); // >= la transición de cierre CSS de .notes-panel (0.26s)
 
   if (lastFocusedBeforeNotesOpen instanceof HTMLElement) lastFocusedBeforeNotesOpen.focus();
 }
