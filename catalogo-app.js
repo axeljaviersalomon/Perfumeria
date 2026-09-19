@@ -557,6 +557,26 @@ applyFilters();
   document.getElementById('curtainScrollCue')?.addEventListener('click', closeCurtain);
 })();
 
+// ---- Link directo a una fragancia (compartir por WhatsApp) ----
+// catalogo-preview.js arma links con ?perfume=<marca>::<nombre> al
+// compartir una fragancia. Si la página carga con ese parámetro, se
+// salta la cortina (igual que tocar "Ver fragancias") y se abre la
+// previsualización de esa fragancia sola, para que quien recibe el
+// mensaje caiga directo en ella en vez de tener que buscarla.
+(function initDeepLinkedPreview() {
+  const targetId = new URLSearchParams(location.search).get('perfume');
+  if (!targetId) return;
+
+  const itemEl = document.querySelector(`.item[data-item-id="${CSS.escape(targetId)}"]`);
+  if (!itemEl) return;
+
+  // La cortina tarda 1000ms en levantarse (TRANSITION_MS de
+  // initHeroCurtain, arriba): recién ahí tiene sentido abrir la card,
+  // si no queda tapada por la cortina misma.
+  document.getElementById('ctaJump')?.click();
+  window.setTimeout(() => itemEl.click(), 1100);
+})();
+
 // ---- Volver arriba ----
 // Aparece recién después de scrollear un poco (si estuviera siempre
 // visible arriba de la página no serviría de nada) y desaparece de

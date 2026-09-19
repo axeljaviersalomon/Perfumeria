@@ -446,8 +446,13 @@ async function shareOnWhatsApp(slide) {
   const inspired = slide.dataset.itemInspired || '';
   const price = typeof catalogoPrecios !== 'undefined' ? catalogoPrecios[slide.dataset.itemId] : undefined;
   const priceLine = typeof price === 'number' ? `\nPrecio: ${formatPrice(price)}` : '';
+  // Link directo a esta fragancia: catalogo-app.js lee ?perfume=<id> al
+  // cargar la página y abre esta misma card automáticamente (ver
+  // initDeepLinkedPreview), así quien recibe el mensaje cae directo en
+  // ella en vez de tener que buscarla en todo el catálogo.
+  const link = `${location.origin}${location.pathname}?perfume=${encodeURIComponent(slide.dataset.itemId || '')}`;
 
-  const text = `¡Mirá esta fragancia! ${brand} - ${name}${inspired ? `\nInspirado en ${inspired}` : ''}${priceLine}`;
+  const text = `¡Mirá esta fragancia! ${brand} - ${name}${inspired ? `\nInspirado en ${inspired}` : ''}${priceLine}\n${link}`;
   const imgSrc = slide.querySelector('.preview-img')?.src;
 
   if (navigator.share) {
