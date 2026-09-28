@@ -36,6 +36,14 @@ function itemMatchesSearch(itemEl, term) {
     || normalizeSearch(itemEl.dataset.itemInspired).includes(term);
 }
 
+// "Tope del catálogo": el punto donde termina .curtain-spacer y arranca
+// la barra de filtros. Lo usan tanto la cortina (initHeroCurtain) como
+// el buscador y "volver arriba", así que vive en un solo lugar.
+function getCatalogTop() {
+  const spacer = document.querySelector('.curtain-spacer');
+  return spacer ? spacer.offsetTop + spacer.offsetHeight : 0;
+}
+
 let placeholderCounter = 0;
 
 function nextPlaceholderImage() {
@@ -230,6 +238,10 @@ function initFilters() {
   document.getElementById('search-filter').addEventListener('input', (e) => {
     state.search = e.target.value;
     applyFilters();
+    // Cada letra puede reordenar drásticamente lo que se ve; sin este
+    // scroll la persona podría quedar mirando un tramo vacío de la
+    // sección donde estaba, lejos de los resultados nuevos.
+    window.scrollTo({ top: getCatalogTop(), behavior: 'smooth' });
   });
 
   initSearchToggle();
@@ -319,6 +331,11 @@ applyFilters();
   let locked = false;
   let touchStartY = null;
   let arrivingTimer = null;
+  // Una vez que la cortina se cerró la primera vez, el gesto de scroll
+  // hacia arriba en el tope del catálogo deja de reabrirla: solo vuelve
+  // si la persona recarga la página. Facilita la UX evitando que el
+  // hero "salte" de nuevo mientras se navega el catálogo.
+  let heroDismissed = false;
 
   function lock() {
     locked = true;
@@ -397,6 +414,7 @@ applyFilters();
     if (!curtainOpen || locked) return;
     lock();
     curtainOpen = false;
+    heroDismissed = true;
     curtain.classList.remove('curtain-returning');
     jumpTo(catalogTop());
     scheduleArrival();
@@ -417,7 +435,7 @@ applyFilters();
   // lo que quedó revelado debajo se vuelva a armar: así la próxima
   // bajada al catálogo también tiene su llegada.
   function openCurtain() {
-    if (curtainOpen || locked) return;
+    if (curtainOpen || locked || heroDismissed) return;
     lock();
     curtainOpen = true;
     clearTimeout(arrivingTimer);

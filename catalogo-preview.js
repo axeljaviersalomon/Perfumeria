@@ -451,14 +451,15 @@ async function shareOnWhatsApp(slide) {
   // ella en vez de tener que buscarla en todo el catálogo.
   const link = `${location.origin}${location.pathname}?perfume=${encodeURIComponent(slide.dataset.itemId || '')}`;
 
-  // Mensaje simple y prolijo: solo el nombre, la marca original en la
-  // que está inspirado, el precio y el link. Sin relleno.
+  // Mensaje simple y prolijo: el link primero (así WhatsApp ya arma la
+  // vista previa de la página arriba de todo) y debajo el nombre, la
+  // marca original en la que está inspirado y el precio. Sin relleno.
   const detailLines = [
     `🌸 *${name}*`,
     inspired ? `Inspirado en *${inspired}*` : '',
     priceLine
   ].filter(Boolean);
-  const text = [...detailLines, '', link].join('\n');
+  const text = [link, '', ...detailLines].join('\n');
   const imgSrc = slide.querySelector('.preview-img')?.src;
 
   if (navigator.share) {
