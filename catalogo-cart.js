@@ -303,7 +303,7 @@ function showToast(text) {
 const CART_POSITION_KEY = 'perfumeria-cart-position-v1';
 const CART_DRAG_THRESHOLD_PX = 6;
 const CART_FLOAT_MOBILE_BREAKPOINT = 520;
-const CART_FLOAT_EDGE_MARGIN = 8;
+const CART_FLOAT_EDGE_MARGIN = 16;
 
 function clampNumber(value, min, max) {
   return Math.min(Math.max(value, min), max);
@@ -363,7 +363,7 @@ function applyDefaultCartFloatPosition(toggle) {
   }
   const filterBar = document.querySelector('.filter-bar');
   const top = (filterBar ? filterBar.offsetHeight : 0) + 14;
-  const left = window.innerWidth - toggle.offsetWidth - 16;
+  const left = window.innerWidth - toggle.offsetWidth - CART_FLOAT_EDGE_MARGIN;
   applyCartFloatPosition(toggle, left, top);
 }
 
