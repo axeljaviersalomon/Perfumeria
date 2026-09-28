@@ -2319,6 +2319,39 @@ body.cart-open-lock{ overflow:hidden; }
 }
 .notes-body + .notes-body{ margin-top:14px; }
 
+/* Modal de confirmación (p.ej. "¿vaciar el carrito?"): mismo panel
+   visual que .notes-panel, pero sin botón de cerrar en la esquina y
+   con dos botones de acción en vez de texto largo. */
+.confirm-panel .notes-title{ padding-right:0; margin-bottom:16px; }
+.confirm-actions{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+}
+.confirm-btn{
+  flex:1;
+  max-width:140px;
+  padding:11px 18px;
+  border-radius:999px;
+  font-size:14.5px;
+  font-weight:600;
+  cursor:pointer;
+  transition:border-color 0.2s ease, color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+.confirm-btn:active{ transform:scale(0.96); }
+.confirm-btn--no{
+  border:1px solid var(--hair);
+  background:var(--overlay-chip);
+  color:var(--ink-soft);
+}
+.confirm-btn--no:hover{ border-color:var(--brass-soft); color:var(--brass-soft); }
+.confirm-btn--yes{
+  border:1px solid var(--brass);
+  background:var(--brass);
+  color:var(--bg);
+}
+.confirm-btn--yes:hover{ background:var(--brass-soft); border-color:var(--brass-soft); }
+
 /* ---------- NOSCRIPT FALLBACK ---------- */
 noscript .wrap{ padding-top:40px; }
 noscript h2{

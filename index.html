@@ -393,6 +393,17 @@ try {
   <p class="notes-body">Se prepara en el momento del encargo para garantizar calidad máxima: el proceso toma hasta 5 días hábiles.</p>
 </div>
 
+<!-- Confirmación antes de vaciar el carrito -->
+<div class="modal-backdrop" id="cartClearBackdrop" hidden></div>
+<div class="notes-panel confirm-panel" id="cartClearPanel" role="alertdialog" aria-modal="true" aria-labelledby="cartClearTitle" hidden>
+  <h4 class="notes-title" id="cartClearTitle">¿Estás seguro que quieres vaciar el carrito?</h4>
+  <div class="notes-divider"></div>
+  <div class="confirm-actions">
+    <button type="button" class="confirm-btn confirm-btn--no" id="cartClearCancel">No</button>
+    <button type="button" class="confirm-btn confirm-btn--yes" id="cartClearConfirm">Sí</button>
+  </div>
+</div>
+
 <script src="catalogo-theme.js"></script>
 <script src="catalogo-data.js"></script>
 <script src="catalogo-notas.js"></script>

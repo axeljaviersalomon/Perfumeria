@@ -477,6 +477,8 @@ function onCartKeydown(e) {
   // Si el aviso "Importante - leer" está abierto, Escape cierra ESE
   // primero (el carrito de atrás sigue abierto), igual que tocar afuera
   // lo cerraría sin tocar el carrito.
+  const clearPanel = document.getElementById('cartClearPanel');
+  if (clearPanel?.classList.contains('is-open')) { closeCartClearConfirm(); return; }
   const infoPanel = document.getElementById('cartInfoPanel');
   if (infoPanel?.classList.contains('is-open')) { closeCartInfo(); return; }
   closeCart();
@@ -515,6 +517,42 @@ function closeCartInfo() {
   }, 340); // >= la transición de cierre CSS de .notes-panel (0.26s)
 
   if (lastFocusedBeforeCartInfoOpen instanceof HTMLElement) lastFocusedBeforeCartInfoOpen.focus();
+}
+
+// ---- Confirmación antes de vaciar el carrito ----
+
+let lastFocusedBeforeCartClearOpen = null;
+
+function openCartClearConfirm() {
+  const panel = document.getElementById('cartClearPanel');
+  const backdrop = document.getElementById('cartClearBackdrop');
+  if (!panel || !backdrop) return;
+
+  lastFocusedBeforeCartClearOpen = document.activeElement;
+  panel.hidden = false;
+  backdrop.hidden = false;
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      panel.classList.add('is-open');
+      backdrop.classList.add('is-open');
+    });
+  });
+  document.getElementById('cartClearCancel')?.focus();
+}
+
+function closeCartClearConfirm() {
+  const panel = document.getElementById('cartClearPanel');
+  const backdrop = document.getElementById('cartClearBackdrop');
+  if (!panel || !backdrop || !panel.classList.contains('is-open')) return;
+
+  panel.classList.remove('is-open');
+  backdrop.classList.remove('is-open');
+  setTimeout(() => {
+    panel.hidden = true;
+    backdrop.hidden = true;
+  }, 340); // >= la transición de cierre CSS de .notes-panel (0.26s)
+
+  if (lastFocusedBeforeCartClearOpen instanceof HTMLElement) lastFocusedBeforeCartClearOpen.focus();
 }
 
 function openCart() {
@@ -609,8 +647,14 @@ function initCartToggle() {
 }
 
 function initCartActions() {
-  document.getElementById('cartClear')?.addEventListener('click', clearCart);
+  document.getElementById('cartClear')?.addEventListener('click', openCartClearConfirm);
   document.getElementById('cartOrder')?.addEventListener('click', openWhatsAppOrder);
+  document.getElementById('cartClearCancel')?.addEventListener('click', closeCartClearConfirm);
+  document.getElementById('cartClearBackdrop')?.addEventListener('click', closeCartClearConfirm);
+  document.getElementById('cartClearConfirm')?.addEventListener('click', () => {
+    closeCartClearConfirm();
+    clearCart();
+  });
 }
 
 // El botón "Agregar al carrito" de la previsualización (catalogo-preview.js)
