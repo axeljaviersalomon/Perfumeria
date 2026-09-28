@@ -218,7 +218,12 @@ function renderCartList() {
   // El botón flotante del carrito solo existe en pantalla mientras hay
   // algo seleccionado: si el carrito queda vacío (o arranca vacío), no
   // tiene sentido mostrar un carrito sin nada adentro.
+  const wasHidden = toggleEl ? toggleEl.hidden : null;
   if (toggleEl) toggleEl.hidden = total === 0;
+  // Recién cuando el botón pasa de oculto a visible tiene tamaño real
+  // (offsetWidth/Height): recién ahí tiene sentido calcular/clampar su
+  // posición (ver initCartFloatDrag más abajo).
+  if (toggleEl && wasHidden && !toggleEl.hidden) restoreCartFloatPosition(toggleEl);
 
   badgeEl.textContent = String(total);
   badgeEl.classList.toggle('is-visible', total > 0);
@@ -282,6 +287,156 @@ function showToast(text) {
 
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => toast.classList.remove('is-visible'), TOAST_DURATION_MS);
+}
+
+// ---- Botón flotante: posición libre (arrastrable) ----
+// Antes el botón vivía fijo arriba a la derecha (right/top en CSS) y en
+// mobile eso terminaba tapando el interruptor de tema. Ahora: por
+// defecto, en mobile se calcula su lugar en JS (siempre debajo de toda
+// la barra de filtros/búsqueda/tema, cuya altura cambia según el
+// contenido), y además la persona puede arrastrarlo a cualquier parte
+// de la pantalla; esa posición elegida se guarda para las próximas
+// visitas.
+
+const CART_POSITION_KEY = 'perfumeria-cart-position-v1';
+const CART_DRAG_THRESHOLD_PX = 6;
+const CART_FLOAT_MOBILE_BREAKPOINT = 520;
+const CART_FLOAT_EDGE_MARGIN = 8;
+
+function clampNumber(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
+
+function loadCartFloatPosition() {
+  try {
+    const raw = localStorage.getItem(CART_POSITION_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (err) {
+    return null;
+  }
+}
+
+function saveCartFloatPosition(toggle) {
+  try {
+    const rect = toggle.getBoundingClientRect();
+    const maxLeft = Math.max(window.innerWidth - rect.width, 1);
+    const maxTop = Math.max(window.innerHeight - rect.height, 1);
+    // Se guarda como fracción del espacio disponible (no en píxeles
+    // fijos) para que la posición elegida siga teniendo sentido si la
+    // persona vuelve a entrar desde otra pantalla de distinto tamaño.
+    localStorage.setItem(CART_POSITION_KEY, JSON.stringify({
+      xPct: clampNumber(rect.left / maxLeft, 0, 1),
+      yPct: clampNumber(rect.top / maxTop, 0, 1)
+    }));
+  } catch (err) {
+    // Sin persistencia disponible: el botón se puede seguir moviendo,
+    // solo que no recuerda el lugar en la próxima visita.
+  }
+}
+
+// Aplica left/top en píxeles absolutos, siempre clampado adentro del
+// viewport (con un margen chico) para que el arrastre nunca lo deje a
+// medio salir de la pantalla ni atrás de una esquina inalcanzable.
+function applyCartFloatPosition(toggle, left, top) {
+  const maxLeft = window.innerWidth - toggle.offsetWidth - CART_FLOAT_EDGE_MARGIN;
+  const maxTop = window.innerHeight - toggle.offsetHeight - CART_FLOAT_EDGE_MARGIN;
+  toggle.style.left = `${clampNumber(left, CART_FLOAT_EDGE_MARGIN, Math.max(CART_FLOAT_EDGE_MARGIN, maxLeft))}px`;
+  toggle.style.top = `${clampNumber(top, CART_FLOAT_EDGE_MARGIN, Math.max(CART_FLOAT_EDGE_MARGIN, maxTop))}px`;
+  toggle.style.right = 'auto';
+  toggle.style.bottom = 'auto';
+}
+
+// Sin posición guardada: en mobile va siempre debajo de TODA la barra
+// de filtros (categorías, marca, búsqueda y el interruptor de tema),
+// que es justo lo que antes tapaba. Se mide en JS porque esa barra
+// cambia de alto según el contenido (en mobile se apila en columna).
+// En desktop se deja el lugar de siempre, definido en el CSS.
+function applyDefaultCartFloatPosition(toggle) {
+  if (window.innerWidth > CART_FLOAT_MOBILE_BREAKPOINT) {
+    toggle.style.left = '';
+    toggle.style.top = '';
+    toggle.style.right = '';
+    toggle.style.bottom = '';
+    return;
+  }
+  const filterBar = document.querySelector('.filter-bar');
+  const top = (filterBar ? filterBar.offsetHeight : 0) + 14;
+  const left = window.innerWidth - toggle.offsetWidth - 16;
+  applyCartFloatPosition(toggle, left, top);
+}
+
+function restoreCartFloatPosition(toggle) {
+  const saved = loadCartFloatPosition();
+  if (!saved) {
+    applyDefaultCartFloatPosition(toggle);
+    return;
+  }
+  const maxLeft = Math.max(window.innerWidth - toggle.offsetWidth, 1);
+  const maxTop = Math.max(window.innerHeight - toggle.offsetHeight, 1);
+  applyCartFloatPosition(toggle, saved.xPct * maxLeft, saved.yPct * maxTop);
+}
+
+function initCartFloatDrag() {
+  const toggle = document.getElementById('cartToggle');
+  if (!toggle) return;
+
+  restoreCartFloatPosition(toggle);
+
+  let dragging = false;
+  let moved = false;
+  let startX = 0;
+  let startY = 0;
+  let startLeft = 0;
+  let startTop = 0;
+
+  toggle.addEventListener('pointerdown', (e) => {
+    if (e.button !== undefined && e.button !== 0) return;
+    const rect = toggle.getBoundingClientRect();
+    startX = e.clientX;
+    startY = e.clientY;
+    startLeft = rect.left;
+    startTop = rect.top;
+    dragging = true;
+    moved = false;
+    toggle.setPointerCapture(e.pointerId);
+  });
+
+  toggle.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    if (!moved && Math.hypot(dx, dy) > CART_DRAG_THRESHOLD_PX) {
+      moved = true;
+      toggle.classList.add('is-dragging');
+    }
+    if (moved) applyCartFloatPosition(toggle, startLeft + dx, startTop + dy);
+  });
+
+  function endDrag() {
+    if (!dragging) return;
+    dragging = false;
+    if (moved) {
+      toggle.classList.remove('is-dragging');
+      saveCartFloatPosition(toggle);
+    }
+    // El click que dispara el navegador después de soltar necesita saber
+    // si esto fue un arrastre, para no abrir el carrito de quien solo
+    // quería reubicar el botón (ver el listener de "click" en
+    // initCartToggle).
+    toggle.dataset.justDragged = moved ? '1' : '';
+  }
+
+  toggle.addEventListener('pointerup', endDrag);
+  toggle.addEventListener('pointercancel', endDrag);
+
+  window.addEventListener('resize', () => {
+    // Con posición guardada: la reacomoda dentro del viewport nuevo para
+    // que no quede fuera de pantalla al rotar o redimensionar. Sin
+    // posición guardada: recalcula el default (debajo de filtros en
+    // mobile, cuya altura también pudo cambiar).
+    if (loadCartFloatPosition()) restoreCartFloatPosition(toggle);
+    else applyDefaultCartFloatPosition(toggle);
+  });
 }
 
 // ---- Apertura / cierre del panel ----
@@ -402,7 +557,18 @@ function initCartToggle() {
   const toggle = document.getElementById('cartToggle');
   const closeBtn = document.getElementById('cartClose');
   const backdrop = document.getElementById('cartBackdrop');
-  toggle?.addEventListener('click', toggleCart);
+  toggle?.addEventListener('click', (e) => {
+    // Si el toque/click fue en realidad el final de un arrastre (ver
+    // initCartFloatDrag), no se abre el carrito: la persona solo quería
+    // mover el botón, no verlo.
+    if (toggle.dataset.justDragged === '1') {
+      toggle.dataset.justDragged = '';
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    toggleCart();
+  });
   closeBtn?.addEventListener('click', closeCart);
   backdrop?.addEventListener('click', closeCart);
 
@@ -484,5 +650,6 @@ initCartToggle();
 initCartActions();
 initDelegatedClicks();
 initPreviewAddToCart();
+initCartFloatDrag();
 renderCartList();
 restoreItemBadgesFromCart();

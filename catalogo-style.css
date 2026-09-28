@@ -1362,7 +1362,13 @@ footer p{
 /* [hidden] tiene que ganarle a "display:flex" de abajo, mismo motivo que
    en .cart-panel: el botón se oculta por completo (toggleEl.hidden en
    catalogo-cart.js) mientras el carrito está vacío.
-   Esquina superior derecha, debajo de la barra de filtros sticky. */
+   Posición por defecto: esquina superior derecha en desktop. En mobile,
+   catalogo-cart.js calcula "top" en JS (queda siempre debajo de la barra
+   de filtros/búsqueda/tema, cuya altura varía) y aplica left/top inline;
+   el right/top de acá abajo es solo el valor de arranque antes de que
+   ese cálculo corra. Además, el botón se puede arrastrar libremente
+   (ver initCartFloatDrag en catalogo-cart.js): touch-action:none evita
+   que el navegador intente scrollear la página al arrastrar en mobile. */
 .cart-float[hidden]{ display:none; }
 .cart-float{
   position:fixed;
@@ -1380,7 +1386,8 @@ footer p{
   color:var(--brass-soft);
   box-shadow:0 14px 34px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.02);
   z-index:30;
-  cursor:pointer;
+  cursor:grab;
+  touch-action:none;
   transition:transform 0.45s var(--ease-out-expo), box-shadow 0.35s ease, border-color 0.35s ease, background 0.35s ease;
   opacity:0;
   /* Sin retardo inicial: el botón recién existe cuando se agrega la
@@ -1389,6 +1396,13 @@ footer p{
      después. */
   animation:floatIn 0.6s var(--ease-out-expo) both,
             ctaGlow 3.6s ease-in-out 0.8s infinite;
+}
+/* Mientras se arrastra: nada de transición de transform (si no, el
+   círculo "persigue" al dedo/mouse en vez de seguirlo en el acto) y
+   cursor de agarre activo. */
+.cart-float.is-dragging{
+  transition:box-shadow 0.35s ease, border-color 0.35s ease, background 0.35s ease;
+  cursor:grabbing;
 }
 /* Latido del ícono cada vez que entra algo al carrito (catalogo-cart.js
    pone .is-pinged): vive en el ícono y no en el botón para no reiniciar
