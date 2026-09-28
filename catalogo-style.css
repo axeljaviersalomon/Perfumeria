@@ -1404,6 +1404,13 @@ footer p{
   transition:box-shadow 0.35s ease, border-color 0.35s ease, background 0.35s ease;
   cursor:grabbing;
 }
+/* Al soltar, el botón se desliza solo hacia el borde (izquierdo o
+   derecho) más cercano: esta transición en left/top es lo que hace
+   fluido ese salto, y se saca apenas termina (ver snapCartFloatToEdge
+   en catalogo-cart.js) para no interferir con el arrastre libre. */
+.cart-float.is-snapping{
+  transition:left 0.45s var(--ease-out-expo), top 0.45s var(--ease-out-expo);
+}
 /* Latido del ícono cada vez que entra algo al carrito (catalogo-cart.js
    pone .is-pinged): vive en el ícono y no en el botón para no reiniciar
    la animación de aparición de arriba. */

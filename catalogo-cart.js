@@ -289,14 +289,16 @@ function showToast(text) {
   toastTimer = setTimeout(() => toast.classList.remove('is-visible'), TOAST_DURATION_MS);
 }
 
-// ---- Botón flotante: posición libre (arrastrable) ----
+// ---- Botón flotante: arrastrable, siempre pegado a un borde ----
 // Antes el botón vivía fijo arriba a la derecha (right/top en CSS) y en
 // mobile eso terminaba tapando el interruptor de tema. Ahora: por
 // defecto, en mobile se calcula su lugar en JS (siempre debajo de toda
 // la barra de filtros/búsqueda/tema, cuya altura cambia según el
-// contenido), y además la persona puede arrastrarlo a cualquier parte
-// de la pantalla; esa posición elegida se guarda para las próximas
-// visitas.
+// contenido), y además la persona puede arrastrarlo verticalmente a
+// donde quiera. Pero nunca queda "flotando" a mitad de pantalla: al
+// soltarlo, se desliza solo (animado) hacia el borde izquierdo o
+// derecho más cercano, conservando la altura elegida. Esa posición
+// final (borde + altura) se guarda para las próximas visitas.
 
 const CART_POSITION_KEY = 'perfumeria-cart-position-v1';
 const CART_DRAG_THRESHOLD_PX = 6;
@@ -373,7 +375,36 @@ function restoreCartFloatPosition(toggle) {
   }
   const maxLeft = Math.max(window.innerWidth - toggle.offsetWidth, 1);
   const maxTop = Math.max(window.innerHeight - toggle.offsetHeight, 1);
-  applyCartFloatPosition(toggle, saved.xPct * maxLeft, saved.yPct * maxTop);
+  // El botón siempre vive pegado a un borde (izquierdo o derecho), sin
+  // excepción: aunque haya una posición guardada de una versión anterior
+  // con una fracción horizontal cualquiera, acá se la lleva al borde más
+  // cercano en vez de restaurarla tal cual.
+  const xPct = saved.xPct > 0.5 ? 1 : 0;
+  applyCartFloatPosition(toggle, xPct * maxLeft, saved.yPct * maxTop);
+}
+
+// Al soltar el arrastre, el botón nunca queda a mitad de pantalla: se
+// desliza solo hacia el borde (izquierdo o derecho) más cercano al punto
+// donde se soltó, conservando la altura elegida. La transición CSS de
+// .is-snapping es lo que hace ese salto animado en vez de instantáneo.
+function snapCartFloatToEdge(toggle) {
+  const rect = toggle.getBoundingClientRect();
+  const centerX = rect.left + rect.width / 2;
+  const goRight = centerX > window.innerWidth / 2;
+  const targetLeft = goRight
+    ? window.innerWidth - toggle.offsetWidth - CART_FLOAT_EDGE_MARGIN
+    : CART_FLOAT_EDGE_MARGIN;
+
+  toggle.classList.add('is-snapping');
+  applyCartFloatPosition(toggle, targetLeft, rect.top);
+
+  const onTransitionEnd = (e) => {
+    if (e.propertyName !== 'left') return;
+    toggle.removeEventListener('transitionend', onTransitionEnd);
+    toggle.classList.remove('is-snapping');
+    saveCartFloatPosition(toggle);
+  };
+  toggle.addEventListener('transitionend', onTransitionEnd);
 }
 
 function initCartFloatDrag() {
@@ -417,7 +448,7 @@ function initCartFloatDrag() {
     dragging = false;
     if (moved) {
       toggle.classList.remove('is-dragging');
-      saveCartFloatPosition(toggle);
+      snapCartFloatToEdge(toggle);
     }
     // El click que dispara el navegador después de soltar necesita saber
     // si esto fue un arrastre, para no abrir el carrito de quien solo
